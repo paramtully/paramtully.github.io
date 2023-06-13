@@ -1,5 +1,7 @@
 
+const sections = ['About', 'Experience', 'Personal Projects', 'Academic Projects', 'Courses'];
 
+// Contains name and brief description
 function NameCard() {
     return (
         <div>
@@ -10,23 +12,23 @@ function NameCard() {
     );
 }
 
+// Contains one link to a section within the main page
 function NavLink({ section }) {
-    const id = '#' + section.toLowerCase();
+    const sectionId = '#' + section.toLowerCase().replace(/\s/g, "");
     return (
-        <a href={id}>
-            <span>line</span>
+        <a href={sectionId}>
+            <span>--</span>
             <span>{ section }</span>
         </a>
     );
 }
 
-
+// Contains collection of links to sections of main page
 function NavBar() {
-    const sections = ['About', 'Academic Projects', 'Personal Projects', 'Courses'];
-
     const section_elts = sections.map(section => {
+        const sectionId = 'NAV_' + section.replace(/\s/g, "");     // removes whitespace
         return (
-            <li id={section}>
+            <li id={sectionId}>
                 <NavLink section={section} />
             </li>
         );
@@ -41,6 +43,7 @@ function NavBar() {
     );
 }
 
+// TODO: ADD LINKS TO HEADER
 export default function Header() {
     return (
         <header>
@@ -49,3 +52,5 @@ export default function Header() {
         </header>
     );
 }
+
+export { sections };
