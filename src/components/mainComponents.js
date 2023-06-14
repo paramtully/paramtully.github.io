@@ -60,7 +60,7 @@ export default function MainComponent({ title, components }) {
 
     return (
         <section id={id}>
-            <h2>{title}</h2>
+            <h2 className='sectionTitle'>{title}</h2>
             <ol>{ listItems }</ol>
             { components.length > 1 && <button onClick={() => setExpanded(!expanded)} >{expanded ? 'show less' : 'show more'}</button>}
         </section>
