@@ -6,7 +6,7 @@ function ProfilePhoto() {
 export default function About() {
     return (
         <section id='about'>
-            <h2 className="sectionTitle">About</h2>
+            <h2 className="sectionTitle">ABOUT</h2>
             <p>
                 {/* Who am i? */}
                 Who am i 

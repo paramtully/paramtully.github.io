@@ -5,7 +5,7 @@ const sections = ['About', 'Experience', 'Personal Projects', 'Academic Projects
 function NameCard() {
     return (
         <div>
-            <h1>Param Tully</h1>
+            <h1 className="name">Param Tully</h1>
             <h2>4th Year Computer Science Student at UBC</h2>
             <p>Aspiring Software Engineer based in Vancouver, BC, Canada</p>
         </div>

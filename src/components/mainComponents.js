@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
 function DateHeader({ date }) {
-    return <header>{ date }</header>;
+    return <header className='mainHeader'>{ date }</header>;
 }
 
 function TitleCard({ title, position, detail }) {
     return (
         <h3>
-            <div>{title}</div>
+            <div className='mainItemTitle'>{title}</div>
             <div>{position}</div>
             <div>{detail}</div>
         </h3>
@@ -15,38 +15,40 @@ function TitleCard({ title, position, detail }) {
 }
 
 function Description({ description }) {
-    return <p>{description}</p>;
+    return <p className='mainBodyComponent'>{description}</p>;
 }
 
 function Technologies({ technologies }) {
     const techItems = technologies.map(item => {
         return (
-            <li key={ item }>
-                <div>{ item }</div>
+            <li className='tech' key={ item }>
+                <div className='bubble'>{ item }</div>
             </li>
         );
     });
 
-    return <ul>{ techItems }</ul>;
+    return <ul className='mainBodyComponent techList'>{ techItems }</ul>;
 }
 
 function Links({ code_url, project_url }) {
     return (
-        <div>
-            { code_url && <a href={code_url}>Code</a> }
-            { project_url && <a href={project_url}>Website</a> }
+        <div className='mainBodyComponent techList links'>
+            { code_url && <a className='bubble' href={code_url}>Code</a> }
+            { project_url && <a className='bubble' href={project_url}>Website</a> }
         </div>
     ) 
 }
 
 function MainItem({ project }) {
     return (
-        <div>
+        <div className='mainItem'>
             { project.date && <DateHeader date={project.date} /> }
-            <TitleCard title={project.title} position={project.position} detail={project.detail} />
-            <Description description={project.description} />
-            { project.technologies && <Technologies technologies={project.technologies} /> }
-            <Links code_url={project.code_url} project_url={project.project_url} />
+            <div className='mainBody'>
+                <TitleCard title={project.title} position={project.position} detail={project.detail} />
+                <Description description={project.description} />
+                { project.technologies && <Technologies technologies={project.technologies} /> }
+                <Links code_url={project.code_url} project_url={project.project_url} />
+            </div>
         </div>
     );
 }
@@ -60,7 +62,7 @@ export default function MainComponent({ title, components }) {
 
     return (
         <section id={id}>
-            <h2 className='sectionTitle'>{title}</h2>
+            <h2 className='sectionTitle'>{title.toUpperCase()}</h2>
             <ol>{ listItems }</ol>
             { components.length > 1 && <button onClick={() => setExpanded(!expanded)} >{expanded ? 'show less' : 'show more'}</button>}
         </section>
