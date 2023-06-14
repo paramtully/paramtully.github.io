@@ -16,8 +16,8 @@ function NameCard() {
 function NavLink({ section }) {
     const sectionId = '#' + section.toLowerCase().replace(/\s/g, "");
     return (
-        <a href={sectionId}>
-            <span>--</span>
+        <a className="navItem" href={sectionId}>
+            <span className="line">---</span>
             <span>{ section }</span>
         </a>
     );
@@ -35,7 +35,7 @@ function NavBar() {
     });
 
     return (
-        <nav>
+        <nav className="navList">
             <ul>
                 { section_elts }
             </ul>
@@ -46,7 +46,7 @@ function NavBar() {
 // TODO: ADD LINKS TO HEADER
 export default function Header() {
     return (
-        <header>
+        <header className="nav">
             <NameCard />
             <NavBar />
         </header>

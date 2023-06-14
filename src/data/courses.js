@@ -160,7 +160,7 @@ const courses = [
         detail: null,
         date: null,
         description: null,
-        technologies: ['C', 'x86', 'Caching', 'Memory Read Optimization', 'File Systems', 'CPU design', 'Pipelining', 'Virtual Machines'],
+        technologies: ['C', 'GDB', 'x86', 'Caching', 'Memory Read Optimization', 'File Systems', 'CPU design', 'Pipelining', 'Virtual Machines'],
         code_url: null,
         project_url: null,
         shortlist: true
