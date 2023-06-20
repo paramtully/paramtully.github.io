@@ -17,7 +17,7 @@ function NavLink({ section }) {
     const sectionId = '#' + section.toLowerCase().replace(/\s/g, "");
     return (
         <a className="navItem" href={sectionId}>
-            <span className="line">---</span>
+            <span className="line"></span>
             <span>{ section }</span>
         </a>
     );

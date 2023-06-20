@@ -21,18 +21,18 @@ function Description({ description }) {
 function Technologies({ technologies }) {
     const techItems = technologies.map(item => {
         return (
-            <li className='tech' key={ item }>
+            <li key={ item }>
                 <div className='bubble'>{ item }</div>
             </li>
         );
     });
 
-    return <ul className='mainBodyComponent techList'>{ techItems }</ul>;
+    return <ul className='mainBodyComponent bubbleContainer'>{ techItems }</ul>;
 }
 
 function Links({ code_url, project_url }) {
     return (
-        <div className='mainBodyComponent techList links'>
+        <div className='mainBodyComponent bubbleContainer'>
             { code_url && <a className='bubble' href={code_url}>Code</a> }
             { project_url && <a className='bubble' href={project_url}>Website</a> }
         </div>
