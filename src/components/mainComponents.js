@@ -1,40 +1,38 @@
 import { useState } from 'react';
 
 function DateHeader({ date }) {
-    return <header className='mainHeader'>{ date }</header>;
+    return <header className='mainSubHeader'>{ date }</header>;
 }
 
 function TitleCard({ title, position, detail }) {
     return (
         <h3>
-            <div className='mainItemTitle'>{title}</div>
-            <div>{position}</div>
-            <div>{detail}</div>
+            <div>{title}</div>
+            <div className='mainSubHeader'>{position}</div>
+            <div className='mainSubHeader'>{detail}</div>
         </h3>
     );
 }
 
 function Description({ description }) {
-    return <p className='mainBodyComponent'>{description}</p>;
+    return <p>{description}</p>;
 }
 
 function Technologies({ technologies }) {
     const techItems = technologies.map(item => {
         return (
-            <li key={ item }>
-                <div className='bubble'>{ item }</div>
-            </li>
+            <li className='techItem' key={ item }> { item } </li>
         );
     });
 
-    return <ul className='mainBodyComponent bubbleContainer'>{ techItems }</ul>;
+    return <ul>{ techItems }</ul>;
 }
 
 function Links({ code_url, project_url }) {
     return (
-        <div className='mainBodyComponent bubbleContainer'>
-            { code_url && <a className='bubble' href={code_url}>Code</a> }
-            { project_url && <a className='bubble' href={project_url}>Website</a> }
+        <div>
+            { code_url && <a className='projectLink' href={code_url}>Code</a> }
+            { project_url && <a className='projectLink' href={project_url}>Website</a> }
         </div>
     ) 
 }
@@ -43,7 +41,7 @@ function MainItem({ project }) {
     return (
         <div className='mainItem'>
             { project.date && <DateHeader date={project.date} /> }
-            <div className='mainBody'>
+            <div>
                 <TitleCard title={project.title} position={project.position} detail={project.detail} />
                 <Description description={project.description} />
                 { project.technologies && <Technologies technologies={project.technologies} /> }
@@ -51,6 +49,10 @@ function MainItem({ project }) {
             </div>
         </div>
     );
+}
+
+function Expand({ value, expanded, setExpanded }) {
+    return <button className='expand' onClick={() => setExpanded(!expanded)} >{expanded ? 'show less' : 'show more'}</button>;
 }
 
 export default function MainComponent({ title, components }) {
@@ -62,9 +64,11 @@ export default function MainComponent({ title, components }) {
 
     return (
         <section id={id}>
-            <h2 className='sectionTitle'>{title.toUpperCase()}</h2>
+            <h2>{title.toUpperCase()}</h2>
             <ol>{ listItems }</ol>
-            { components.length > 1 && <button onClick={() => setExpanded(!expanded)} >{expanded ? 'show less' : 'show more'}</button>}
+            {   components.length > 1 && 
+                <Expand value={expanded ? 'show less' : 'show more'} expanded={expanded} setExpanded={setExpanded} /> 
+            }
         </section>
     );
 }

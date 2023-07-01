@@ -1,7 +1,30 @@
+
+:root {
+  --textTitle: 50px;
+  --textBig: 20px;
+  --textMedium: 17px;
+  --textSmall: 15px;
+
+
+  --baseColor: rgb(148 163 184);
+  --titleColor: rgb(226 232 240);
+
+  --itemColor: rgba(69, 162, 158, 0.4);
+  --itemTextColor: rgb(59, 200, 193);
+
+  --projectLinkColor: rgb(0, 46, 51, 0.6);
+  --projectLinkColorHover: rgb(0, 46, 51);
+  --projectLinkTextColor: rgb(59, 200, 193);
+
+  --expandColor: rgb(217, 246, 239, 0.8);
+  --expandColorHover: rgb(217, 246, 239)
+
+}
+
 body {
   margin: 0%;
   padding: 0%;
-  color: rgb(148 163 184);
+  color: var(--baseColor);
   background: rgb(15 23 42);
   font-family: -apple-system, BlinkMacSystemFont, 'Proxima Nova', 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -15,11 +38,116 @@ code {
     monospace;
 }
 
+/* General Styling */
+
 html {
   scroll-behavior: smooth;
 }
 
+main, header {
+  padding: 4% 4% 0 4%;
+}
+
 ul, ol {
+  list-style: none;
+  padding: 4px 0px;
+}
+
+a {
+  text-decoration: none;
+  color: var(--baseColor);
+}
+
+/* Fonts */
+
+h1 {
+  font-size: var(--textTitle);
+}
+
+h2 {
+  font-size: var(--textBig);
+  font-weight: 500;
+}
+
+h3 {
+  font-size: var(--textMedium);
+  font-weight: 400;
+}
+
+h1, h2, h3, h4 {
+  padding: 0px;
+  margin: 0px;
+}
+
+h1, h2, h3 {
+  color: var(--titleColor);
+}
+
+p {
+  font-size: var(--textSmall);
+}
+
+/* Header Styling */
+
+nav {
+  display: none;
+}
+
+/* Main Components */
+
+.mainSubHeader {
+  padding-left: 0;
+  font-weight: normal;
+  color: var(--baseColor);
+  opacity: 75%;
+}
+
+.techItem {
+  display: inline-block;
+  border-radius: 8px;
+  margin: 3px;
+  padding: 5px;
+  color: var(--itemTextColor);
+  background-color: var(--itemColor);
+}
+
+.projectLink {
+  display: inline-block;
+  border-radius: 8px;
+  margin: 3px;
+  padding: 7px 40px;
+  color: var(--projectLinkTextColor);
+  background-color: var(--projectLinkColor);
+}
+
+.projectLink:hover {
+  background-color: var(--projectLinkColorHover);
+}
+
+.expand {
+  border-style: none;
+  border-radius: 5px;
+  margin: 5px 5px 20px 5px;
+  padding: 5px 15px;
+  background-color: var(--expandColor);
+}
+
+.expand:hover {
+  background-color: var(--expandColorHover);
+}
+
+/* Adjust to Non-mobile screen */
+
+@media (min-width: 1100px) {
+  /* nav {
+    display: initial;
+  } */
+}
+
+/* OLD CODE */
+
+
+/* ul, ol {
   list-style: none;
   padding-left: 0;
   padding-top: 2px;
@@ -158,4 +286,4 @@ h1, h2 {
   .mainBody {
     grid-column: 2;
   }
-}
+} */

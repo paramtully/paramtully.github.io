@@ -5,7 +5,7 @@ const sections = ['About', 'Experience', 'Personal Projects', 'Academic Projects
 function NameCard() {
     return (
         <div>
-            <h1 className="name">Param Tully</h1>
+            <h1>Param Tully</h1>
             <h2>4th Year Computer Science Student at UBC</h2>
             <p>Aspiring Software Engineer based in Vancouver, BC, Canada</p>
         </div>
@@ -16,7 +16,7 @@ function NameCard() {
 function NavLink({ section }) {
     const sectionId = '#' + section.toLowerCase().replace(/\s/g, "");
     return (
-        <a className="navItem" href={sectionId}>
+        <a href={sectionId}>
             <span className="line"></span>
             <span>{ section }</span>
         </a>
@@ -35,7 +35,7 @@ function NavBar() {
     });
 
     return (
-        <nav className="navList">
+        <nav>
             <ul>
                 { section_elts }
             </ul>
