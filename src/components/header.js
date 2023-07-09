@@ -1,3 +1,4 @@
+import { githubLink, linkedinLink, instagramLink } from "../data/socialMedia";
 
 const sections = ['About', 'Experience', 'Personal Projects', 'Academic Projects', 'Courses'];
 
@@ -43,12 +44,24 @@ function NavBar() {
     );
 }
 
+// Contains links to social media
+function SocialMedia() {
+    return (
+        <div>
+            <a href={githubLink}>Github</a>
+            <a href={linkedinLink}>Linkedin</a>
+            <a href={instagramLink}>Instagram</a>
+        </div>
+    );
+}
+
 // TODO: ADD LINKS TO HEADER
 export default function Header() {
     return (
         <header className="nav">
             <NameCard />
             <NavBar />
+            <SocialMedia />
         </header>
     );
 }

@@ -208,7 +208,7 @@ const courses = [
         code_url: null,
         project_url: null,
         shortlist: true
-    }
+    },
 ];
 
 export { courses };
