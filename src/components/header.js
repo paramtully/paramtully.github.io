@@ -58,10 +58,12 @@ function SocialMedia() {
 // TODO: ADD LINKS TO HEADER
 export default function Header() {
     return (
-        <header className="nav">
-            <NameCard />
-            <NavBar />
-            <SocialMedia />
+        <header className="header">
+            <div className="nav">
+                <NameCard />
+                <NavBar />
+                <SocialMedia />
+            </div>
         </header>
     );
 }
