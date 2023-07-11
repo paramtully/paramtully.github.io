@@ -94,6 +94,14 @@ nav {
   display: none;
 }
 
+.socialLink {
+  margin: 5px 8px 5px 0px;
+}
+
+.socialIcon:hover {
+  fill: var(--titleColor);
+}
+
 /* Main Components */
 
 .mainSubHeader {

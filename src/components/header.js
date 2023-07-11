@@ -1,4 +1,5 @@
 import { githubLink, linkedinLink, instagramLink } from "../data/socialMedia";
+import { FaFacebook, FaInstagram, FaGithub } from 'react-icons/fa';
 
 const sections = ['About', 'Experience', 'Personal Projects', 'Academic Projects', 'Courses'];
 
@@ -46,11 +47,20 @@ function NavBar() {
 
 // Contains links to social media
 function SocialMedia() {
+    const size = '1.5em';
+    const color = 'rgb(148 163 184)';
+    const hoverColor = 'rgb(226 232 240)';
     return (
         <div>
-            <a href={githubLink}>Github</a>
-            <a href={linkedinLink}>Linkedin</a>
-            <a href={instagramLink}>Instagram</a>
+            <a href={githubLink} className="socialLink">
+                <FaGithub className="socialIcon" size={size} color={color} />
+            </a>
+            <a href={linkedinLink} className="socialLink">
+                <FaFacebook className="socialIcon" size={size} color={color} />
+            </a>
+            <a href={instagramLink} className="socialLink">
+                <FaInstagram className="socialIcon" size={size} color={color} />
+            </a>
         </div>
     );
 }
