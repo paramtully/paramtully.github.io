@@ -43,7 +43,7 @@ html {
   scroll-behavior: smooth;
 }
 
-main, header {
+main, .header {
   padding: 50px 8% 0 8%;
 }
 
@@ -107,16 +107,17 @@ nav {
   color: var(--titleColor);
 }
 
-.navLink:hover .line {
-  background-color: var(--titleColor);
-}
-
 .line {
   width: 35px;
   height: 1px;
   border-radius: 1px;
   background-color: var(--baseColor);
   margin-right: 15px;
+}
+
+.navLink:hover .line {
+  background-color: var(--titleColor);
+  width: 70px;
 }
 
 .socialLink {
@@ -128,6 +129,10 @@ nav {
 }
 
 /* Main Components */
+
+.mainItem {
+  margin: 20px auto;
+}
 
 .mainSubHeader {
   padding-left: 0;
@@ -161,7 +166,7 @@ nav {
 .expand {
   border-style: none;
   border-radius: 5px;
-  margin: 30px 5px 30px 5px;
+  margin: 15px 5px 30px 5px;
   padding: 5px 30px;
   background-color: var(--expandColor);
 }
