@@ -18,7 +18,7 @@ function NameCard() {
 function NavLink({ section }) {
     const sectionId = '#' + section.toLowerCase().replace(/\s/g, "");
     return (
-        <a href={sectionId}>
+        <a href={sectionId} className="navLink">
             <span className="line"></span>
             <span>{ section }</span>
         </a>
@@ -49,7 +49,6 @@ function NavBar() {
 function SocialMedia() {
     const size = '1.5em';
     const color = 'rgb(148 163 184)';
-    const hoverColor = 'rgb(226 232 240)';
     return (
         <div>
             <a href={githubLink} className="socialLink">
