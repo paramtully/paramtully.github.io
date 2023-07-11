@@ -97,8 +97,6 @@ nav {
   display: none;
 }
 
-.header
-
 .navLink {
   display: flex;
   align-items: center;
@@ -120,7 +118,6 @@ nav {
   background-color: var(--baseColor);
   margin-right: 15px;
 }
-
 
 .socialLink {
   margin: 5px 8px 5px 0px;
@@ -185,7 +182,7 @@ nav {
     grid-column: 1;
     padding: 0;
 
-    display: inline-flex;
+    display: flex;
     justify-content: center;
   }
 
