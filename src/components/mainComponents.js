@@ -66,7 +66,7 @@ export default function MainComponent({ title, components }) {
         <section id={id}>
             <h2>{title.toUpperCase()}</h2>
             <ol>{ listItems }</ol>
-            {   components.length > 1 && 
+            {   components.length > 5 && 
                 <Expand value={expanded ? 'show less' : 'show more'} expanded={expanded} setExpanded={setExpanded} /> 
             }
         </section>

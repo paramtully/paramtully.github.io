@@ -204,7 +204,7 @@ const courses = [
         detail: null,
         date: null,
         description: null,
-        technologies: ['python', 'numpy', 'pandas', 'linear regression', 'decision trees', 'neural networks', 'Portfolio NPV', 'Unemployment Dynamics'],
+        technologies: ['Python', 'Numpy', 'Pandas', 'Linear Regression', 'Decision Trees', 'Neural Networks', 'Portfolio NPV', 'Unemployment Dynamics'],
         code_url: null,
         project_url: null,
         shortlist: true

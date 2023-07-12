@@ -29,7 +29,7 @@ const academicProjects = [
         detail: 'Worked on Team of 9',
         date: 'Jan - May 2023',
         description: 'I fully implemented a CI/CD pipeline using GCP supporting 3 build environments, concurrent pushes from 6+ developers, and reduced build and deploy times by 300%. I also contributed to the backend team by choosing our techstack, creating the external design (UML) for the backend, and working on implementation details with team members.',
-        technologies: ['GCP', 'Docker', 'GitHub Actions', 'Java', 'React', 'Node.js', 'Maven', 'Spring Boot', 'Cloud SQL', 'JUnit', 'mocha/chai', 'git'],
+        technologies: ['GCP', 'Docker', 'GitHub Actions', 'Java', 'React', 'Node.js', 'Maven', 'Spring Boot', 'Cloud SQL', 'JUnit', 'mocha/chai', 'Git'],
         code_url: null,
         project_url: null,
         shortlist: true

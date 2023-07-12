@@ -1,5 +1,5 @@
 import { githubLink, linkedinLink, instagramLink } from "../data/socialMedia";
-import { FaFacebook, FaInstagram, FaGithub } from 'react-icons/fa';
+import { FaLinkedin, FaInstagram, FaGithub } from 'react-icons/fa';
 
 const sections = ['About', 'Experience', 'Personal Projects', 'Academic Projects', 'Courses'];
 
@@ -51,11 +51,11 @@ function SocialMedia() {
     const color = 'rgb(148 163 184)';
     return (
         <div>
+            <a href={linkedinLink} className="socialLink">
+                <FaLinkedin className="socialIcon" size={size} color={color} />
+            </a>
             <a href={githubLink} className="socialLink">
                 <FaGithub className="socialIcon" size={size} color={color} />
-            </a>
-            <a href={linkedinLink} className="socialLink">
-                <FaFacebook className="socialIcon" size={size} color={color} />
             </a>
             <a href={instagramLink} className="socialLink">
                 <FaInstagram className="socialIcon" size={size} color={color} />
