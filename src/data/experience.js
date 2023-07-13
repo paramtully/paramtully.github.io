@@ -15,7 +15,7 @@ const positions = [
         title: 'Invoke Media',
         position: 'DevOps Engineer Co-op',
         detail: null,
-        date: 'Sept 2023 - present',
+        date: 'Sept 2023 - Present',
         description: null,
         technologies: ['AWS', 'Terraform',],
         code_url: null,
