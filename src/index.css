@@ -8,6 +8,9 @@
   --baseColor: rgb(148 163 184);
   --titleColor: rgb(226 232 240);
 
+  --backgroundColor: rgb(15 23 42);
+  --backgroundHoverColor: rgb(19, 26, 42);
+
   --itemColor: rgba(69, 162, 158, 0.4);
   --itemTextColor: rgb(59, 200, 193);
 
@@ -24,7 +27,7 @@ body {
   margin: 0%;
   padding: 0%;
   color: var(--baseColor);
-  background: rgb(15 23 42);
+  background: var(--backgroundColor);
   font-family: -apple-system, BlinkMacSystemFont, 'Proxima Nova', 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -130,6 +133,7 @@ nav {
 
 .mainItem {
   margin: 20px auto;
+  border-radius: 5px;
 }
 
 .mainSubHeader {
