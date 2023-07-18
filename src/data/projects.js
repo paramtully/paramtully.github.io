@@ -200,7 +200,7 @@ const personalProjects = [
         technologies: ['HTML', 'CSS'],
         code_url: 'https://github.com/paramtully/TechnicalProjects/tree/main/GoogleSearch',
         project_url: null,
-        shortlist: true
+        shortlist: false
     },
     {
         title: 'Tic-Tac-Toe Game',
