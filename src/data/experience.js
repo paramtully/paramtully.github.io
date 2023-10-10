@@ -17,7 +17,7 @@ const positions = [
         detail: null,
         date: 'Sept 2023 - Present',
         description: null,
-        technologies: ['AWS', 'Terraform',],
+        technologies: ['AWS', 'Pulumi', 'Terraform', 'Fastlane'],
         code_url: null,
         project_url: null,
         shortlist: true
