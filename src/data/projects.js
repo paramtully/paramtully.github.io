@@ -148,17 +148,6 @@ const personalProjects = [
         shortlist: true
     },
     {
-        title: 'Personal Website',
-        position: null,
-        roll: null,
-        date: 'July 2023',
-        description: `A live website that summarizes my journey in CS.`,
-        technologies: ['React', 'CSS3', 'GitHub Pages'],
-        code_url: 'https://github.com/paramtully/paramtully.github.io',
-        project_url: 'https://paramtully.github.io/',
-        shortlist: true
-    },
-    {
         title: 'GPA Calculator',
         position: null,
         roll: null,
