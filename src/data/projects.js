@@ -12,16 +12,6 @@ const academicProjects = [
         project_url: null,
         shortlist: true
     },{
-        title: 'Personal Website',
-        position: null,
-        detail: null,
-        date: 'July 2023',
-        description: 'A live website that summarizes my journey in CS. The project is built from scratch and is able to dynamically scale content to the browser window size. It also uses simple css animations to bring interactable components like links to life.',
-        technologies: ['React', 'CSS3', 'GitHub Pages'],
-        code_url: 'https://github.com/paramtully/paramtully.github.io',
-        project_url: 'https://paramtully.github.io',
-        shortlist: true
-    }, {
         title: 'Blog Website on CI/CD Pipeline',
         position: 'Cloud DevOps Engineer + Software Engineer (Backend)',
         detail: 'Worked on Team of 9',
@@ -144,8 +134,17 @@ const personalProjects = [
         code_url: null,
         project_url: null,
         shortlist: true
-    },
-    {
+    },{
+        title: 'Personal Website',
+        position: null,
+        detail: null,
+        date: 'July 2023',
+        description: 'A live website that summarizes my journey in CS. The project is built from scratch and is able to dynamically scale content to the browser window size. It also uses simple css animations to bring interactable components like links to life.',
+        technologies: ['React', 'CSS3', 'GitHub Pages'],
+        code_url: 'https://github.com/paramtully/paramtully.github.io',
+        project_url: 'https://paramtully.github.io',
+        shortlist: true
+    },{
         title: 'GPA Calculator',
         position: null,
         roll: null,
