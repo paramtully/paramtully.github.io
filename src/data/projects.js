@@ -1,4 +1,101 @@
-
+const personalProjects = [
+    {
+        title: null,
+        position: null,
+        roll: null,
+        date: null,
+        description: null,
+        technologies: null,
+        code_url: null,
+        project_url: null,
+        shortlist: true
+    },{
+        title: "oAuth",
+        position: null,
+        roll: null,
+        date: "Sept 2023 - Nov 2023",
+        description: "This project implements the oAuth2.0 protocol, a token based authentication system, from scratch. It uses an authentication server to store and manage user credentials and sessions according to the oAuth2.0 protocol. It then demos a full stack application utilizing oAuth with a React frontend served on an express.js backend. For demonstration purposes, access tokens duration is 10s and refresh token duration is 60s.",
+        technologies: ['TypeScript/JavaScript', 'React', 'Express.js', 'Axios', 'React-Cookies', 'jsonwebtoken', 'crypto', 'fs-extra', 'Mocha/Chai'],
+        code_url: "https://github.com/paramtully/oAuth",
+        project_url: null,
+        shortlist: true
+    },{
+        title: 'Personal Website',
+        position: null,
+        detail: null,
+        date: 'July 2023',
+        description: 'A live website that summarizes my journey in CS. The project is built from scratch and is able to dynamically scale content to the browser window size. It also uses simple css animations to bring interactable components like links to life.',
+        technologies: ['React', 'CSS3', 'GitHub Pages'],
+        code_url: 'https://github.com/paramtully/paramtully.github.io',
+        project_url: 'https://paramtully.github.io',
+        shortlist: true
+    },{
+        title: 'GPA Calculator',
+        position: null,
+        roll: null,
+        date: 'July 2022 – May 2023',
+        description: "A full-stack web app that calculates a UBC student's GPA. This is accomplished by scraping their grade data from UBC's ssc website in a headless browser. Chooses one of several device metadatas for the headless browser to prevent bot detection.",
+        technologies: ['Python3', 'React', 'Selenium', 'Yarn', 'Flask', 'C++'],
+        code_url: 'https://github.com/paramtully/UBC_GPA_Retriever',
+        project_url: null,
+        shortlist: true
+    },
+    {
+        title: 'Currency Converter',
+        position: null,
+        roll: null,
+        date: 'July 2022',
+        description: 'A simple frontend currency conversion application. Utilizes a public API to retrieve supported coutries and their conversion rates. Creates a drop-down from the supported countries countries. Sends API calls on form submissions and displays the returned value.',
+        technologies: ['JavaScript', 'HTML', 'JSON'],
+        code_url: 'https://github.com/paramtully/TechnicalProjects/tree/main/CurrencyConverter',
+        project_url: null,
+        shortlist: false
+    },
+    {
+        title: 'Online Marketplace',
+        position: null,
+        roll: null,
+        date: 'June - July 2022',
+        description: 'A full-stack web application that allows users to list items, make bids, and comment on listings.',
+        technologies: ['Django', 'HTML', 'Bootstrap (CSS)', 'SQLite'],
+        code_url: 'https://github.com/paramtully/TechnicalProjects/tree/main/OnlineMarketplace',
+        project_url: null,
+        shortlist: false
+    },
+    {
+        title: 'Brick Breaker Game',
+        position: null,
+        roll: null,
+        date: 'Dec 2021',
+        description: 'A recreation of a game from my childhood. The goal of the game is to break all of the bricks by intercepting the ball with a paddle and redirecting the ball to collide with the bricks. The game incorporated collision detection, random spawning of power-ups which can grant one of three bonuses: paddle extension, slow-mo balls, and multi-ball generation. The game also reduced coupling of score updating by using the observer pattern.',
+        technologies: ['Java', 'JUnit', 'Swing'],
+        code_url: 'https://github.com/paramtully/TechnicalProjects/tree/main/BrickBreakerPlus',
+        project_url: null,
+        shortlist: true
+    },
+    {
+        title: 'Google Search Page',
+        position: null,
+        roll: null,
+        date: 'July 2021',
+        description: 'Recreated a fully functional Google Search page.',
+        technologies: ['HTML', 'CSS'],
+        code_url: 'https://github.com/paramtully/TechnicalProjects/tree/main/GoogleSearch',
+        project_url: null,
+        shortlist: false
+    },
+    {
+        title: 'Tic-Tac-Toe Game',
+        position: null,
+        roll: null,
+        date: 'May 2021',
+        description: 'A single player game that competes against A.I. by using a brute force predictive algorithm involving arbitrary-arity trees and backtracking search.',
+        technologies: ['Python', 'unittest'],
+        code_url: null,
+        project_url: null,
+        shortlist: false
+    },
+]
 
 const academicProjects = [
     {
@@ -122,94 +219,5 @@ const academicProjects = [
         shortlist: false
     },
 ];
-
-const personalProjects = [
-    {
-        title: null,
-        position: null,
-        roll: null,
-        date: null,
-        description: null,
-        technologies: null,
-        code_url: null,
-        project_url: null,
-        shortlist: true
-    },{
-        title: 'Personal Website',
-        position: null,
-        detail: null,
-        date: 'July 2023',
-        description: 'A live website that summarizes my journey in CS. The project is built from scratch and is able to dynamically scale content to the browser window size. It also uses simple css animations to bring interactable components like links to life.',
-        technologies: ['React', 'CSS3', 'GitHub Pages'],
-        code_url: 'https://github.com/paramtully/paramtully.github.io',
-        project_url: 'https://paramtully.github.io',
-        shortlist: true
-    },{
-        title: 'GPA Calculator',
-        position: null,
-        roll: null,
-        date: 'July 2022 – May 2023',
-        description: "A full-stack web app that calculates a UBC student's GPA. This is accomplished by scraping their grade data from UBC's ssc website in a headless browser. Chooses one of several device metadatas for the headless browser to prevent bot detection.",
-        technologies: ['Python3', 'React', 'Selenium', 'Yarn', 'Flask', 'C++'],
-        code_url: 'https://github.com/paramtully/UBC_GPA_Retriever',
-        project_url: null,
-        shortlist: true
-    },
-    {
-        title: 'Currency Converter',
-        position: null,
-        roll: null,
-        date: 'July 2022',
-        description: 'A simple frontend currency conversion application. Utilizes a public API to retrieve supported coutries and their conversion rates. Creates a drop-down from the supported countries countries. Sends API calls on form submissions and displays the returned value.',
-        technologies: ['JavaScript', 'HTML', 'JSON'],
-        code_url: 'https://github.com/paramtully/TechnicalProjects/tree/main/CurrencyConverter',
-        project_url: null,
-        shortlist: false
-    },
-    {
-        title: 'Online Marketplace',
-        position: null,
-        roll: null,
-        date: 'June - July 2022',
-        description: 'A full-stack web application that allows users to list items, make bids, and comment on listings.',
-        technologies: ['Django', 'HTML', 'Bootstrap (CSS)', 'SQLite'],
-        code_url: 'https://github.com/paramtully/TechnicalProjects/tree/main/OnlineMarketplace',
-        project_url: null,
-        shortlist: true
-    },
-    {
-        title: 'Brick Breaker Game',
-        position: null,
-        roll: null,
-        date: 'Dec 2021',
-        description: 'A recreation of a game from my childhood. The goal of the game is to break all of the bricks by intercepting the ball with a paddle and redirecting the ball to collide with the bricks. The game incorporated collision detection, random spawning of power-ups which can grant one of three bonuses: paddle extension, slow-mo balls, and multi-ball generation. The game also reduced coupling of score updating by using the observer pattern.',
-        technologies: ['Java', 'JUnit', 'Swing'],
-        code_url: 'https://github.com/paramtully/TechnicalProjects/tree/main/BrickBreakerPlus',
-        project_url: null,
-        shortlist: true
-    },
-    {
-        title: 'Google Search Page',
-        position: null,
-        roll: null,
-        date: 'July 2021',
-        description: 'Recreated a fully functional Google Search page.',
-        technologies: ['HTML', 'CSS'],
-        code_url: 'https://github.com/paramtully/TechnicalProjects/tree/main/GoogleSearch',
-        project_url: null,
-        shortlist: false
-    },
-    {
-        title: 'Tic-Tac-Toe Game',
-        position: null,
-        roll: null,
-        date: 'May 2021',
-        description: 'A single player game that competes against A.I. by using a brute force predictive algorithm involving arbitrary-arity trees and backtracking search.',
-        technologies: ['Python', 'unittest'],
-        code_url: null,
-        project_url: null,
-        shortlist: true
-    },
-]
 
 export { academicProjects, personalProjects };
