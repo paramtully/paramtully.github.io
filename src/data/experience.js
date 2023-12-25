@@ -14,12 +14,12 @@ const positions = [
     {
         title: 'Invoke',
         position: 'DevOps Engineer Co-op',
-        detail: "A small company based in Vancouver that specializes in helping build tech start-ups",
+        detail: "Vancouver based company specializing in building start-ups",
         date: 'Sept 2023 - Dec 2023',
-        description: "In this position, I specialized in building and maintaining automation infrastructure for various projects. My first project involved automating the deployment of a React Native application to both the IOS and Android app stores. This involved learning and applying security best practices when storing and sharing sensitive data like private keys. I also implemented the user authentication system in the same mobile application utilizing AWS resources including AWS Cognito.",
-        technologies: ['AWS', 'CircleCI', 'Pulumi', 'Fastlane'],
+        description: "I worked on 2 major projects for Incrowd, a live-streaming mobile app. The first being an automated deployment pipeline to the IOS App Store which improved deploy times by 3x and no longer required manual intermediate steps. My second major project involved building a custom user Authentication flow which will soon make it to production.",
+        technologies: ['AWS', 'CircleCI', 'Terraform', 'React Native', 'GraphQL' ,'Fastlane'],
         code_url: null,
-        project_url: null,
+        project_url: "https://www.incrowd.live/",
         shortlist: true
     },
 ];
