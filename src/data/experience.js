@@ -2,6 +2,7 @@
 const positions = [
     {
         title: null,
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -13,6 +14,7 @@ const positions = [
     },
     {
         title: 'Invoke',
+        title_url: 'https://invokedigital.co/',
         position: 'DevOps Engineer Co-op',
         detail: "Vancouver based company specializing in building start-ups",
         date: 'Sept 2023 - Dec 2023',

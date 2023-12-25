@@ -2,6 +2,7 @@
 const courses = [
     {
         title: null,
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -13,6 +14,7 @@ const courses = [
     },
     {
         title: 'Principles of Microeconomics',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -24,6 +26,7 @@ const courses = [
     },
     {
         title: 'Principles of Macroeconomics',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -35,6 +38,7 @@ const courses = [
     },
     {
         title: 'Calculus I/II/III',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -46,6 +50,7 @@ const courses = [
     },
     {
         title: 'Matrix Algebra',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -57,6 +62,7 @@ const courses = [
     },
     {
         title: 'Elementary Statistics',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -68,6 +74,7 @@ const courses = [
     },
     {
         title: 'Discrete Mathematics',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -79,6 +86,7 @@ const courses = [
     },
     {
         title: 'Intro to Computer Science I/II',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -90,6 +98,7 @@ const courses = [
     },
     {
         title: 'Software Construction',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -101,6 +110,7 @@ const courses = [
     },
     {
         title: 'Basic Data Structures & Algorithms',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -112,6 +122,7 @@ const courses = [
     },
     {
         title: 'Intro to Computer Systems',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -123,6 +134,7 @@ const courses = [
     },
     {
         title: 'Intro to Software Engineering',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -134,6 +146,7 @@ const courses = [
     },
     {
         title: 'Software Engineering Project',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -145,6 +158,7 @@ const courses = [
     },
     {
         title: 'Intermediate Algorithm Design & Analysis',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -156,6 +170,7 @@ const courses = [
     },
     {
         title: 'Computer Hardware & OS',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -167,6 +182,7 @@ const courses = [
     },
     {
         title: 'Intro to Relational Databases',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -178,6 +194,7 @@ const courses = [
     },
     {
         title: 'Intro to Computer Networking',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -189,6 +206,7 @@ const courses = [
     },
     {
         title: 'Intro to Artificial Intelligence',
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -200,6 +218,7 @@ const courses = [
     },
     {
         title: 'Quantitative Economic Modelling with Data Science Applications',
+        title_url: null,
         position: null,
         detail: null,
         date: null,

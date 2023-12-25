@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import getTitleId from '../utility/TitleId';
 
 function DateHeader({ date }) {
     return <header className='mainSubHeader'>{ date }</header>;
@@ -7,7 +8,7 @@ function DateHeader({ date }) {
 function TitleCard({ title, position, detail }) {
     return (
         <h3>
-            <div>{title}</div>
+            <div className='title'>{title}</div>
             <div className='mainSubHeader'>{position}</div>
             <div className='mainSubHeader'>{detail}</div>
         </h3>
@@ -32,14 +33,14 @@ function Links({ code_url, project_url }) {
     return (
         <div>
             { code_url && <a className='projectLink' href={code_url}>Code</a> }
-            { project_url && <a className='projectLink' href={project_url}>Website</a> }
+            { project_url && <a className='projectLink' href={project_url}>Live Project</a> }
         </div>
     ) 
 }
 
 function MainItem({ project }) {
     return (
-        <div className='mainItem'>
+        <a href={project.title_url} className='mainItem'>
             { project.date && <DateHeader date={project.date} /> }
             <div>
                 <TitleCard title={project.title} position={project.position} detail={project.detail} />
@@ -47,7 +48,7 @@ function MainItem({ project }) {
                 { project.technologies && <Technologies technologies={project.technologies} /> }
                 <Links code_url={project.code_url} project_url={project.project_url} />
             </div>
-        </div>
+        </a>
     );
 }
 
@@ -57,7 +58,7 @@ function Expand({ value, expanded, setExpanded }) {
 
 export default function MainComponent({ title, components }) {
     const [expanded, setExpanded] = useState(false);
-    const id = title.toLowerCase().replace(/\s/g, "");
+    const id = getTitleId(title);
 
     const displayedProjects = expanded ? components : components.filter(project => project.shortlist);
     const listItems = displayedProjects.map(project => <li key={project.title}><MainItem project={project} /></li>);

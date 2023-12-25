@@ -1,6 +1,7 @@
 const personalProjects = [
     {
         title: null,
+        title_url: null,
         position: null,
         roll: null,
         date: null,
@@ -11,6 +12,7 @@ const personalProjects = [
         shortlist: true
     },{
         title: "oAuth",
+        title_url: null,
         position: null,
         roll: null,
         date: "Sept 2023 - Nov 2023",
@@ -21,6 +23,7 @@ const personalProjects = [
         shortlist: true
     },{
         title: 'Personal Website',
+        title_url: null,
         position: null,
         detail: null,
         date: 'July 2023',
@@ -31,6 +34,7 @@ const personalProjects = [
         shortlist: true
     },{
         title: 'GPA Calculator',
+        title_url: null,
         position: null,
         roll: null,
         date: 'July 2022 – May 2023',
@@ -42,6 +46,7 @@ const personalProjects = [
     },
     {
         title: 'Currency Converter',
+        title_url: null,
         position: null,
         roll: null,
         date: 'July 2022',
@@ -53,6 +58,7 @@ const personalProjects = [
     },
     {
         title: 'Online Marketplace',
+        title_url: null,
         position: null,
         roll: null,
         date: 'June - July 2022',
@@ -64,6 +70,7 @@ const personalProjects = [
     },
     {
         title: 'Brick Breaker Game',
+        title_url: null,
         position: null,
         roll: null,
         date: 'Dec 2021',
@@ -75,6 +82,7 @@ const personalProjects = [
     },
     {
         title: 'Google Search Page',
+        title_url: null,
         position: null,
         roll: null,
         date: 'July 2021',
@@ -86,6 +94,7 @@ const personalProjects = [
     },
     {
         title: 'Tic-Tac-Toe Game',
+        title_url: null,
         position: null,
         roll: null,
         date: 'May 2021',
@@ -100,6 +109,7 @@ const personalProjects = [
 const academicProjects = [
     {
         title: null,
+        title_url: null,
         position: null,
         detail: null,
         date: null,
@@ -110,6 +120,7 @@ const academicProjects = [
         shortlist: true
     },{
         title: 'Blog Website on CI/CD Pipeline',
+        title_url: null,
         position: 'Cloud DevOps Engineer + Software Engineer (Backend)',
         detail: 'Worked on Team of 9',
         date: 'Jan - May 2023',
@@ -121,6 +132,7 @@ const academicProjects = [
     },
     {
         title: 'Basketball League Tracker',
+        title_url: null,
         position: null,
         detail: 'Worked on Team of 3',
         date: 'April 2023',
@@ -132,6 +144,7 @@ const academicProjects = [
     },
     {
         title: 'Spotify Song Classification System',
+        title_url: null,
         position: null,
         detail: null,
         date: 'April 2023',
@@ -143,6 +156,7 @@ const academicProjects = [
     },
     {
         title: 'Insight UBC',
+        title_url: null,
         position: 'Software Engineer (Backend)',
         detail: 'Worked on team of 3',
         date: 'Sept - Dec 2022',
@@ -154,6 +168,7 @@ const academicProjects = [
     },
     {
         title: 'Brute Force Password Decription',
+        title_url: null,
         position: null,
         detail: null,
         date: 'April 2022',
@@ -165,6 +180,7 @@ const academicProjects = [
     },
     {
         title: 'Pruning Tree',
+        title_url: null,
         position: null,
         detail: null,
         date: 'April 2022',
@@ -176,6 +192,7 @@ const academicProjects = [
     },
     {
         title: 'Flood-Fill Animation',
+        title_url: null,
         position: null,
         detail: null,
         date: 'March 2022',
@@ -187,6 +204,7 @@ const academicProjects = [
     },
     {
         title: 'Social Media Application',
+        title_url: null,
         position: null,
         detail: null,
         date: 'Oct - Dec 2021',
@@ -198,6 +216,7 @@ const academicProjects = [
     },
     {
         title: 'Matching Pairs Game',
+        title_url: null,
         position: null,
         detail: null,
         date: 'April 2022',
@@ -209,6 +228,7 @@ const academicProjects = [
     },
     {
         title: 'Predictive Machine Learning Model',
+        title_url: null,
         position: null,
         detail: null,
         date: 'Nov 2022',
