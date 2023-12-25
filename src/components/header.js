@@ -1,7 +1,7 @@
 import { githubLink, linkedinLink, instagramLink } from "../data/socialMedia";
 import { FaLinkedin, FaInstagram, FaGithub } from 'react-icons/fa';
 
-const sections = ['About', 'Experience', 'Personal Projects', 'Academic Projects', 'Courses'];
+const sections = ['About', 'Experience', 'Personal Projects', 'Academic Projects'];
 
 // Contains name and brief description
 function NameCard() {
@@ -64,7 +64,6 @@ function SocialMedia() {
     );
 }
 
-// TODO: ADD LINKS TO HEADER
 export default function Header() {
     return (
         <header className="header">

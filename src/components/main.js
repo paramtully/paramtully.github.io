@@ -12,7 +12,6 @@ export default function Main() {
             <MainSection id='experience' title='Experience' components={positions} />
             <MainSection id='personalprojects' title='Personal Projects' components={personalProjects} />
             <MainSection id='academicprojects' title='Academic Projects' components={academicProjects} />
-            <MainSection id='courses' title='Courses' components={courses} />
         </main>
     );
 }
