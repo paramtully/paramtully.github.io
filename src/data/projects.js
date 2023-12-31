@@ -17,7 +17,7 @@ const personalProjects = [
         roll: null,
         date: "Sept 2023 - Nov 2023",
         description: "This project implements the oAuth2.0 protocol, a token based authentication system, from scratch. It uses an authentication server to store and manage user credentials and sessions according to the oAuth2.0 protocol. It then demos a full stack application utilizing oAuth with a React frontend served on an express.js backend. For demonstration purposes, access tokens duration is 10s and refresh token duration is 60s.",
-        technologies: ['TypeScript/JavaScript', 'React', 'Express.js', 'Axios', 'React-Cookies', 'jsonwebtoken', 'crypto', 'fs-extra', 'Mocha/Chai'],
+        technologies: ['TypeScript/JavaScript', 'React', 'DynamoDB', 'Express.js', 'Axios', 'React-Cookies', 'jsonwebtoken', 'crypto', 'fs-extra', 'Mocha/Chai'],
         code_url: "https://github.com/paramtully/oAuth",
         project_url: null,
         shortlist: true
