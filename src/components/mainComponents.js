@@ -40,7 +40,8 @@ function Links({ code_url, project_url }) {
 
 function MainItem({ project }) {
     return (
-        <a href={project.title_url} className='mainItem'>
+        <div className='mainItem'>
+             <a href={project.title_url}>
             { project.date && <DateHeader date={project.date} /> }
             <div>
                 <TitleCard title={project.title} position={project.position} detail={project.detail} />
@@ -49,6 +50,7 @@ function MainItem({ project }) {
                 <Links code_url={project.code_url} project_url={project.project_url} />
             </div>
         </a>
+        </div>
     );
 }
 
