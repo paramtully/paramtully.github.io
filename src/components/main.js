@@ -1,7 +1,7 @@
-import About from "./about";
+import About from "./about/about";
 import MainSection from './mainComponents';
 import { personalProjects, academicProjects } from "../data/projects";
-import { positions } from "../data/experience";
+import { positions } from "../data/positions";
 
 export default function Main() {
 

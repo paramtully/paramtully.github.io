@@ -1,4 +1,4 @@
-import { githubLink, linkedinLink, instagramLink } from "../data/socialMedia";
+import { githubLink, linkedinLink, instagramLink } from "../../data/socialMedia";
 import { FaLinkedin, FaInstagram, FaGithub } from 'react-icons/fa';
 
 const sections = ['About', 'Experience', 'Personal Projects', 'Academic Projects'];
