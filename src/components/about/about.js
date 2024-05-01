@@ -13,9 +13,9 @@ export default function About() {
             </p>
             <p>
                 {/* mission stuff */}
-                Generally, my interest lies in automating repeatable tasks as I find value in automating 
-                and streamlining workflows and thus saving time that can otherwise be used more productively. 
-                This has led me into fields such as DevOps, where I've worked on automated cloud deployment pipelines 
+                Generally, my interest lies in automating repeatable tasks as I find value in streamlining 
+                workflows and thus saving time that can otherwise be used more productively. This has led me
+                into fields such as DevOps, where I've worked on automated cloud deployment pipelines 
                 and more recently machine learning.
             </p>
             <p>
