@@ -3,7 +3,7 @@
 export default class Task {
     title: String;
     summary: String;
-    description: String;
+    description: String[];
     technologies: String;
     start_date: String | null;
     end_date: String;

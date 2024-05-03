@@ -244,7 +244,7 @@ const academicProjects = [
 const projects = [
     {
         title: null,
-        category: null,
+        categories: null,
         summary: null,
         description: null,
         technologies: null,
@@ -255,29 +255,21 @@ const projects = [
         org_url: null,
         importance: null
     },{
-        title: "oAuth2",
-        category: 'SWE',
+        title: 'oAuth2',
+        categories: ['SWE', 'CyberSec'],
         summary: 'Implemented oAuth2.0 token based user authentication standard from scratch',
-        description: 'null',
+        description: [
+            'The oAuth standard is commonly used to log in users and save users sessions securely without the need to re-authenticate after changing pages or leaving then revisiting the page.', 
+            "I implemented oAuth with a separate authentication server which handles storing and validating login credentials and session information. The authentication server sends asymmetrically signed authentication tokens upon successful login which can then be stored securely in a cookie on the client’s browser. The authentication token can easily be verified by the backend with a public key, proving the sender is authorized to view their protected information. A refresh token is added to the authentication server’s response to allow user’s to get new authorization tokens when they have expired without the need to enter login credentials again.",
+            "This project was an opportunity to learn about some cybersecurity topics and security best practices in general. The biggest lesson was the need to hash and salt passwords (server-side) before storing them in databases, as it mitigates risk of attackers retrieving the user’s passwords if the database gets leaked. I also got to learn about how to mitigate risk when sending proof of authentication over the internet by using signatures with asymmetric encryption and expiry dates.",
+            'A diagram and more in depth explanation can be found on github, linked below.'],
         technologies: ['TypeScript', 'React.js', 'Express.js', 'DynamoDB', 'Mocha/Chai'],
         start_date: null,
         end_date: new Date(2023, 11),
         github_url: "https://github.com/paramtully/oAuth",
         live_url: null,
         org_url: null,
-        importance: null,
-
-
-        title: "oAuth2",
-        title_url: null,
-        position: null,
-        roll: null,
-        date: "Sept 2023 - Nov 2023",
-        description: "This project implements the oAuth2.0 protocol, a token-based authentication system, from scratch. It uses an authentication server to store and manage user credentials and sessions according to the oAuth2.0 protocol. It then demos a full stack application utilizing oAuth with a React frontend served on an express.js backend. For demonstration purposes, access tokens duration is 10s and refresh token duration is 60s.",
-        technologies: ['TypeScript/JavaScript', 'React', 'DynamoDB', 'Express.js', 'Axios', 'React-Cookies', 'jsonwebtoken', 'crypto', 'fs-extra', 'Mocha/Chai'],
-        code_url: "https://github.com/paramtully/oAuth",
-        project_url: null,
-        shortlist: true
+        importance: 5,
     },{
         title: 'Personal Website',
         title_url: null,
