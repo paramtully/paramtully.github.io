@@ -2,7 +2,7 @@ import Task from "./Task";
 
 export default class Position extends Task {
     position: String;
-    required_position_keys = ['position'];
+    required_position_keys: String[] = ['position'];
 
     constructor(data: Any) {
         super(data);
