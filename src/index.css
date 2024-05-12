@@ -177,6 +177,42 @@ nav {
   background-color: var(--expandColorHover);
 }
 
+.collapsibleHidden {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.collapsibleOpen {
+  overflow: hidden;
+  opacity: 1;
+  transition: all 0.25s ease;
+}
+
+.collapseButton {
+  display: flex;
+  align-items: center;
+  padding: 0.1em;
+
+  color: var(--baseColor);
+  background: none;
+  border: none;
+}
+
+.collapseButton:hover {
+  color: var(--titleColor);
+}
+
+.collapseButton:hover .line {
+  width: 70px;
+}
+
+.collapseIcon {
+  display: inline-block;
+  width: 25px;
+  rotate: 180deg;
+}
+
 /* Adjust to Non-mobile screen */
 
 @media (min-width: 944px) {
@@ -209,4 +245,25 @@ nav {
     margin-bottom: 2em;
   }
 
+}
+
+/* Animations */
+@keyframes rotateDown {
+  0% {
+    transform: rotate(-180deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes rotateUp {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-180deg);
+  }
 }
