@@ -1,4 +1,4 @@
-import About from "../../about/about";
+import About from "../../about/About";
 import MainSection from './mainComponents';
 import { personalProjects, academicProjects } from "../../../data/projects";
 import { positions, positions_updated } from "../../../data/positions";

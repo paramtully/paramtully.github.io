@@ -1,5 +1,5 @@
 import './App.css';
-import Header from './components/header/header';
+import Header from './components/header/Header';
 import Main from './components/main/legacyVersion/main';
 
 function App() {

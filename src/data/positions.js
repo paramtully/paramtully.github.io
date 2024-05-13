@@ -42,10 +42,12 @@ const positions_updated = [
     {
         title: 'Invoke',
         position: 'DevOps Engineer Co-op',
-        summary: 'Built automated deployment pipeline supporting multiple build environments and implemented login flow for a mobile app.',
+        summary: 'Designed and built automated deployment pipeline and login/logout pages for a react native mobile app',
         description: [
-            "I worked on 2 major projects for Incrowd, a live-streaming mobile app.",
-            "I worked on 2 major projects for Incrowd, a live-streaming mobile app. The first being an automated deployment pipeline to the IOS App Store which improved deploy speeds by 300% and no longer requires manual intermediate steps. The pipeline supports running and reporting automated tests on feature branches, and additionally deployment of a beta or production version of the application depending on the environment. My second major project involved building a custom user login flow. I utilized AWS Amplify's Cognito library for it's API and implemented the client side logic from scratch with Typescript and React to support custom styling and features."
+            "I worked on 2 major projects for Incrowd, a live-streaming mobile app during my 4 month co-op term.",
+            "The first project was an automated testing and deployment pipeline for the app to the IOS App Store. The pipeline improved deploy speeds by 300% and eliminated the manual process that was previously used to carry out the same task. The pipeline runs and reports automated tests on feature branches, and additionally deployment of a beta or production version of the application depending on the environment. This process is triggered on pushes or merges to the project repository, and prevents the deployment steps if the automated tests fail for robustness.",
+            "During the building of the project, I focused on 3 things: maintainability, robustness, and security. I made the code as maintainable as possible by compartmentalizing code, which in the case of deployment involved making well-named and simple fastlane functions and circleCI processes. This allows code to easily be modified or removed if needed. I also created documentation using visualization tools such Miro both to help me design the pipeline, so others can easily gain the information they need to work on it in the future. Robustness was maintained with deployment steps being dependent on success of automated tests. Finally, security was maintained by assuring secrets were not pushed to the repository or hard coded anywhere in the code. Github secrets, CircleCI secrets, and AWS S3 with IAM permissions were tools I utilized to ensure security",
+            "My second major project involved building a custom user login flow. I utilized AWS Amplify's Cognito library for it's API and implemented the client side logic from scratch with Typescript and React to support custom styling and features. The feature is currently live on the production version of the app.",
         ],
         technologies: ['CircleCI', 'AWS', 'Fastlane', 'React Native', 'Terraform'],
         start_date: new Date(2023, 9),
