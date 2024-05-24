@@ -1,5 +1,5 @@
-import About from "../../about/about";
-import MainSection from './mainComponents';
+import About from '../../about';
+import MainSection from './mainComponents'; 
 import { personal_projects_legacy, academic_projects_legacy } from "../../../data/projects";
 import { positions_legacy } from "../../../data/positions";
 
