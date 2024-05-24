@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import getTitleId from '../utility/TitleId';
+import getTitleId from '../../../utility/TitleId';
 
 function DateHeader({ date }) {
     return <header className='mainSubHeader'>{ date }</header>;

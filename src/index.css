@@ -4,6 +4,7 @@
   --textBig: 20px;
   --textMedium: 17px;
   --textSmall: 15px;
+  --textHover: 17.5px;
 
   --baseColor: rgb(148 163 184);
   --titleColor: rgb(226 232 240);
@@ -165,6 +166,19 @@ nav {
   background-color: var(--projectLinkColorHover);
 }
 
+.title {
+  color: var(--titleColor);
+}
+
+.titleLink {
+  color: var(--titleColor);
+  transition: all 0.1s;
+}
+
+.titleLink:hover {
+  font-size: var(--textHover);
+}
+
 .expand {
   border-style: none;
   border-radius: 5px;
@@ -175,6 +189,52 @@ nav {
 
 .expand:hover {
   background-color: var(--expandColorHover);
+}
+
+/* Main Component - Description Collapsing Functionality */
+.collapsibleHidden {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.collapsibleOpen {
+  max-height: 150svh;
+  opacity: 1;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.collapsibleTasks {
+  transition: all 0.7s ease !important;
+}
+
+.collapseButton {
+  display: flex;
+  align-items: center;
+  padding: 0.1em;
+
+  color: var(--baseColor);
+  background: none;
+  border: none;
+}
+
+.collapseButton:hover {
+  color: var(--titleColor);
+}
+
+.collapseButton:hover .line {
+  width: 70px;
+}
+
+.collapseIcon {
+  display: inline-block;
+  width: 25px;
+  rotate: 180deg;
+}
+
+.expandTask {
+  margin: 0px auto 15px auto;
 }
 
 /* Adjust to Non-mobile screen */
@@ -209,4 +269,25 @@ nav {
     margin-bottom: 2em;
   }
 
+}
+
+/* Animations */
+@keyframes rotateDown {
+  0% {
+    transform: rotate(-180deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes rotateUp {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-180deg);
+  }
 }
