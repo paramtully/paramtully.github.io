@@ -17,8 +17,7 @@ export default function About() {
             <p>
                 {/* outside of work stuff */}
                 When I'm not at my desk, You'll often find me working out, playing basketball either at my 
-                local YMCA or in UBC's intramural basketball league, exploring the food scene in Vancouver, 
-                or watching a relaxing horror movie.
+                local YMCA or in UBC's intramural basketball league, or watching a relaxing horror movie.
             </p>
         </section>
     );

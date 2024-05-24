@@ -5,7 +5,7 @@ export default class Project extends Task {
     categories: String[];
     importance: String;
     required_course_keys: String[] = ['category', 'importance'];
-    categories: String[] = ['SWE', 'ML', 'CyberSec', 'DevOps', 'Game'];
+    categories: String[] = ['SWE', 'ML', 'CyberSec', 'DevOps', 'Game', 'DB'];
 
     constructor(data: Any) {
         super(data);
