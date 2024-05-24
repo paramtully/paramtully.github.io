@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import getTitleId from '../../../utility/TitleId';
 import MainItem from '../shared/MainItem';
-import { categories } from '../../../data/projects';
 import CollapsibleButton from '../shared/CollapsibleButton';
 
 export default function ProjectSection({ title, projects }) {
