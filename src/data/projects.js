@@ -393,7 +393,7 @@ const academic_projects = [
         summary: "A full-stack web application that allows users to query UBCs historical grade data.",
         description: [
             "This project required accessing data stored as a zipped html file. We also had to follow requirements for the project which were outlined in EBNF format.", 
-            "Implementing the project involved deriving and implementing the visitor design pattern. This design takes advantange of polymorphism to allow double dispatch which decouples objects from the operations conducted on the object. This basically allows you to recursively conduct operations on a tree of objects in a way that can easily accomodate the addition of new operations in the future.",
+            "Implementing the project involved deriving and implementing the visitor design pattern. This design takes advantage of polymorphism to allow double dispatch which decouples objects from the operations conducted on the object. This basically allows you to recursively conduct operations on a tree of objects in a way that can easily accomodate the addition of new operations in the future.",
         ],
         technologies: ['TypeScript', 'JSZip', 'Express', 'Mocha/Chai', 'Yarn', 'HTML', 'Git'],
         start_date: new Date(2022, 8),
