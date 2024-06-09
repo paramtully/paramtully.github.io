@@ -359,7 +359,7 @@ const academic_projects = [
         summary: 'An NBA stat tracking application utilizing an EBNF relational database',
         description: [
             "An NBA stat tracking application that utilizes a relational database to model a complex system. The application allows users to search or filter players that hold user specified stat requirements.",
-            "The relational model model was designed with 11 entity sets including a weak entity, and 11 relationships including an ISA hierarchy. The model also enforced cardinality constraints and participation constraints for robustness. I then implemented it with Oracle SQL.",
+            "The relational model was designed with 11 entity sets including a weak entity, and 11 relationships including an ISA hierarchy. The model also enforced cardinality constraints and participation constraints for robustness. I then implemented it with Oracle SQL.",
             "I then made SQL queries for the backend necessary to support the common stat tracking queries a user would make from the front-end."
         ],
         technologies: ['Java', 'Oracle SQL', 'Java Swing'],
