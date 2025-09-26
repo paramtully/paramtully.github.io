@@ -1,0 +1,84 @@
+{
+  "nav": {
+    "logo": "<span class='italic'>PARAM</span> <span class='font-bold'>TULLY</span>",
+    "links": [
+      {
+        "title": "link",
+        "url": ""
+      }
+    ]
+  },
+
+  "intro": {
+    "heading": "<span class='font-bold'>Developer turning</span> <span class='italic'>ideas</span> <span class='font-bold'>into</span> <span class='italic'>impactful</span> <span class='font-bold'>software</span> <span class='italic font-light'>solutions</span> ",
+    "icon": "/icons/intro-icon.svg"
+  },
+   
+  "portrait": {
+    "image": "/fullPortrait.jpg"
+  },
+
+  "about": {
+    "text": "DJ Lisa is a passionate wedding DJ, acclaimed for blending diverse musical genres with expert crowd-reading skills. Based in Florida, she crafts personalized soundtracks that turn every wedding into an unforgettable celebration.",
+    "icon": "/icons/about-icon.svg"
+  },
+
+  "contact": {
+    "label": "Have some questions?",
+    "heading": "Contact <span class='italic'>me</span>",
+    "linkIcon": "/icons/arrow-icon.svg",
+    "email": "paramtully.dev@gmail.com"
+  },
+
+  "work": {
+    "projects": [
+      {
+        "title": "Education",
+        "url": "",
+        "media": "/work.png"
+      },
+      {
+        "title": "Work Experience",
+        "url": "",
+        "media": "/work.png"
+
+      },
+      {
+        "title": "Skills",
+        "url": "",
+        "media": "/work.png"
+
+      },
+      {
+        "title": "Projects",
+        "url": "",
+        "media": "/work.png"
+
+      },
+      {
+        "title": "About this Website",
+        "url": "",
+        "media": "/work.png"
+      }
+    ],
+    "linkIcon": "/icons/arrow-icon-black.svg"  
+  },
+
+ 
+  "socials": {
+    "links": [
+      {
+        "title": "LinkedIn",
+        "url": "https://www.linkedin.com/in/paramtully/"
+      },
+      {
+        "title": "Github",
+        "url": "https://github.com/paramtully"
+      },
+      {
+        "title": "Resume",
+        "url": ""
+      }
+    ]
+  }
+}
