@@ -2,7 +2,7 @@ name: Deploy to Github Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   gh-pages:
@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
-        with: 
+        with:
           node-version: 18
       - run: npm ci
       - name: Build (allow warnings)
@@ -22,4 +22,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build
-
