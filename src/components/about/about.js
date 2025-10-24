@@ -5,19 +5,35 @@ export default function About() {
             <h2 className="sectionTitle">ABOUT</h2>
             <p>
                 {/* Who am i? / how did i get into SWE */}
-                I'm just a cs student following whatever peeks my curiousity.
+                I began my academic journey pursuing a career in medicine, studying biology like 
+                others in my family. But everything changed during a first-year chemistry course, 
+                where I was introduced to bioinformatics and how it was transforming the field. It 
+                enabled chemists to simulate reactions and accelerate discovery through software. 
+                That moment sparked a deep appreciation for the power of technology and the impact 
+                software engineers can have on all facets of the world.
             </p>
             <p>
-                {/* mission stuff */}
-                My interest lies in finding ways to automate tasks as I find value in streamlining 
-                workflows and thus saving time that can otherwise be used more productively. This has led me
-                into fields such as DevOps, where I've worked on automated cloud deployment pipelines 
-                and more recently machine learning.
+                {/* Who am i? / how did i get into SWE (cont)*/}
+                Driven by curiosity, I enrolled in a computer science course as an elective. I 
+                quickly discovered both an aptitude for programming and a passion for problem-solving 
+                that rivalled anything I had experienced before. This reinforced my decision to 
+                redirect the trajectory of my career towards software engineering.
+            </p>
+            <p>
+                {/* Who am i? / how did i get into SWE (cont)*/}
+                I've made it a point to explore a wide breadth of CS topics to build a strong, 
+                versatile foundation. I've since taken nearly every major undergraduate CS course, 
+                ranging from hardware and OS and machine learning to distributed systems and DevOps. 
+            </p>
+            <p>
+                {/* Who am i? / how did i get into SWE (cont)*/}
+                My goal has always been the same: to become the kind of engineer that can tackle any 
+                challenge, across any domain.
             </p>
             <p>
                 {/* outside of work stuff */}
-                When I'm not at my desk, You'll often find me working out, playing basketball either at my 
-                local YMCA or in UBC's intramural basketball league, or watching a relaxing horror movie.
+                When I'm not working on personal projects or studying Machine Learning and AI, you can 
+                find me playing basketball, at the gym, or binge watching horror movies with my family.
             </p>
         </section>
     );

@@ -1,5 +1,5 @@
-import { githubLink, linkedinLink, instagramLink } from "../../data/socialMedia";
-import { FaLinkedin, FaInstagram, FaGithub } from 'react-icons/fa';
+import { githubLink, linkedinLink, /* instagramLink */ } from "../../data/socialMedia";
+import { FaLinkedin, /* FaInstagram, */ FaGithub } from 'react-icons/fa';
 
 // Contains links to social media
 export default function SocialMedia() {
@@ -13,9 +13,9 @@ export default function SocialMedia() {
             <a href={githubLink} className="socialLink">
                 <FaGithub className="socialIcon" size={size} color={color} />
             </a>
-            <a href={instagramLink} className="socialLink">
+            {/* <a href={instagramLink} className="socialLink">
                 <FaInstagram className="socialIcon" size={size} color={color} />
-            </a>
+            </a> */}
         </div>
     );
 }

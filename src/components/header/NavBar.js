@@ -1,6 +1,6 @@
 import NavLink from "./NavLink";
 
-const sections = ['About', 'Experience', 'Personal Projects', 'Academic Projects'];
+const sections = ['About', 'Experience', 'Personal Projects', 'Academic Projects', 'Courses'];
 
 // Contains collection of links to sections of main page
 export default function NavBar() {
