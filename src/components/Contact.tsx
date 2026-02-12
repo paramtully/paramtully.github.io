@@ -11,7 +11,7 @@ export default function Contact() {
             href={githubLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 px-6 py-4 bg-surface border border-border rounded-lg text-text-primary hover:border-accent hover:text-accent transition-colors"
+            className="flex items-center gap-3 px-6 py-4 bg-surface border border-border rounded-lg text-text-primary hover:border-accent hover:text-accent hover:bg-surface-elevated transition-all"
           >
             <FaGithub size={24} />
             <span>GitHub</span>
@@ -20,7 +20,7 @@ export default function Contact() {
             href={linkedinLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 px-6 py-4 bg-surface border border-border rounded-lg text-text-primary hover:border-accent hover:text-accent transition-colors"
+            className="flex items-center gap-3 px-6 py-4 bg-surface border border-border rounded-lg text-text-primary hover:border-accent hover:text-accent hover:bg-surface-elevated transition-all"
           >
             <FaLinkedin size={24} />
             <span>LinkedIn</span>
@@ -29,7 +29,7 @@ export default function Contact() {
             href={resumeLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 px-6 py-4 bg-surface border border-border rounded-lg text-text-primary hover:border-accent hover:text-accent transition-colors"
+            className="flex items-center gap-3 px-6 py-4 bg-surface border border-border rounded-lg text-text-primary hover:border-accent hover:text-accent hover:bg-surface-elevated transition-all"
           >
             <FaFilePdf size={24} />
             <span>Resume PDF</span>

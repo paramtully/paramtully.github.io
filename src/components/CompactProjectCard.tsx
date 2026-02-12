@@ -1,17 +1,20 @@
 import { Project } from '../data/projects.ts'
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa'
 
-interface ProjectCardProps {
+interface CompactProjectCardProps {
     project: Project
     onExpand: () => void
 }
 
-export default function ProjectCard({ project, onExpand }: ProjectCardProps) {
+export default function CompactProjectCard({ project, onExpand }: CompactProjectCardProps) {
     return (
-        <div className="bg-surface border border-border rounded-lg p-6 hover:border-accent hover:bg-surface-elevated hover-lift transition-all fade-in">
-            <div className="flex items-start justify-between mb-4">
-                <h3 className="text-2xl font-semibold text-text-primary">{project.title}</h3>
-                <div className="flex gap-2">
+        <div 
+            onClick={onExpand}
+            className="bg-surface border border-border rounded-lg p-4 hover:border-accent hover:bg-surface-elevated hover-lift transition-all fade-in cursor-pointer w-[280px] md:w-[320px] flex-shrink-0"
+        >
+            <div className="flex items-start justify-between mb-3">
+                <h3 className="text-lg font-semibold text-text-primary pr-2">{project.title}</h3>
+                <div className="flex gap-2 flex-shrink-0">
                     {project.githubUrl && (
                         <a
                             href={project.githubUrl}
@@ -21,7 +24,7 @@ export default function ProjectCard({ project, onExpand }: ProjectCardProps) {
                             onClick={(e) => e.stopPropagation()}
                             aria-label="View on GitHub"
                         >
-                            <FaGithub size={20} />
+                            <FaGithub size={18} />
                         </a>
                     )}
                     {project.liveUrl && (
@@ -33,34 +36,27 @@ export default function ProjectCard({ project, onExpand }: ProjectCardProps) {
                             onClick={(e) => e.stopPropagation()}
                             aria-label="View live site"
                         >
-                            <FaExternalLinkAlt size={20} />
+                            <FaExternalLinkAlt size={18} />
                         </a>
                     )}
                 </div>
             </div>
-            <p className="text-text-secondary mb-4">{project.description}</p>
-            <p className="text-sm text-accent mb-4 italic font-medium">{project.hardProblem}</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-                {project.techTags.slice(0, 6).map((tag, idx) => (
+            <p className="text-sm text-text-secondary mb-3 line-clamp-2">{project.description}</p>
+            <div className="flex flex-wrap gap-2">
+                {project.techTags.slice(0, 4).map((tag, idx) => (
                     <span
                         key={idx}
-                        className="px-3 py-1 bg-background border border-border rounded text-sm text-text-secondary"
+                        className="px-2 py-1 bg-background border border-border rounded text-xs text-text-secondary"
                     >
                         {tag}
                     </span>
                 ))}
-                {project.techTags.length > 6 && (
-                    <span className="px-3 py-1 bg-background border border-border rounded text-sm text-text-secondary">
-                        +{project.techTags.length - 6} more
+                {project.techTags.length > 4 && (
+                    <span className="px-2 py-1 bg-background border border-border rounded text-xs text-text-secondary">
+                        +{project.techTags.length - 4} more
                     </span>
                 )}
             </div>
-            <button
-                onClick={onExpand}
-                className="w-full py-2 text-accent hover:text-text-primary hover:underline transition-all text-sm font-medium"
-            >
-                Learn more →
-            </button>
         </div>
     )
 }

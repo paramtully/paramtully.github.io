@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 
 const sections = [
   { id: 'hero', label: 'Home' },
+  { id: 'about', label: 'About' },
+  { id: 'education', label: 'Education' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
   { id: 'systems-thinking', label: 'Systems Thinking' },
-  { id: 'about', label: 'About' },
   { id: 'contact', label: 'Contact' },
 ]
 

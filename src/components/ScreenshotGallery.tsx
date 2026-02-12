@@ -43,14 +43,14 @@ export default function ScreenshotGallery({ screenshots }: ScreenshotGalleryProp
           <>
             <button
               onClick={goToPrevious}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background border border-border rounded-full p-2 text-text-primary transition-colors"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-surface hover:border-accent border border-border rounded-full p-2 text-text-primary hover:text-accent transition-all"
               aria-label="Previous image"
             >
               <FaChevronLeft />
             </button>
             <button
               onClick={goToNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background border border-border rounded-full p-2 text-text-primary transition-colors"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-surface hover:border-accent border border-border rounded-full p-2 text-text-primary hover:text-accent transition-all"
               aria-label="Next image"
             >
               <FaChevronRight />

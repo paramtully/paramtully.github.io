@@ -10,7 +10,7 @@ function Summary({ summaryId, summary }) {
 
 export default function Description({ title, summary, description }) {
 
-    const descriptionItems = description.map(description_item => <p>{description_item}</p>);
+    const descriptionItems = description?.map((description_item, index) => <p key={index}>{description_item}</p>) || [];
     const buttonId = `${title}_button`;
     const summaryId = `${title}_summary`;
     const descriptionId = `${title}_description`;
@@ -34,8 +34,8 @@ export default function Description({ title, summary, description }) {
         <div>
             <Summary summaryId={summaryId} summary={summary} />
             <div id={descriptionId} className='collapsibleHidden' >{descriptionItems}</div>
-            { description.length > 0 &&
-              <CollapsibleButton buttonId={buttonId} collapsedButtonValue={'Show More'} openButtonValue={'Show Less'} handleClick={expandDescription} />
+            {description && description.length > 0 &&
+                <CollapsibleButton buttonId={buttonId} collapsedButtonValue={'Show More'} openButtonValue={'Show Less'} handleClick={expandDescription} />
             }
         </div>
     );

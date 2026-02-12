@@ -33,7 +33,7 @@ export default function SystemsThinking() {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {principles.map((principle, idx) => (
-            <div key={idx} className="bg-surface border border-border rounded-lg p-6">
+            <div key={idx} className="bg-surface border border-border rounded-lg p-6 hover:border-border-hover hover:bg-surface-elevated transition-all">
               <h3 className="text-xl font-semibold text-text-primary mb-3">
                 {principle.title}
               </h3>
