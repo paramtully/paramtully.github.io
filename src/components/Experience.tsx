@@ -3,14 +3,14 @@ import { format } from 'date-fns'
 
 export default function Experience() {
     return (
-        <section id="experience" className="py-20 px-6">
+        <section id="experience" className="py-12 px-6 bg-surface">
             <div className="max-w-4xl mx-auto">
                 <h2 className="text-4xl md:text-5xl font-bold text-text-primary mb-12">
                     Professional Experience
                 </h2>
                 <div className="space-y-8">
                     {experiences.map((exp, idx) => (
-                        <div key={idx} className="bg-surface border border-border rounded-lg p-6 hover:border-border-hover hover:bg-surface-elevated transition-all fade-in">
+                        <div key={idx} className="bg-background border border-border rounded-lg p-6 hover:border-border-hover transition-all fade-in">
                             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
                                 <div>
                                     <h3 className="text-2xl font-semibold text-text-primary">
@@ -19,7 +19,7 @@ export default function Experience() {
                                                 href={exp.companyUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="hover:text-accent transition-colors font-medium"
+                                                className="hover:text-text-primary hover:underline transition-all font-medium"
                                             >
                                                 {exp.company}
                                             </a>
@@ -42,7 +42,7 @@ export default function Experience() {
                                 {exp.technologies.map((tech, techIdx) => (
                                     <span
                                         key={techIdx}
-                                        className="px-3 py-1 bg-background border border-border rounded text-sm text-text-secondary"
+                                        className="px-3 py-1 bg-surface border border-border rounded text-sm text-text-secondary"
                                     >
                                         {tech}
                                     </span>

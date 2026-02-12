@@ -24,8 +24,8 @@
     },
     "include": [
         "src",
-        "courses.js",
-        "projects.js"
+        "legacyData/courses.js",
+        "legacyData/projects.js"
     ],
     "references": [
         {

@@ -9,7 +9,7 @@ export default function AdditionalProjects({ onProjectClick }: AdditionalProject
     if (allProjects.length === 0) return null
 
     return (
-        <section id="additional-projects" className="pt-0 pb-20 px-6 bg-background">
+        <section id="additional-projects" className="pt-0 pb-12 px-6 bg-background">
             <div className="max-w-7xl mx-auto">
                 <div className="horizontal-scroll-container">
                     <div className="horizontal-scroll">

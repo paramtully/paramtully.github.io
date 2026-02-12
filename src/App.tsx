@@ -18,11 +18,11 @@ function App() {
         <div className="min-h-screen bg-background">
             <Navigation />
             <Hero />
-            <About />
-            <Education />
-            <Experience />
             <FeaturedProjects onProjectClick={setSelectedProject} />
             <AdditionalProjects onProjectClick={setSelectedProject} />
+            <Experience />
+            <About />
+            <Education />
             <SystemsThinking />
             <Contact />
             {selectedProject && (

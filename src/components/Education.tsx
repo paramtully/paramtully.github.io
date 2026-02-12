@@ -22,7 +22,7 @@ export default function Education() {
             code: "CPSC 317",
             title: "Internet Computing",
             description: "Network protocols and distributed computing including TCP/IP, HTTP, DNS, and socket programming essential for building scalable networked applications and understanding system-level communication.",
-            technologies: ["Java", "TCP/IP", "HTTP", "DNS", "Socket Programming"]
+            technologies: ["C++", "Java", "TCP/IP", "HTTP", "DNS", "Socket Programming"]
         },
         {
             code: "CPSC 436S",
@@ -51,54 +51,65 @@ export default function Education() {
     ]
 
     return (
-        <section id="education" className="py-20 px-6 bg-surface">
-            <div className="max-w-4xl mx-auto">
-                <h2 className="text-4xl md:text-5xl font-bold text-text-primary mb-8">Education</h2>
-                <div className="mb-8">
-                    <h3 className="text-2xl font-semibold text-text-primary">University of British Columbia</h3>
-                    <p className="text-lg text-text-secondary mt-1">Bachelor of Science in Computer Science</p>
-                    <p className="text-text-secondary">2021 - 2025</p>
-                </div>
-
-                <div className="mb-8">
-                    <h3 className="text-2xl font-semibold text-text-primary">Simon Fraser University</h3>
-                    <p className="text-lg text-text-secondary mt-1">Biological Sciences — Coursework Completed</p>
-                    <p className="text-text-secondary">2019 – 2021</p>
-                    <div className="mt-2">
-                        <p className="text-sm text-text-secondary">
-                            <span className="font-medium">Honours:</span> Dean's Honour List, President's Honour Roll
-                        </p>
-                        <p className="text-sm text-text-secondary">
-                            <span className="font-medium">Awards:</span> Undergraduate Open Scholarship
-                        </p>
-                    </div>
-                </div>
-
-                <h4 className="text-xl font-semibold text-text-primary mb-6">Relevant Coursework</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {courses.map((course, idx) => (
-                        <div
-                            key={idx}
-                            className="bg-background border border-border rounded-lg p-5 hover:border-border-hover transition-all"
-                        >
-                            <h5 className="text-lg font-semibold text-text-primary mb-1">
-                                {course.code}: {course.title}
-                            </h5>
-                            <p className="text-sm text-text-secondary mb-3 leading-relaxed">
-                                {course.description}
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                                {course.technologies.map((tech, techIdx) => (
-                                    <span
-                                        key={techIdx}
-                                        className="px-2 py-1 bg-surface border border-border rounded text-xs text-text-secondary"
-                                    >
-                                        {tech}
-                                    </span>
-                                ))}
+        <section id="education" className="py-12 px-6 bg-surface">
+            <div className="max-w-7xl mx-auto">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-8">Education</h2>
+                    <div className="mb-6">
+                        <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
+                            <div>
+                                <h3 className="text-xl font-semibold text-text-primary">University of British Columbia</h3>
+                                <p className="text-base text-text-secondary mt-1">Bachelor of Science in Computer Science</p>
+                                <p className="text-base text-text-secondary">Cumulative GPA: 3.56/4.0</p>
+                            </div>
+                            <div className="text-left md:text-right mt-2 md:mt-0">
+                                <p className="text-base text-text-secondary">Vancouver, BC</p>
+                                <p className="text-base text-text-secondary">2021 - 2025</p>
                             </div>
                         </div>
-                    ))}
+                    </div>
+
+                    <div className="mb-8">
+                        <div className="flex flex-col md:flex-row md:justify-between md:items-start">
+                            <div>
+                                <h3 className="text-xl font-semibold text-text-primary">Simon Fraser University</h3>
+                                <p className="text-sm text-text-secondary mt-1">Coursework completed • 2019-2021</p>
+                                <p className="text-sm text-text-secondary">Dean's Honour List, President's Honour Roll, Undergraduate Open Scholarship</p>
+                            </div>
+                            <div className="text-left md:text-right mt-2 md:mt-0">
+                                <p className="text-base text-text-secondary">Vancouver, BC</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 className="text-xl font-semibold text-text-primary mb-6">Relevant Coursework</h4>
+                </div>
+                <div className="horizontal-scroll-container">
+                    <div className="horizontal-scroll">
+                        {courses.map((course, idx) => (
+                            <div
+                                key={idx}
+                                className="bg-background border border-border rounded-lg p-4 hover:border-border-hover transition-all w-[280px] md:w-[320px] flex-shrink-0"
+                            >
+                                <h5 className="text-lg font-semibold text-text-primary mb-2">
+                                    {course.code}: {course.title}
+                                </h5>
+                                <p className="text-sm text-text-secondary mb-3 leading-relaxed">
+                                    {course.description}
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                    {course.technologies.map((tech, techIdx) => (
+                                        <span
+                                            key={techIdx}
+                                            className="px-2 py-1 bg-surface border border-border rounded text-xs text-text-secondary"
+                                        >
+                                            {tech}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>

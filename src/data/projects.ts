@@ -31,7 +31,7 @@ export const featuredProjects: Project[] = [
         hardProblem: 'Designed cost vs. isolation tradeoffs: separated internet-facing ingestion from VPC-isolated persistence, eliminated NAT Gateway costs using S3 VPC endpoints while keeping RDS in private subnets',
         githubUrl: 'https://github.com/paramtully/Stocker',
         liveUrl: null,
-        screenshots: [],
+        screenshots: ['/images/projects/stocker-1.png', '/images/projects/stocker-2.png', '/images/projects/stocker-3.png', '/images/projects/stocker-4.png', '/images/projects/stocker-5.png'],
         category: 'featured',
         overview: 'A production-grade stock analytics platform that ingests and processes over 1 million market events per day. The system handles real-time data ingestion, time-series storage optimization, and provides APIs for analytical workloads.',
         problemContext: 'Financial market data requires high-throughput ingestion, efficient long-term storage for analytical queries, and cost-effective infrastructure. Traditional approaches using JSON storage and always-on services result in high costs and poor query performance.',
