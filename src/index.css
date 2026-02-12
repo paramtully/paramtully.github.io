@@ -1,293 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --textTitle: 50px;
-  --textBig: 20px;
-  --textMedium: 17px;
-  --textSmall: 15px;
-  --textHover: 17.5px;
-
-  --baseColor: rgb(148 163 184);
-  --titleColor: rgb(226 232 240);
-
-  --backgroundColor: rgb(15 23 42);
-  --backgroundHoverColor: rgb(19, 26, 42);
-
-  --itemColor: rgba(69, 162, 158, 0.4);
-  --itemTextColor: rgb(59, 200, 193);
-
-  --projectLinkColor: rgb(0, 46, 51, 0.6);
-  --projectLinkColorHover: rgb(0, 46, 51);
-  --projectLinkTextColor: rgb(59, 200, 193);
-
-  --expandColor: rgb(217, 246, 239, 0.8);
-  --expandColorHover: rgb(217, 246, 239);
-
-}
-
-body {
-  margin: 0%;
-  padding: 0%;
-  color: var(--baseColor);
-  background: var(--backgroundColor);
-  font-family: -apple-system, BlinkMacSystemFont, 'Proxima Nova', 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-/* General Styling */
-
-html {
-  scroll-behavior: smooth;
-}
-
-main, .header {
-  padding: 50px 8% 0 8%;
-}
-
-ul, ol {
-  list-style: none;
-  padding: 4px 0px;
-  margin: 0 auto;
-}
-
-a {
-  text-decoration: none;
-  color: var(--baseColor);
-}
-
-/* Fonts */
-
-h1 {
-  font-size: var(--textTitle);
-}
-
-h2 {
-  font-size: var(--textBig);
-  font-weight: 500;
-}
-
-h3 {
-  font-size: var(--textMedium);
-  font-weight: 400;
-}
-
-h1, h2, h3, h4 {
-  padding: 0px;
-  margin: 0px;
-}
-
-h1, h2, h3 {
-  color: var(--titleColor);
-}
-
-p {
-  font-size: var(--textSmall);
-}
-
-/* Header Styling */
-
-nav {
-  display: none;
-}
-
-.navLink {
-  display: flex;
-  align-items: center;
-  padding: 0.1em;
-}
-
-.navLink:hover {
-  color: var(--titleColor);
-}
-
-.line {
-  width: 35px;
-  height: 1px;
-  border-radius: 1px;
-  background-color: var(--baseColor);
-  margin-right: 15px;
-
-  transition: width 100ms;
-}
-
-.navLink:hover .line {
-  background-color: var(--titleColor);
-  width: 70px;
-}
-
-.socialLink {
-  margin: 5px 8px 5px 0px;
-}
-
-.socialIcon:hover {
-  fill: var(--titleColor);
-}
-
-/* Main Components */
-
-.mainItem {
-  margin: 20px auto;
-  border-radius: 5px;
-}
-
-.mainSubHeader {
-  padding-left: 0;
-  font-weight: normal;
-  color: var(--baseColor);
-  opacity: 75%;
-}
-
-.techItem {
-  display: inline-block;
-  border-radius: 8px;
-  margin: 3px;
-  padding: 5px;
-  color: var(--itemTextColor);
-  background-color: var(--itemColor);
-}
-
-.projectLink {
-  display: inline-block;
-  border-radius: 8px;
-  margin: 3px;
-  padding: 7px 40px;
-  color: var(--projectLinkTextColor);
-  background-color: var(--projectLinkColor);
-}
-
-.projectLink:hover {
-  background-color: var(--projectLinkColorHover);
-}
-
-.title {
-  color: var(--titleColor);
-}
-
-.titleLink {
-  color: var(--titleColor);
-  transition: all 0.1s;
-}
-
-.titleLink:hover {
-  font-size: var(--textHover);
-}
-
-.expand {
-  border-style: none;
-  border-radius: 5px;
-  margin: 15px 5px 30px 5px;
-  padding: 5px 30px;
-  background-color: var(--expandColor);
-}
-
-.expand:hover {
-  background-color: var(--expandColorHover);
-}
-
-/* Main Component - Description Collapsing Functionality */
-.collapsibleHidden {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
-}
-
-.collapsibleOpen {
-  max-height: 150svh;
-  opacity: 1;
-  overflow: hidden;
-  transition: all 0.25s ease;
-}
-
-.collapsibleTasks {
-  transition: all 0.7s ease !important;
-}
-
-.collapseButton {
-  display: flex;
-  align-items: center;
-  padding: 0.1em;
-
-  color: var(--baseColor);
-  background: none;
-  border: none;
-}
-
-.collapseButton:hover {
-  color: var(--titleColor);
-}
-
-.collapseButton:hover .line {
-  width: 70px;
-}
-
-.collapseIcon {
-  display: inline-block;
-  width: 25px;
-  rotate: 180deg;
-}
-
-.expandTask {
-  margin: 0px auto 15px auto;
-}
-
-/* Adjust to Non-mobile screen */
-
-@media (min-width: 944px) {
-  .app {
-    display: grid;
-    grid-template-columns: 50% auto;
+@layer base {
+  * {
+    @apply border-border;
   }
-
-  .header {
-    grid-column: 1;
-    padding: 0;
-
-    display: flex;
-    justify-content: center;
+  
+  body {
+    @apply bg-background text-text-primary;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
-
-  .nav {
-    position: sticky;
-    align-self: flex-start;
-    top: 0;
-    padding: 50px 0 0 10%;
+  
+  html {
+    scroll-behavior: smooth;
   }
-
-  main {
-    grid-column: 2;
-  }
-
-  nav {
-    display: inline-block;
-    margin-bottom: 2em;
-  }
-
-}
-
-/* Animations */
-@keyframes rotateDown {
-  0% {
-    transform: rotate(-180deg);
-  }
-
-  100% {
-    transform: rotate(0deg);
+  
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-@keyframes rotateUp {
-  0% {
-    transform: rotate(0deg);
+@layer utilities {
+  .fade-in {
+    animation: fadeIn 0.6s ease-out;
   }
-
-  100% {
-    transform: rotate(-180deg);
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .hover-lift {
+    transition: transform 0.2s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-2px);
   }
 }
