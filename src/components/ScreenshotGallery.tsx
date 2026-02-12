@@ -8,13 +8,19 @@ interface ScreenshotGalleryProps {
 export default function ScreenshotGallery({ screenshots }: ScreenshotGalleryProps) {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [expandedImage, setExpandedImage] = useState<string | null>(null)
+    const [imageKey, setImageKey] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
 
     const goToNext = () => {
+        setIsLoading(true)
         setCurrentIndex((prev) => (prev + 1) % screenshots.length)
+        setImageKey((prev) => prev + 1)
     }
 
     const goToPrevious = () => {
+        setIsLoading(true)
         setCurrentIndex((prev) => (prev - 1 + screenshots.length) % screenshots.length)
+        setImageKey((prev) => prev + 1)
     }
 
     useEffect(() => {
@@ -22,14 +28,20 @@ export default function ScreenshotGallery({ screenshots }: ScreenshotGalleryProp
             // If image is expanded, ESC closes it
             if (expandedImage && e.key === 'Escape') {
                 setExpandedImage(null)
+                setImageKey((prev) => prev + 1)
+                setIsLoading(false)
                 return
             }
 
             // Otherwise, handle navigation
             if (e.key === 'ArrowLeft') {
+                setIsLoading(true)
                 setCurrentIndex((prev) => (prev - 1 + screenshots.length) % screenshots.length)
+                setImageKey((prev) => prev + 1)
             } else if (e.key === 'ArrowRight') {
+                setIsLoading(true)
                 setCurrentIndex((prev) => (prev + 1) % screenshots.length)
+                setImageKey((prev) => prev + 1)
             }
         }
 
@@ -44,10 +56,14 @@ export default function ScreenshotGallery({ screenshots }: ScreenshotGalleryProp
             {/* Main image display */}
             <div className="relative aspect-video bg-surface border border-border rounded-lg overflow-hidden group">
                 <img
+                    key={`main-${currentIndex}-${imageKey}`}
                     src={screenshots[currentIndex]}
                     alt={`Screenshot ${currentIndex + 1}`}
-                    className="w-full h-full object-contain cursor-zoom-in transition-opacity group-hover:opacity-95"
+                    className="w-full h-full object-contain cursor-zoom-in group-hover:opacity-95"
                     onClick={() => setExpandedImage(screenshots[currentIndex])}
+                    loading="eager"
+                    onLoad={() => setIsLoading(false)}
+                    style={{ opacity: isLoading ? 0 : 1 }}
                 />
                 {screenshots.length > 1 && (
                     <>
@@ -77,7 +93,11 @@ export default function ScreenshotGallery({ screenshots }: ScreenshotGalleryProp
                         {screenshots.map((screenshot, idx) => (
                             <button
                                 key={idx}
-                                onClick={() => setCurrentIndex(idx)}
+                                onClick={() => {
+                                    setIsLoading(true)
+                                    setCurrentIndex(idx)
+                                    setImageKey((prev) => prev + 1)
+                                }}
                                 className={`flex-shrink-0 w-24 h-16 rounded border-2 overflow-hidden transition-all ${idx === currentIndex
                                     ? 'border-accent scale-105 shadow-lg'
                                     : 'border-border opacity-60 hover:opacity-100 hover:border-text-secondary'
@@ -105,21 +125,36 @@ export default function ScreenshotGallery({ screenshots }: ScreenshotGalleryProp
             {/* Expanded image overlay */}
             {expandedImage && (
                 <div
+                    key="expanded-overlay"
                     className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-sm flex items-center justify-center p-4"
-                    onClick={() => setExpandedImage(null)}
+                    onClick={() => {
+                        setExpandedImage(null)
+                        setImageKey((prev) => prev + 1)
+                        setIsLoading(false)
+                    }}
                 >
                     <button
                         className="absolute top-4 right-4 text-text-secondary hover:text-accent transition-colors"
-                        onClick={() => setExpandedImage(null)}
+                        onClick={() => {
+                            setExpandedImage(null)
+                            setImageKey((prev) => prev + 1)
+                            setIsLoading(false)
+                        }}
                         aria-label="Close expanded view"
                     >
                         <FaTimes size={32} />
                     </button>
                     <img
+                        key={`expanded-${expandedImage}`}
                         src={expandedImage}
                         alt="Expanded screenshot"
                         className="max-w-full max-h-full object-contain cursor-zoom-out"
-                        onClick={() => setExpandedImage(null)}
+                        onClick={() => {
+                            setExpandedImage(null)
+                            setImageKey((prev) => prev + 1)
+                            setIsLoading(false)
+                        }}
+                        loading="eager"
                     />
                 </div>
             )}
