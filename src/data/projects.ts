@@ -26,29 +26,29 @@ export const featuredProjects: Project[] = [
     {
         id: 'stock-analytics',
         title: 'Stock Analytics Platform',
-        description: 'Event-driven platform ingesting 1M+ market events/day with 70-90% storage cost reduction via Parquet columnar formats and S3 lifecycle policies',
-        techTags: ['TypeScript', 'React', 'PostgreSQL', 'AWS Lambda', 'ECS Fargate', 'RDS', 'S3', 'Terraform', 'Parquet'],
-        hardProblem: 'Designed cost vs. isolation tradeoffs: separated internet-facing ingestion from VPC-isolated persistence, eliminated NAT Gateway costs using S3 VPC endpoints while keeping RDS in private subnets',
+        description: 'Event-driven platform ingesting 1M+ market events/day. Designed two-stage Lambda architecture with S3 VPC endpoints to eliminate NAT Gateway costs; implemented Parquet storage achieving 70-90% compression to reduce S3 read/write costs.',
+        techTags: ['TypeScript', 'React', 'PostgreSQL', 'AWS Lambda', 'ECS Fargate', 'RDS', 'S3', 'Terraform', 'Parquet', 'WAF', 'API Gateway', 'EventBridge'],
+        hardProblem: 'Architected two-stage Lambda pipeline to eliminate NAT Gateway costs (~$500/yr) while maintaining RDS security. Handled stock-split reconciliation across historical data with state management.',
         githubUrl: 'https://github.com/paramtully/Stocker',
         liveUrl: null,
         screenshots: ['/images/projects/stocker-1.png', '/images/projects/stocker-2.png', '/images/projects/stocker-3.png', '/images/projects/stocker-4.png', '/images/projects/stocker-5.png'],
         category: 'featured',
-        overview: 'A production-grade stock analytics platform that ingests and processes over 1 million market events per day. The system handles real-time data ingestion, time-series storage optimization, and provides APIs for analytical workloads.',
+        overview: 'A full-stack stock analytics platform processing 1M+ market events daily through 15+ orchestrated microservices. Demonstrates distributed systems design with event-driven pipelines, idempotent processing with stock-split reconciliation, and cost-optimized AWS architecture (VPC endpoints, Parquet storage, multi-layered rate limiting).',
         problemContext: 'Financial market data requires high-throughput ingestion, efficient long-term storage for analytical queries, and cost-effective infrastructure. Traditional approaches using JSON storage and always-on services result in high costs and poor query performance.',
         whyItWasHard: 'Balancing cost optimization with security isolation required careful architecture decisions. Implementing idempotent ingestion for correctness (especially stock-split reconciliation), designing VPC endpoints to eliminate NAT Gateway costs, and modeling time-series data for analytical workloads all required deep understanding of AWS services and data engineering principles.',
         keyDecisions: [
-            'Used Parquet columnar format instead of JSON: 70-90% storage reduction, better query performance',
-            'S3 partitioning strategy driven by query access patterns for optimal cost',
-            'Separated public-facing ingestion (API Gateway + Lambda) from VPC-isolated persistence (RDS in private subnets)',
-            'Used S3 VPC endpoints to eliminate NAT Gateway costs while maintaining security',
-            'Implemented idempotent ingestion with stock-split detection and reconciliation',
-            'Layered rate limiting: WAF + API Gateway quotas for abuse protection'
+            'Two-stage Lambda architecture: internet-facing (no VPC) for ingestion → S3 buffer → VPC-isolated (with endpoints) for RDS writes, eliminating NAT Gateway costs',
+            'Parquet columnar format over JSON: 70-90% storage reduction, query performance for analytical workloads',
+            'Year-based S3 partitioning driven by query access patterns and lifecycle policy optimization',
+            'Idempotent ingestion with S3-based state management for stock-split detection and historical reconciliation',
+            'Multi-layered rate limiting: IP-based WAF rules (100 req/5min unauthenticated, 1000 req/5min authenticated) + API Gateway stage throttling (50 req/sec sustained, 100 burst)',
+            'EventBridge orchestration for scheduled data pipelines with proper failure handling'
         ],
         reliability: 'Idempotent ingestion ensures no duplicate data even with retries. Event processing is failure-tolerant with proper error handling. JWT-based authentication with proper validation. Rate limiting prevents abuse and protects backend systems.',
         performance: 'Processes 1M+ events/day with Lambda auto-scaling. Parquet format enables efficient analytical queries. S3 lifecycle policies automatically move old data to cheaper storage tiers based on access patterns.',
         results: 'Achieved 70-90% reduction in long-term storage costs through Parquet format and S3 lifecycle policies. Eliminated NAT Gateway costs ($32-45/month) using S3 VPC endpoints. System handles production traffic with proper fault tolerance and abuse protection.',
         futureImprovements: 'Consider adding real-time streaming analytics with Kinesis. Implement caching layer for frequently accessed data. Add more sophisticated partitioning strategies based on query patterns.',
-        lessons: 'Cost is a feature - explicit tradeoffs between isolation and cost can yield significant savings. Columnar formats are essential for analytical workloads. Idempotency is critical for data correctness in distributed systems.'
+        lessons: 'Cost is a feature. Explicit tradeoffs between isolation and cost can yield significant savings. Idempotency is critical for data correctness in distributed systems. Data storage formats can have a significant impact on cost.'
     },
     {
         id: 'distributed-kv',
@@ -78,7 +78,7 @@ export const featuredProjects: Project[] = [
     {
         id: 'blog-cicd',
         title: 'Blog on CI/CD Pipeline',
-        description: 'Independently designed and implemented CI/CD pipeline supporting 3 build environments and concurrent pushes from 6+ developers, reducing build and deploy times by 300%',
+        description: 'Independently designed and implemented CI/CD pipeline supporting 3 build environments and concurrent pushes from 6+ developers, achieving 3x faster build times',
         techTags: ['GCP', 'Docker', 'GitHub Actions', 'Java', 'Spring Boot', 'JUnit'],
         hardProblem: 'Designed pipeline supporting multiple environments with proper isolation while enabling concurrent development workflows and automated testing',
         githubUrl: null,
@@ -89,7 +89,7 @@ export const featuredProjects: Project[] = [
         problemContext: 'The team needed a CI/CD pipeline that could support multiple developers working concurrently, multiple deployment environments (Dev, QA, Prod), and automated testing. Manual deployment processes were slow and error-prone.',
         whyItWasHard: 'Designing a pipeline that supports concurrent pushes from 6+ developers without conflicts, manages 3 separate build environments with proper isolation, and reduces build times by 300% required understanding of CI/CD best practices, Docker optimization, and parallel execution strategies.',
         keyDecisions: [
-            'Designed pipeline with 3 phases: build, test, deployment',
+            'Designed pipeline with 3 phases: conatinerize and build, test, deployment',
             'Build and test phases run on all feature branches',
             'Deployment only runs on Dev, QA, and Prod branches after tests pass',
             'Used concurrency to parallelize independent build steps',
@@ -97,8 +97,8 @@ export const featuredProjects: Project[] = [
             'Built backend REST API in Java/Spring Boot for article CRUD, authentication, and comments'
         ],
         reliability: 'Pipeline prevents deployment if automated tests fail. Proper environment isolation ensures Dev/QA/Prod don\'t interfere. Concurrent builds are handled correctly with proper resource management.',
-        performance: 'Reduced build and deploy times by 300% through parallelization and Docker layer optimization. Pipeline supports concurrent pushes from 6+ developers without conflicts.',
-        results: 'Successfully deployed pipeline supporting 3 build environments and concurrent development. Reduced build and deploy times by 300%. Built production backend API handling article CRUD operations, user authentication, and comment management.',
+        performance: 'Reduced build and deploy times by 3x (from 45 to 15 minutes) through parallelization and Docker layer optimization. Pipeline supports concurrent pushes from 6+ developers without conflicts.',
+        results: 'Successfully deployed pipeline supporting 3 build environments and concurrent development. Reduced build and deploy times by 3x (from 45 to 15 minutes). Built production backend API handling article CRUD operations, user authentication, and comment management.',
         futureImprovements: 'Could add blue-green deployments for zero-downtime. Implement canary deployments for safer production releases. Add more comprehensive monitoring and alerting.',
         lessons: 'CI/CD pipelines are critical infrastructure that enable team productivity. Proper design can dramatically reduce deployment times. Automation and testing are essential for reliable deployments.'
     },

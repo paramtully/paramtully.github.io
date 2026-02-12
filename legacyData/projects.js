@@ -11,7 +11,7 @@ const personal_projects_legacy = [
         code_url: null,
         project_url: null,
         shortlist: true
-    },{
+    }, {
         title: "oAuth",
         title_url: null,
         position: null,
@@ -22,7 +22,7 @@ const personal_projects_legacy = [
         code_url: "https://github.com/paramtully/oAuth",
         project_url: null,
         shortlist: true
-    },{
+    }, {
         title: 'Personal Website',
         title_url: null,
         position: null,
@@ -33,7 +33,7 @@ const personal_projects_legacy = [
         code_url: 'https://github.com/paramtully/paramtully.github.io',
         project_url: 'https://paramtully.github.io',
         shortlist: true
-    },{
+    }, {
         title: 'GPA Calculator',
         title_url: null,
         position: null,
@@ -119,7 +119,7 @@ const academic_projects_legacy = [
         code_url: null,
         project_url: null,
         shortlist: true
-    },{
+    }, {
         title: 'Blog Website on CI/CD Pipeline',
         title_url: null,
         position: 'Cloud DevOps Engineer + Software Engineer (Backend)',
@@ -247,7 +247,7 @@ const personal_projects = [
         categories: ['SWE', 'CyberSec'],
         summary: 'Implemented oAuth2.0 token based user authentication standard from scratch',
         description: [
-            "The oAuth standard is commonly used to log in users and save users' sessions securely without the need to re-authenticate after changing pages or leaving then revisiting the page.", 
+            "The oAuth standard is commonly used to log in users and save users' sessions securely without the need to re-authenticate after changing pages or leaving then revisiting the page.",
             "I implemented oAuth with a separate authentication server which handles storing and validating login credentials and session information. The authentication server sends asymmetrically signed authentication tokens upon successful login which can then be stored securely in a cookie on the client’s browser. The authentication token can easily be verified by the backend with a public key, proving the sender is authorized to view their protected information. A refresh token is added to the authentication server’s response to allow user’s to get new authorization tokens when they have expired without the need to enter login credentials again.",
             "This project was an opportunity to learn about some cybersecurity topics and security best practices in general. The biggest lesson that I learned was the importance to hash and salt passwords (server-side) before storing them in databases, as it mitigates risk of attackers retrieving the user’s passwords if the database gets leaked. I also got to learn about how to mitigate risk when sending proof of authentication over the internet by using signatures with asymmetric encryption and expiry dates.",
             'A diagram and more in depth explanation can be found on github, linked below.'
@@ -259,7 +259,7 @@ const personal_projects = [
         live_url: null,
         org_url: null,
         importance: 5,
-    },{
+    }, {
         title: 'GPA Retriever',
         categories: ['SWE'],
         summary: "A script that logs into UBC's website, scrapes a user's grade data, then summarizes it with a few GPA metrics",
@@ -275,7 +275,7 @@ const personal_projects = [
         live_url: null,
         org_url: null,
         importance: 5,
-    },{
+    }, {
         title: 'Online Marketplace',
         categories: ['SWE'],
         summary: "A full-stack web application that allows users to list items, make bids, and comment on listings",
@@ -289,7 +289,7 @@ const personal_projects = [
         live_url: null,
         org_url: null,
         importance: 4,
-    },{
+    }, {
         title: 'Brick Breaker Game',
         categories: ['SWE', 'Game'],
         summary: 'A recreation of the classic Brickbreaker game',
@@ -305,7 +305,7 @@ const personal_projects = [
         live_url: null,
         org_url: null,
         importance: 3,
-    },{
+    }, {
         title: 'Google Search Page',
         categories: ['SWE'],
         summary: 'Recreated a fully functional Google Search Page',
@@ -317,7 +317,7 @@ const personal_projects = [
         live_url: null,
         org_url: null,
         importance: 1,
-    },{
+    }, {
         title: 'Tic-Tac-Toe Game',
         categories: ['SWE', 'Games'],
         summary: 'Player vs AI Tic-Tac-Toe Game',
@@ -331,7 +331,7 @@ const personal_projects = [
         live_url: null,
         org_url: null,
         importance: 2,
-    }, 
+    },
 ]
 
 const academic_projects = [
@@ -392,7 +392,7 @@ const academic_projects = [
         categories: ['SWE'],
         summary: "A full-stack web application that allows users to query UBCs historical grade data.",
         description: [
-            "This project required accessing data stored as a zipped html file. We also had to follow requirements for the project which were outlined in EBNF format.", 
+            "This project required accessing data stored as a zipped html file. We also had to follow requirements for the project which were outlined in EBNF format.",
             "Implementing the project involved deriving and implementing the visitor design pattern. This design takes advantage of polymorphism to allow double dispatch which decouples objects from the operations conducted on the object. This basically allows you to recursively conduct operations on a tree of objects in a way that can easily accommodate the addition of new operations in the future.",
         ],
         technologies: ['TypeScript', 'JSZip', 'Express', 'Mocha/Chai', 'Yarn', 'HTML', 'Git'],
