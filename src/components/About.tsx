@@ -13,7 +13,7 @@ export default function About() {
                         I'm motivated by designing systems that are reliable, observable, and cost-aware, and I enjoy solving problems that require strong systems thinking and thoughtful tradeoff decisions.
                     </p>
                     <p>
-                        Outside of engineering, I enjoy strength training, team sports like basketball and volleyball, and building side projects to experiment with new systems and tools.
+                        Outside of engineering, I enjoy strength training and team sports. I captained a competitive intramural basketball team for three years at UBC, balancing technical work with leadership and team coordination.
                     </p>
                 </div>
             </div>

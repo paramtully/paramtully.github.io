@@ -125,11 +125,22 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
 
                         {/* Why It Was Hard */}
                         <div>
-                            <div className="flex items-center gap-3 mb-3">
+                            <div className="flex items-center gap-3 mb-4">
                                 <FaFire className="text-accent flex-shrink-0" />
                                 <h3 className="text-xl font-semibold text-text-primary">Why It Was Hard</h3>
                             </div>
-                            <p className="text-text-secondary leading-relaxed">{project.whyItWasHard}</p>
+                            <div className="space-y-3">
+                                {project.whyItWasHard.map((challenge, idx) => (
+                                    <div key={idx} className="flex overflow-hidden rounded-lg border border-border">
+                                        <div className="bg-accent/30 px-4 py-3 flex items-center w-[240px] flex-shrink-0">
+                                            <h4 className="font-semibold text-text-primary text-sm leading-tight">{challenge.heading}</h4>
+                                        </div>
+                                        <div className="bg-accent/10 px-4 py-3 flex-1">
+                                            <p className="text-text-secondary leading-relaxed text-sm">{challenge.context}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
@@ -156,11 +167,16 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
                             </div>
                             <div className="space-y-3">
                                 {project.keyDecisions.map((decision, idx) => (
-                                    <div key={idx} className="flex gap-3 bg-surface-elevated p-4 rounded-lg border border-border">
-                                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-accent/20 text-accent text-sm font-semibold flex items-center justify-center">
-                                            {idx + 1}
-                                        </span>
-                                        <p className="text-text-secondary leading-relaxed">{decision}</p>
+                                    <div key={idx} className="flex overflow-hidden rounded-lg border border-border">
+                                        <div className="bg-accent/30 px-4 py-3 flex items-center gap-3 w-[240px] flex-shrink-0">
+                                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-accent/40 text-text-primary text-xs font-bold flex items-center justify-center">
+                                                {idx + 1}
+                                            </span>
+                                            <h4 className="font-semibold text-text-primary text-sm leading-tight">{decision.heading}</h4>
+                                        </div>
+                                        <div className="bg-accent/10 px-4 py-3 flex-1">
+                                            <p className="text-text-secondary leading-relaxed text-sm">{decision.context}</p>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

@@ -60,7 +60,7 @@ export default function Education() {
                             <div>
                                 <h3 className="text-xl font-semibold text-text-primary">University of British Columbia</h3>
                                 <p className="text-base text-text-secondary mt-1">Bachelor of Science in Computer Science</p>
-                                <p className="text-base text-text-secondary">Cumulative GPA: 3.56/4.0</p>
+                                <p className="text-base text-text-secondary">Cumulative GPA: 3.58/4.0</p>
                             </div>
                             <div className="text-left md:text-right mt-2 md:mt-0">
                                 <p className="text-base text-text-secondary">Vancouver, BC</p>

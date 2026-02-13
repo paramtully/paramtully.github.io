@@ -15,7 +15,7 @@ export default function Hero() {
                     Vancouver, BC (PST) • Open to remote & relocation
                 </p>
                 <p className="text-lg md:text-xl text-text-secondary mb-8 max-w-2xl mx-auto">
-                    I build reliable backend systems and cloud infrastructure, with experience designing distributed services and production-ready applications on AWS.
+                    I design and build reliable backend systems and cloud infrastructure, with experience shipping production applications on AWS
                 </p>
                 <p className="text-base text-accent mb-12">
                     Open to full-time Software Engineer roles
