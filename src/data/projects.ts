@@ -354,6 +354,122 @@ export const allProjects: Project[] = [
         lessons: 'Concurrency primitives require careful design to avoid deadlocks and race conditions. Thread pools are essential for CPU-bound parallel workloads. Systems programming demands attention to memory management and performance.'
     },
     {
+        id: 'dns-resolver',
+        title: 'DNS Resolver',
+        description: 'Implemented a full DNS resolver from scratch in Java, handling iterative resolution across the DNS hierarchy with raw UDP socket communication and binary wire-format parsing',
+        techTags: ['Java', 'Networking', 'UDP Sockets', 'DNS Protocol', 'Binary Parsing'],
+        hardProblem: 'Parsed and constructed DNS messages at the binary wire-format level, implementing iterative resolution across root, TLD, and authoritative nameservers with correct RCODE and QTYPE handling',
+        githubUrl: null,
+        liveUrl: null,
+        screenshots: [],
+        category: 'systems',
+        overview: 'A DNS resolver built from scratch as part of UBC CPSC 317 (Internet Computing). Implements the full iterative resolution process starting from root nameservers and following referrals down the DNS hierarchy to authoritative answers using raw UDP sockets and hand-written binary protocol parsing.',
+        problemContext: 'DNS is the phonebook of the internet, yet most engineers treat it as a black box. Implementing a resolver from scratch requires understanding the wire protocol, the iterative delegation model, and the edge cases that real-world DNS infrastructure surfaces, knowledge that directly informs debugging production network issues and designing distributed systems.',
+        whyItWasHard: [
+            {
+                heading: 'Binary Wire-Format Parsing',
+                context: 'DNS messages are encoded in a compact binary format with bit-level fields, variable-length labels, and message compression using pointer offsets — all parsed manually from raw bytes'
+            },
+            {
+                heading: 'Iterative Resolution Logic',
+                context: 'Correctly following the delegation chain from root → TLD → authoritative server, handling CNAME chains, referrals in the Authority section, and knowing when to stop'
+            },
+            {
+                heading: 'UDP Reliability',
+                context: 'UDP provides no delivery guarantees; the resolver must handle packet loss, timeouts, and retransmission without the safety net of a connection-oriented transport'
+            },
+            {
+                heading: 'Edge Cases in Real DNS',
+                context: 'Handling NXDOMAIN, SERVFAIL, truncated responses, glue records, and nameservers that return unexpected RCODE values requires careful protocol-level reasoning'
+            }
+        ],
+        keyDecisions: [
+            {
+                heading: 'Raw UDP Sockets',
+                context: 'Direct socket communication at the transport layer provides full control over message framing, timeouts, and retry logic rather than relying on OS-level resolver abstractions'
+            },
+            {
+                heading: 'Manual Binary Serialization',
+                context: 'Hand-written byte-level encoding and decoding of DNS message sections (header, question, answer, authority, additional) builds deep understanding of protocol structure'
+            },
+            {
+                heading: 'Iterative over Recursive',
+                context: 'Iterative resolution — where the client follows each referral itself — is what real resolvers do; it exposes the full DNS delegation hierarchy and teaches how the system actually works'
+            },
+            {
+                heading: 'Structured Message Model',
+                context: 'Modeled DNS messages as typed Java objects (header flags, resource records by QTYPE) to keep parsing logic separate from resolution logic and simplify debugging'
+            }
+        ],
+        reliability: 'Handles UDP packet loss with configurable timeouts and retransmission. Gracefully surfaces NXDOMAIN, SERVFAIL, and other RCODE failures. CNAME chain resolution prevents infinite loops.',
+        performance: 'Follows the minimal number of UDP round trips required by iterative resolution. Stops traversal as soon as an authoritative answer is found rather than querying unnecessary nameservers.',
+        results: 'Successfully resolves arbitrary domain names by walking the live DNS hierarchy from root nameservers. Demonstrates deep understanding of network protocols, binary serialization, and the architecture of internet infrastructure. These topics surface directly in backend engineering and distributed systems work.',
+        futureImprovements: 'Add a local cache with TTL-based expiration to reduce redundant queries. Support TCP fallback for truncated responses. Implement DNSSEC validation for authenticated resolution.',
+        lessons: 'Understanding protocols at the wire level demystifies abstractions that engineers use every day. UDP\'s lack of reliability guarantees forces explicit design decisions around timeouts and retries. Real-world DNS has far more edge cases than the spec suggests, handling them correctly requires reading RFCs carefully and testing against live infrastructure.'
+    },
+    {
+        id: 'csftp-server',
+        title: 'FTP Server in C',
+        description: 'Implemented a concurrent FTP server from scratch in C using POSIX sockets and pthreads, with dual-channel architecture, passive mode data transfer, and session-scoped state management across full RFC command support',
+        techTags: ['C', 'POSIX Sockets', 'pthreads', 'TCP/IP', 'FTP Protocol', 'Systems Programming'],
+        hardProblem: 'Engineered a dual-channel FTP architecture in raw C where a dynamically allocated passive port is negotiated over the control connection and serves file transfers on a separate data socket, with select()-based timeout to prevent indefinite hangs and explicit fd cleanup in every code path',
+        githubUrl: 'https://github.com/paramtully/FtpServer',
+        liveUrl: null,
+        screenshots: [],
+        category: 'systems',
+        overview: 'An RFC-compliant FTP server built entirely in C using BSD sockets and POSIX threads. Handles concurrent client sessions, passive mode data transfer, directory listing, and file retrieval with full authentication and per-session state management. Built as part of UBC CPSC 317 (Internet Computing).',
+        problemContext: 'Building a networked server that correctly separates control and data channels, manages per-client state across asynchronous commands, and enforces security boundaries without a runtime or framework requires deep understanding of the POSIX networking stack and the FTP protocol specification.',
+        whyItWasHard: [
+            {
+                heading: 'Dual-Channel Protocol',
+                context: 'FTP separates control and data onto different TCP connections. PASV required spawning a second listening socket mid-session, encoding the IP and port into FTP wire format, and coordinating its full lifecycle with the downstream RETR and NLST commands'
+            },
+            {
+                heading: 'Session State Without Memory Safety',
+                context: 'Each client thread owns a client_info_t struct tracking authentication, transfer mode, and passive socket state. Managing this across all command transitions in C, no RAII and no borrow checker, requires disciplined lifecycle design'
+            },
+            {
+                heading: 'Path Traversal Security',
+                context: 'Preventing directory traversal (../ and ./) without a standard library required manual string inspection and root-pinning logic to enforce a userspace jail on RETR and CWD operations before any filesystem call'
+            },
+            {
+                heading: 'Resource Management Under Failure',
+                context: 'Every socket file descriptor must be explicitly closed in every code path, including all error branches, to prevent leaks. select() with a 30-second timeout ensures the server never hangs waiting for a data client that never connects'
+            }
+        ],
+        keyDecisions: [
+            {
+                heading: 'pthreads per Connection',
+                context: 'Each accepted connection spawns a dedicated pthread with its own client_info_t, isolating session state without shared memory and enabling clean teardown via pthread_join'
+            },
+            {
+                heading: 'select() for Passive Mode Timeout',
+                context: 'Using select() on the passive listening socket prevents indefinite blocking when a data client never connects, keeping the server responsive and file descriptors bounded'
+            },
+            {
+                heading: 'RFC-Compliant Response Codes',
+                context: 'All FTP response codes defined as a statically initialized struct of string literals — correct protocol responses are a lookup, not a string construction, eliminating malformed reply bugs'
+            },
+            {
+                heading: 'Enum-Based Command Dispatch',
+                context: 'Commands parsed into an enum via case-insensitive comparison and dispatched through a switch, cleanly separating parsing from execution and keeping new command additions minimal'
+            },
+            {
+                heading: 'Dynamic PASV Port Allocation',
+                context: 'Passive port randomly selected from the ephemeral range per session, with SO_REUSEADDR set to handle rapid reconnections without blocking on TIME_WAIT'
+            },
+            {
+                heading: 'Userspace Filesystem Jail',
+                context: 'Server records the working directory at session start as the root and refuses CDUP at root, implementing a minimal chroot-style boundary without requiring elevated privileges'
+            }
+        ],
+        reliability: 'Every socket code path handles failure explicitly with correct FTP error codes. select() prevents passive socket hangs. Path traversal is blocked at the string-inspection layer before any filesystem call is made. All file descriptors closed on both success and error paths.',
+        performance: 'File transfer uses a 2KB streaming read loop rather than loading files into memory, supporting arbitrarily large files within a fixed memory footprint. Passive sockets are closed immediately after each transfer to free file descriptors promptly.',
+        results: 'Fully functional FTP server correctly handling authentication, passive mode negotiation, directory listing, and file retrieval over separate TCP channels. Demonstrates low-level networking, protocol implementation, concurrency, and systems resource management in C. The kind of foundational work that makes higher-level distributed systems intuition concrete.',
+        futureImprovements: 'Replace sequential pthread_join with a thread pool or epoll-based event loop for true simultaneous connections. Add TLS on the control channel for encrypted sessions. Implement STOR for file uploads.',
+        lessons: 'Network protocols expose every assumption about timing, ordering, and resource ownership. Implementing FTP from scratch built intuition for why abstractions like HTTP/2 multiplexing and connection pools exist, and exactly what problems they solve at the socket level.'
+    },
+    {
         id: 'blog-cicd',
         title: 'Blog on CI/CD Pipeline',
         description: 'Independently designed and implemented CI/CD pipeline supporting 3 build environments and concurrent pushes from 6+ developers, achieving 3x faster build times',
