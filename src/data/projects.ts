@@ -409,7 +409,7 @@ export const allProjects: Project[] = [
     },
     {
         id: 'csftp-server',
-        title: 'FTP Server in C',
+        title: 'FTP Server',
         description: 'Implemented a concurrent FTP server from scratch in C using POSIX sockets and pthreads, with dual-channel architecture, passive mode data transfer, and session-scoped state management across full RFC command support',
         techTags: ['C', 'POSIX Sockets', 'pthreads', 'TCP/IP', 'FTP Protocol', 'Systems Programming'],
         hardProblem: 'Engineered a dual-channel FTP architecture in raw C where a dynamically allocated passive port is negotiated over the control connection and serves file transfers on a separate data socket, with select()-based timeout to prevent indefinite hangs and explicit fd cleanup in every code path',
