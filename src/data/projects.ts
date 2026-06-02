@@ -30,10 +30,10 @@ export interface Project {
 export const featuredProjects: Project[] = [
     {
         id: 'multi-vendor-vertical-saas',
-        title: 'Multi-Vendor B2B Marketplace (Active Development)',
-        description: 'SaaS marketplace aggregating inventory across fragmented B2B suppliers in a $100B+ vertical. This project involves aggregating live listings of products and streamlining search in a context absent of standardized identification.',
-        techTags: ['Next.js', 'TypeScript', 'React', 'PostgreSQL', 'Drizzle ORM', 'Zod', 'DDD', 'Vercel', 'Supabase'],
-        hardProblem: 'Built a canonical product identity layer from inconsistent vendor data while ensuring real-time listing integrity, deduplication, and protection against taxonomy corruption.',
+        title: 'Multi-Vendor Collision Parts Search',
+        description: 'Live production search for collision repair shops: VIN/fitment and part-number lookup with side-by-side compare across suppliers. Shipped end-to-end (~14k LOC TypeScript monorepo)—canonical parts graph, batched Lambda catalog sync, 160+ automated tests, OIDC deploy.',
+        techTags: ['TypeScript', 'Next.js', 'Express', 'PostgreSQL', 'Drizzle ORM', 'AWS Lambda', 'Terraform', 'Vercel', 'Zod', 'GitHub Actions'],
+        hardProblem: 'Reduced per-page ingestion from ~3,500 SQL round-trips to ~25 (~140×) so catalog sync finishes inside 12-minute Lambda limits—while resolving OEM, aftermarket, and interchange IDs into one canonical parts graph with idempotent, conflict-safe writes.',
         githubUrl: null,
         liveUrl: 'https://www.getboneyard.com',
         screenshots: [
@@ -46,65 +46,65 @@ export const featuredProjects: Project[] = [
             '/images/projects/boneyard/boneyard-7.png'
         ],
         category: 'featured',
-        overview: 'Active development: Building a two-sided B2B marketplace for a fragmented supply chain vertical. Current focus is the data ingestion pipeline with canonical product identity resolution across heterogeneous vendor schemas. Database schema and domain model complete; streaming ingestion layer in progress.',
-        problemContext: 'Buyers in this vertical waste 15-30+ days sourcing across disconnected vendor systems with no unified search or ordering layer. The supplier ecosystem is highly heterogeneous: inconsistent schemas, varying APIs, no standardized product identification. Buyers are also cash-flow constrained, creating a natural wedge for embedded financing tied to purchase orders.',
+        overview: 'Built and deployed a multi-vendor collision-parts search product (getboneyard.com): shops search by VIN/fitment or part number and compare offers across suppliers in one UI. End-to-end TypeScript monorepo—Next.js client, Express API, Postgres (Drizzle), AWS Lambda ingestion workers, Terraform infra, Vercel hosting. Scheduled workers ingest supplier catalogs into one normalized database; search/compare and affiliate outbound links are live. Checkout domain is modeled and tested but intentionally not wired to production routes yet.',
+        problemContext: 'Collision shops source parts across disconnected supplier systems with no unified search. The same physical part appears as different strings per vendor (OEM vs aftermarket vs interchange; formatting like 1234-AB vs 1234AB). Vehicle fitment adds another dimension—one part can apply to many trims, which breaks naive joins and pagination. Suppliers rate-limit APIs and catalogs are too large for a single Lambda invocation without resumable, cursor-based ingestion.',
         whyItWasHard: [
             {
-                heading: 'Canonical Product Identity',
-                context: 'No standardized product IDs across vendors; must resolve diverse schemas and identifiers to a unified product model'
+                heading: 'Canonical Parts Graph',
+                context: 'One physical part must map through typed identifiers (OEM / aftermarket / interchange), vehicle fitments, and per-vendor listings—without silent merges when two IDs imply different parts'
             },
             {
-                heading: 'Memory-Constrained Streaming',
-                context: 'Processing 100K+ listings per vendor without loading entire catalogs into memory; requires backpressure control'
+                heading: 'Lambda-Scale Batched Ingestion',
+                context: 'Naïve row-by-row ingest of a 200-listing page is ~3,500 SQL ops; eBay fitment matrices can add 1k–2k fitments per listing—serial INSERTs risk timing out a 12-minute Lambda'
             },
             {
-                heading: 'Idempotent Ingestion',
-                context: 'Ensuring financial-grade correctness with safe retries, resumable processing, and no data corruption under network failures'
+                heading: 'Resumable Workers Under Rate Limits',
+                context: 'Huge catalogs, 720s Lambda budget, and vendor rate limits require cursor checkpointing, deadline-aware loops, and pause/resume without failing the whole sync'
             },
             {
-                heading: 'Fault Isolation',
-                context: 'Preventing one problematic vendor from cascading failures across the entire ingestion pipeline using circuit breakers'
+                heading: 'Correct Search Under Many-to-Many Fitment',
+                context: 'Joining listings through parts and fitments multiplies rows; shops would see duplicate listings and broken pagination without server-side deduplication'
             },
             {
-                heading: 'Search Performance',
-                context: 'Achieving sub-3s latency over aggregated multi-vendor inventory with complex filtering requirements'
+                heading: 'Vendor Plugin Architecture',
+                context: 'Each supplier has different APIs, auth, pagination, and field shapes—copy-pasting workers per vendor does not scale'
             },
             {
-                heading: 'Schema Heterogeneity',
-                context: 'Normalizing incompatible vendor data structures while tolerating schema drift over time'
+                heading: 'CI Without a Hosted Database',
+                context: '160+ tests must run reliably in CI without provisioning Postgres—including graph-integrity checks after every ingest path'
             }
         ],
         keyDecisions: [
             {
-                heading: 'PostgreSQL Schema Design',
-                context: 'Partial unique indexes handle nullable vendor identifiers while maintaining referential integrity for canonical product matching'
+                heading: 'Normalized Parts Graph (parts → identifiers → fitments → listings)',
+                context: 'Bulk-resolve identifiers at ingest; skip records when two IDs map to different parts; tests enforce no orphan graph edges after every run'
             },
             {
-                heading: 'Domain-Driven Design',
-                context: 'Clean entity boundaries separate product identity, vendor adapters, and listing lifecycle with isolated business logic'
+                heading: 'Four-Phase DrizzleRecordProcessor Per Page',
+                context: 'Two bulk reads → in-memory classify (new / update / conflict) → single transaction with chunked fitment inserts → deferred fitment enrichment only for new parts'
             },
             {
-                heading: 'Zod Validation with Passthrough',
-                context: 'Schema validation tolerates drift when vendors add new fields, preventing pipeline failures on unexpected data'
+                heading: 'VendorInventoryClient + Shared Pipeline',
+                context: 'fetch → map → batch upsert with retry decorator; eBay US and CA live from one Lambda artifact (vendor ID selects behavior); LKQ interface stubbed for next integration'
             },
             {
-                heading: 'Streaming Architecture (In Progress)',
-                context: 'Async iterators with backpressure control process 100K+ listings without memory bloat or OOM errors'
+                heading: 'SELECT DISTINCT ON for Search APIs',
+                context: 'Fitment and part-number routes return one row per listing regardless of fitment cardinality; shared Zod query contract for sort, filters, and cursor pagination'
             },
             {
-                heading: 'SHA-256 Change Detection (Planned)',
-                context: 'Payload fingerprinting identifies changed listings to skip redundant writes when scaling to N vendors'
+                heading: 'OIDC Deploy + PGlite Unit CI',
+                context: 'GitHub Actions assumes AWS via web identity (no long-lived keys); path-filtered deploys after CI; in-memory Postgres for unit tests, live smoke on main only'
             },
             {
-                heading: 'Circuit Breakers (Planned)',
-                context: 'Per-vendor fault isolation with exponential backoff and jitter prevents retry storms and cascading failures'
+                heading: 'Staged MVP Scope',
+                context: 'Shipped search, compare, and affiliate links first; checkout service, Stripe adapter, and outbox modeled in code but routes not enabled—judgment over half-wired payments'
             }
         ],
-        reliability: 'Single-writer model with vendor-level locking prevents concurrent ingestion conflicts. Circuit breakers isolate individual vendor failures so that one bad vendor doesn\'t take down the system. Individual listing errors don\'t abort vendor-wide ingestion. Documented failure modes across 5 categories: race conditions, idempotency violations, retry storms, silent failures, and data corruption.',
-        performance: 'Target architecture: Streaming ingestion with constant memory footprint (100K+ listings/vendor), change detection to eliminate redundant writes, materialized views for sub-3s search latency, cursor-based pagination for resumable ingestion.',
-        results: 'Currently operational: Database schema with domain-driven entity model. In development: Streaming ingestion pipeline. This project demonstrates systems thinking around distributed patterns (idempotency, circuit breakers, eventual consistency), complex domain modeling (product identity resolution, compatibility graphs), and production reliability engineering (failure mode analysis, fault isolation design).',
-        futureImprovements: 'Event sourcing for real-time inventory streaming. Vendor performance scoring from delivery and defect data. Recommendation engine leveraging transaction history. Predictive demand forecasting. Multi-tenancy for enterprise buyer chains.',
-        lessons: 'Canonical identity resolution is harder than it looks in fragmented ecosystems. Streaming architectures essential for memory-constrained ingestion. Idempotency requires careful thinking about concurrent writers and partial failures. Circuit breakers are critical for multi-vendor fault isolation. Domain-driven design enforces boundaries that enable iteration.'
+        reliability: 'Ingestion is idempotent with explicit conflict skips when identifiers disagree. Per-vendor ingestion runs track cursor, stats, and status (in progress, completed, rate-limited, failed). Rate-limit hits pause the run, persist the cursor, and resume after cooldown instead of failing the invocation. Individual listing errors do not abort vendor-wide sync. Automated tests cover re-ingest idempotency, conflict detection, and post-ingest graph integrity.',
+        performance: 'Batched ingest: ~140× fewer DB round-trips per ~200-listing page (~3,500 → ~25 SQL ops). Fitment-heavy paths move from tens of thousands of serial INSERTs to a handful of chunked bulk statements—the difference between timing out and finishing a catalog page within Lambda budget. Search APIs use DISTINCT ON so multi-trim fitment joins do not duplicate listings or break pagination.',
+        results: 'Live at getboneyard.com with production ingestion (eBay US + CA), fitment wizard, VIN decode, filtered/sorted results, compare tray, listing detail, and affiliate outbound links. Shipped with 160+ automated tests (PGlite in CI, live integration smoke on main). End-to-end ownership: data model, batch ingestion workers, search API, frontend, Terraform, and CI/CD. Checkout/payments domain implemented and tested but not productized in prod.',
+        futureImprovements: 'Enable checkout API routes and Stripe flow for vendors that support platform checkout. Add LKQ and additional supplier integrations via the existing plugin pipeline. Expand vendor count and tighten catalog freshness SLAs. Vendor performance scoring from fulfillment data.',
+        lessons: 'Performance work should be tied to real constraints (Lambda timeout and Postgres param limits), not premature optimization. Canonical identity in messy B2B data needs test-defined conflict behavior, not assumed merges. Shipping a live product with honest MVP boundaries (search before payments) reads stronger than a half-integrated checkout. Plugin boundaries pay off when the second vendor is mapper + config, not a rewrite.'
     },
     {
         id: 'stock-analytics',
