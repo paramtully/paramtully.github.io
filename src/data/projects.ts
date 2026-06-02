@@ -35,8 +35,16 @@ export const featuredProjects: Project[] = [
         techTags: ['Next.js', 'TypeScript', 'React', 'PostgreSQL', 'Drizzle ORM', 'Zod', 'DDD', 'Vercel', 'Supabase'],
         hardProblem: 'Built a canonical product identity layer from inconsistent vendor data while ensuring real-time listing integrity, deduplication, and protection against taxonomy corruption.',
         githubUrl: null,
-        liveUrl: null,
-        screenshots: [],
+        liveUrl: 'https://www.getboneyard.com',
+        screenshots: [
+            '/images/projects/boneyard/boneyard-1.png',
+            '/images/projects/boneyard/boneyard-2.png',
+            '/images/projects/boneyard/boneyard-3.png',
+            '/images/projects/boneyard/boneyard-4.png',
+            '/images/projects/boneyard/boneyard-5.png',
+            '/images/projects/boneyard/boneyard-6.png',
+            '/images/projects/boneyard/boneyard-7.png'
+        ],
         category: 'featured',
         overview: 'Active development: Building a two-sided B2B marketplace for a fragmented supply chain vertical. Current focus is the data ingestion pipeline with canonical product identity resolution across heterogeneous vendor schemas. Database schema and domain model complete; streaming ingestion layer in progress.',
         problemContext: 'Buyers in this vertical waste 15-30+ days sourcing across disconnected vendor systems with no unified search or ordering layer. The supplier ecosystem is highly heterogeneous: inconsistent schemas, varying APIs, no standardized product identification. Buyers are also cash-flow constrained, creating a natural wedge for embedded financing tied to purchase orders.',
@@ -106,7 +114,13 @@ export const featuredProjects: Project[] = [
         hardProblem: 'Designed two-stage Lambda architecture to eliminating NAT Gateway costs while maintaining database security. Built idempotent stock-split reconciliation across historical time-series data.',
         githubUrl: 'https://github.com/paramtully/Stocker',
         liveUrl: null,
-        screenshots: ['/images/projects/stocker-1.png', '/images/projects/stocker-2.png', '/images/projects/stocker-3.png', '/images/projects/stocker-4.png', '/images/projects/stocker-5.png'],
+        screenshots: [
+            '/images/projects/stocker/stocker-1.png',
+            '/images/projects/stocker/stocker-2.png',
+            '/images/projects/stocker/stocker-3.png',
+            '/images/projects/stocker/stocker-4.png',
+            '/images/projects/stocker/stocker-5.png'
+        ],
         category: 'featured',
 
         overview: 'Cloud-native stock portfolio platform built end-to-end: 15+ microservices and Lambda functions, event-driven data pipelines processing 1M+ market events daily, AI-powered news summarization via OpenAI GPT, and production AWS infrastructure defined in 15+ Terraform modules. Full-stack React SPA with Cognito auth, role-based access, multi-layered rate limiting, and automated CI/CD via GitHub Actions.',
