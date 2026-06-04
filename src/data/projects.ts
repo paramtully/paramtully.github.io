@@ -34,7 +34,7 @@ export const featuredProjects: Project[] = [
         description: 'Live production search for collision repair shops: VIN/fitment and part-number lookup with side-by-side compare across suppliers. Shipped end-to-end (~14k LOC TypeScript monorepo)—canonical parts graph, batched Lambda catalog sync, 160+ automated tests, OIDC deploy.',
         techTags: ['TypeScript', 'Next.js', 'Express', 'PostgreSQL', 'Drizzle ORM', 'AWS Lambda', 'Terraform', 'Vercel', 'Zod', 'GitHub Actions'],
         hardProblem: 'Reduced per-page ingestion from ~3,500 SQL round-trips to ~25 (~140×) so catalog sync finishes inside 12-minute Lambda limits—while resolving OEM, aftermarket, and interchange IDs into one canonical parts graph with idempotent, conflict-safe writes.',
-        githubUrl: null,
+        githubUrl: 'https://github.com/paramtully/Autobody-Part-Sourcing',
         liveUrl: 'https://www.getboneyard.com',
         screenshots: [
             '/images/projects/boneyard/boneyard-1.png',
