@@ -73,7 +73,7 @@ export default function Education() {
                         <div className="flex flex-col md:flex-row md:justify-between md:items-start">
                             <div>
                                 <h3 className="text-xl font-semibold text-text-primary">Simon Fraser University</h3>
-                                <p className="text-base text-text-secondary mt-1">Biological Sciences</p>
+                                <p className="text-base text-text-secondary mt-1">Bachelor of Science in Biological Sciences</p>
                                 <p className="text-sm text-text-secondary mt-1">Completed foundational coursework, then transferred to UBC to pursue Computer Science</p>
                                 <p className="text-sm text-text-secondary mt-1">Dean's Honour List, President's Honour Roll, Undergraduate Open Scholarship</p>
                             </div>
