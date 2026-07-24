@@ -55,7 +55,7 @@ export default function Experience() {
                                     rel="noopener noreferrer"
                                     className="w-full py-2 text-accent hover:text-text-primary hover:underline transition-all text-sm font-medium block text-center mt-4"
                                 >
-                                    View Project →
+                                    View Project &rarr;
                                 </a>
                             )}
                         </div>

@@ -13,6 +13,8 @@ export interface Project {
     liveUrl?: string | null
     screenshots?: string[] // Array of image paths in public/images/projects/
     category: 'featured' | 'systems' | 'cloud-infra' | 'data'
+    status?: string // short badge, e.g. "Live in production", "In progress"
+    highlights?: string[] // 3-4 skimmable facts shown at the top of the detail view
 
     // Detail modal content
     overview: string
@@ -31,9 +33,9 @@ export const featuredProjects: Project[] = [
     {
         id: 'multi-vendor-vertical-saas',
         title: 'Multi-Vendor Collision Parts Search',
-        description: 'Live production search for collision repair shops: VIN/fitment and part-number lookup with side-by-side compare across suppliers. Shipped end-to-end (~14k LOC TypeScript monorepo)—canonical parts graph, batched Lambda catalog sync, 160+ automated tests, OIDC deploy.',
+        description: 'Live search for collision repair shops. Look up parts by VIN or part number and compare offers across suppliers in one place.',
         techTags: ['TypeScript', 'Next.js', 'Express', 'PostgreSQL', 'Drizzle ORM', 'AWS Lambda', 'Terraform', 'Vercel', 'Zod', 'GitHub Actions'],
-        hardProblem: 'Reduced per-page ingestion from ~3,500 SQL round-trips to ~25 (~140×) so catalog sync finishes inside 12-minute Lambda limits—while resolving OEM, aftermarket, and interchange IDs into one canonical parts graph with idempotent, conflict-safe writes.',
+        hardProblem: 'Cut per-page ingestion from about 3,500 database writes to about 25 so a catalog page finishes inside the 12 minute Lambda limit, while merging OEM, aftermarket, and interchange part numbers into one graph with safe, idempotent writes.',
         githubUrl: 'https://github.com/paramtully/Autobody-Part-Sourcing',
         liveUrl: 'https://www.getboneyard.com',
         screenshots: [
@@ -46,72 +48,140 @@ export const featuredProjects: Project[] = [
             '/images/projects/boneyard/boneyard-7.png'
         ],
         category: 'featured',
-        overview: 'Built and deployed a multi-vendor collision-parts search product (getboneyard.com): shops search by VIN/fitment or part number and compare offers across suppliers in one UI. End-to-end TypeScript monorepo—Next.js client, Express API, Postgres (Drizzle), AWS Lambda ingestion workers, Terraform infra, Vercel hosting. Scheduled workers ingest supplier catalogs into one normalized database; search/compare and affiliate outbound links are live. Checkout domain is modeled and tested but intentionally not wired to production routes yet.',
-        problemContext: 'Collision shops source parts across disconnected supplier systems with no unified search. The same physical part appears as different strings per vendor (OEM vs aftermarket vs interchange; formatting like 1234-AB vs 1234AB). Vehicle fitment adds another dimension—one part can apply to many trims, which breaks naive joins and pagination. Suppliers rate-limit APIs and catalogs are too large for a single Lambda invocation without resumable, cursor-based ingestion.',
+        status: 'Live in production',
+        highlights: [
+            'About 140x fewer database writes per catalog page (roughly 3,500 down to 25)',
+            '160+ automated tests running against in-memory Postgres in CI',
+            'Deploys to AWS with no long-lived keys using GitHub OIDC',
+            'Live vendors today: eBay US and eBay CA'
+        ],
+        overview: 'A live parts search product for collision repair shops (getboneyard.com). Shops search by VIN or part number and compare offers across suppliers in one screen. It is an end to end TypeScript project: a Next.js client, an Express API, Postgres with Drizzle, AWS Lambda ingestion workers, Terraform infrastructure, and Vercel hosting. Scheduled workers pull supplier catalogs into one normalized database, and search, compare, and affiliate links are live. The checkout flow is fully modeled and tested in code but is intentionally left out of production until vendor order APIs are ready.',
+        problemContext: 'Collision shops source parts across disconnected supplier systems with no shared search. The same physical part shows up as different strings per vendor (OEM, aftermarket, and interchange numbers, plus formatting like 1234-AB versus 1234AB). Vehicle fitment adds another layer, since one part can fit many trims, which breaks naive joins and pagination. Suppliers also rate limit their APIs, and catalogs are far too large for a single Lambda run without resumable, cursor based ingestion.',
         whyItWasHard: [
             {
                 heading: 'Canonical Parts Graph',
-                context: 'One physical part must map through typed identifiers (OEM / aftermarket / interchange), vehicle fitments, and per-vendor listings—without silent merges when two IDs imply different parts'
+                context: 'One physical part has to map cleanly through typed identifiers (OEM, aftermarket, interchange), vehicle fitments, and per vendor listings, without silently merging two IDs that actually mean different parts.'
             },
             {
-                heading: 'Lambda-Scale Batched Ingestion',
-                context: 'Naïve row-by-row ingest of a 200-listing page is ~3,500 SQL ops; eBay fitment matrices can add 1k–2k fitments per listing—serial INSERTs risk timing out a 12-minute Lambda'
+                heading: 'Batched Ingestion at Lambda Scale',
+                context: 'Ingesting a 200 listing page one row at a time is about 3,500 database operations, and eBay fitment data can add 1,000 to 2,000 fitments per listing, so serial inserts risk timing out the 12 minute Lambda.'
             },
             {
                 heading: 'Resumable Workers Under Rate Limits',
-                context: 'Huge catalogs, 720s Lambda budget, and vendor rate limits require cursor checkpointing, deadline-aware loops, and pause/resume without failing the whole sync'
+                context: 'Large catalogs, a 12 minute budget, and vendor rate limits mean the worker has to checkpoint its cursor, watch the clock, and pause and resume instead of failing the whole sync.'
             },
             {
-                heading: 'Correct Search Under Many-to-Many Fitment',
-                context: 'Joining listings through parts and fitments multiplies rows; shops would see duplicate listings and broken pagination without server-side deduplication'
+                heading: 'Correct Search Under Many to Many Fitment',
+                context: 'Joining listings through parts and fitments multiplies rows, so without server side deduplication shops would see duplicate listings and broken pagination.'
             },
             {
                 heading: 'Vendor Plugin Architecture',
-                context: 'Each supplier has different APIs, auth, pagination, and field shapes—copy-pasting workers per vendor does not scale'
+                context: 'Each supplier has different APIs, auth, pagination, and field shapes, so copy pasting a worker per vendor does not scale.'
             },
             {
                 heading: 'CI Without a Hosted Database',
-                context: '160+ tests must run reliably in CI without provisioning Postgres—including graph-integrity checks after every ingest path'
+                context: 'The 160+ tests need to run reliably in CI without provisioning Postgres, including graph integrity checks after every ingest path.'
             }
         ],
         keyDecisions: [
             {
-                heading: 'Normalized Parts Graph (parts → identifiers → fitments → listings)',
-                context: 'Bulk-resolve identifiers at ingest; skip records when two IDs map to different parts; tests enforce no orphan graph edges after every run'
+                heading: 'Normalized Parts Graph',
+                context: 'Identifiers are bulk resolved at ingest time, records are skipped when two IDs map to different parts, and tests enforce that no orphan edges remain after every run.'
             },
             {
-                heading: 'Four-Phase DrizzleRecordProcessor Per Page',
-                context: 'Two bulk reads → in-memory classify (new / update / conflict) → single transaction with chunked fitment inserts → deferred fitment enrichment only for new parts'
+                heading: 'Four Phase Record Processor Per Page',
+                context: 'Two bulk reads, then in memory classification into new, update, or conflict, then a single transaction with chunked fitment inserts, then deferred fitment enrichment only for new parts.'
             },
             {
-                heading: 'VendorInventoryClient + Shared Pipeline',
-                context: 'fetch → map → batch upsert with retry decorator; eBay US and CA live from one Lambda artifact (vendor ID selects behavior); LKQ interface stubbed for next integration'
+                heading: 'Shared Vendor Pipeline',
+                context: 'Fetch, map, then batch upsert with a retry decorator. eBay US and CA both run from one Lambda artifact where a vendor ID selects behavior, and the next supplier interface is stubbed for onboarding.'
             },
             {
-                heading: 'SELECT DISTINCT ON for Search APIs',
-                context: 'Fitment and part-number routes return one row per listing regardless of fitment cardinality; shared Zod query contract for sort, filters, and cursor pagination'
+                heading: 'Deduplicated Search Queries',
+                context: 'Fitment and part number routes return one row per listing regardless of how many trims match, with a shared Zod contract for sort, filters, and cursor pagination.'
             },
             {
-                heading: 'OIDC Deploy + PGlite Unit CI',
-                context: 'GitHub Actions assumes AWS via web identity (no long-lived keys); path-filtered deploys after CI; in-memory Postgres for unit tests, live smoke on main only'
+                heading: 'OIDC Deploys and In-Memory Test DB',
+                context: 'GitHub Actions assumes AWS through web identity with no long-lived keys, deploys are path filtered after CI, and unit tests run against in-memory Postgres with a live smoke test on main.'
             },
             {
                 heading: 'Staged MVP Scope',
-                context: 'Shipped search, compare, and affiliate links first; checkout service, Stripe adapter, and outbox modeled in code but routes not enabled—judgment over half-wired payments'
+                context: 'Search, compare, and affiliate links shipped first. The checkout service, payment adapter, and outbox are modeled and tested in code but not enabled, a deliberate call over shipping half wired payments.'
             }
         ],
-        reliability: 'Ingestion is idempotent with explicit conflict skips when identifiers disagree. Per-vendor ingestion runs track cursor, stats, and status (in progress, completed, rate-limited, failed). Rate-limit hits pause the run, persist the cursor, and resume after cooldown instead of failing the invocation. Individual listing errors do not abort vendor-wide sync. Automated tests cover re-ingest idempotency, conflict detection, and post-ingest graph integrity.',
-        performance: 'Batched ingest: ~140× fewer DB round-trips per ~200-listing page (~3,500 → ~25 SQL ops). Fitment-heavy paths move from tens of thousands of serial INSERTs to a handful of chunked bulk statements—the difference between timing out and finishing a catalog page within Lambda budget. Search APIs use DISTINCT ON so multi-trim fitment joins do not duplicate listings or break pagination.',
-        results: 'Live at getboneyard.com with production ingestion (eBay US + CA), fitment wizard, VIN decode, filtered/sorted results, compare tray, listing detail, and affiliate outbound links. Shipped with 160+ automated tests (PGlite in CI, live integration smoke on main). End-to-end ownership: data model, batch ingestion workers, search API, frontend, Terraform, and CI/CD. Checkout/payments domain implemented and tested but not productized in prod.',
-        futureImprovements: 'Enable checkout API routes and Stripe flow for vendors that support platform checkout. Add LKQ and additional supplier integrations via the existing plugin pipeline. Expand vendor count and tighten catalog freshness SLAs. Vendor performance scoring from fulfillment data.',
-        lessons: 'Performance work should be tied to real constraints (Lambda timeout and Postgres param limits), not premature optimization. Canonical identity in messy B2B data needs test-defined conflict behavior, not assumed merges. Shipping a live product with honest MVP boundaries (search before payments) reads stronger than a half-integrated checkout. Plugin boundaries pay off when the second vendor is mapper + config, not a rewrite.'
+        reliability: 'Ingestion is idempotent and skips records when identifiers disagree rather than guessing. Each vendor run tracks its cursor, stats, and status (in progress, completed, rate limited, failed). When a rate limit hits, the run pauses, saves its cursor, and resumes after a cooldown instead of failing the whole invocation. A single bad listing does not abort the vendor sync. Tests cover re-ingest idempotency, conflict detection, and post ingest graph integrity.',
+        performance: 'Batched ingestion does roughly 140 times fewer database writes per 200 listing page (about 3,500 down to about 25). Fitment heavy pages go from tens of thousands of serial inserts to a handful of chunked bulk statements, which is the difference between timing out and finishing a page inside the Lambda budget. Search queries return one row per listing so many trim joins never duplicate results or break pagination.',
+        results: 'Live at getboneyard.com with production ingestion for eBay US and CA, a fitment wizard, VIN decode, filtered and sorted results, a compare tray, listing detail, and affiliate links. Shipped with 160+ automated tests, in-memory Postgres in CI, and a live integration smoke test on main. I owned the whole thing: data model, ingestion workers, search API, frontend, Terraform, and CI/CD. The checkout and payments code is written and tested but not turned on in production.',
+        futureImprovements: 'Turn on the checkout API and payment flow for vendors that support platform checkout. Add more suppliers through the existing plugin pipeline. Grow vendor count and tighten how fresh the catalog stays. Score vendor performance from fulfillment data.',
+        lessons: 'Performance work should be tied to a real limit like the Lambda timeout and Postgres parameter caps, not done for its own sake. Canonical identity in messy vendor data needs conflict behavior defined by tests, not assumed merges. Shipping a live product with honest boundaries, search before payments, reads stronger than a half finished checkout. Plugin boundaries pay off when the second vendor is a mapper and some config instead of a rewrite.'
+    },
+    {
+        id: 'asterism',
+        title: 'Asterism',
+        description: 'iOS app that drafts review replies in each business\u2019s own voice, so owners can approve, edit, or auto post from their phone.',
+        techTags: ['Swift', 'SwiftUI', 'Python', 'FastAPI', 'PostgreSQL', 'pgvector', 'Supabase', 'GitHub Actions'],
+        hardProblem: 'Keeping AI replies on brand with retrieval: a business\u2019s own past replies are embedded and the closest ones are pulled back as examples, but only when there are enough of them and they are similar enough to trust.',
+        githubUrl: null,
+        liveUrl: 'https://asterism-app.vercel.app',
+        screenshots: [],
+        category: 'featured',
+        status: 'In progress',
+        highlights: [
+            'Retrieval only fires with 8 or more past replies and 0.78 or higher similarity, then adds up to 3 examples',
+            'Runs end to end locally against a mocked Google and Yelp integration while partner API access is pending',
+            'Customer review text is kept out of system instructions to reduce prompt injection risk',
+            'StoreKit 2 billing across three subscription plans'
+        ],
+        overview: 'A product for local business owners who never have time to reply to reviews. Asterism connects a business\u2019s Google and Yelp profiles, drafts a reply in that business\u2019s own voice, and lets the owner approve, edit, or auto post from their phone. It is a native SwiftUI app backed by a Python FastAPI service, Postgres with pgvector for retrieval, and Supabase for data and auth. The core loop is built and runs locally against a mocked review integration; a public landing page is live while I wait on Google Business Profile and Yelp partner access.',
+        problemContext: 'Owners know that replying to reviews helps their reputation, but writing a genuine reply to every one is tedious, and generic AI replies sound like a robot and can hurt more than help. The hard part is not calling a language model, it is making the reply actually sound like this specific business, grounded in real facts about them, without letting a hostile review steer the model.',
+        whyItWasHard: [
+            {
+                heading: 'Replies That Sound Like the Owner',
+                context: 'A model with no context writes bland, generic replies. The app needs each business\u2019s tone and past replies as grounding so drafts read like the owner actually wrote them.'
+            },
+            {
+                heading: 'Knowing When to Trust Retrieval',
+                context: 'Pulling in past replies as examples only helps when there are enough of them and they are close enough to the new review. Firing retrieval too early produces off tone, low quality examples.'
+            },
+            {
+                heading: 'Untrusted Review Text',
+                context: 'A customer review is attacker controlled input. It can contain instructions like ignore your rules or reveal your prompt, so review text has to be isolated from the system instructions.'
+            },
+            {
+                heading: 'Third Party Access Gating',
+                context: 'Google Business Profile and Yelp both gate their reply APIs behind partner approval, so the whole app had to be buildable and testable before that access exists.'
+            }
+        ],
+        keyDecisions: [
+            {
+                heading: 'Retrieval With Guardrails',
+                context: 'Past replies are embedded with a sentence transformer and stored in pgvector. Examples are only injected when there are at least 8 past replies and the closest ones clear a 0.78 similarity bar, capped at 3 examples.'
+            },
+            {
+                heading: 'Role Separation for Safety',
+                context: 'System instructions and the customer review live in separate roles, and the review is wrapped as clearly untrusted, so the model treats it as content to reply to rather than commands to follow.'
+            },
+            {
+                heading: 'Stub Integration for Local Development',
+                context: 'A mocked Google and Yelp integration lets the full sync, draft, and post loop run locally, so development never blocks on partner API approval.'
+            },
+            {
+                heading: 'Layered Backend',
+                context: 'Repository interfaces, domain services, and a billing abstraction keep the FastAPI service testable and let the storage and payment details sit behind clean boundaries.'
+            }
+        ],
+        reliability: 'Retrieval degrades gracefully: when a business does not have enough history yet, the app falls back to a stored voice profile instead of injecting weak examples. Review text is treated as untrusted at the prompt layer. The backend is covered by a large automated test suite spanning sync, drafting, and billing.',
+        performance: 'Embeddings use a compact 384 dimension model that runs cheaply on CPU. Retrieval uses vector similarity in Postgres, so it does not need a separate vector database. Prompt size is kept in check with compact voice and business summaries rather than dumping raw history into every request.',
+        results: 'The product is built and runs end to end locally against a mocked review integration, including sync, voice grounded drafting, approve and edit, and StoreKit 2 billing across three plans. A public landing page is live. It is not on TestFlight yet because it needs live Google and Yelp access to be useful to real owners, and that access is still pending.',
+        futureImprovements: 'Ship to TestFlight once partner API access clears. Add a small red team set of adversarial reviews to measure prompt injection resistance directly. Expand the voice profile to learn more from owner edits over time.',
+        lessons: 'The interesting engineering in an AI product is rarely the model call. It is the retrieval gating, the safety boundaries around untrusted input, and the fallbacks for when there is not enough data yet. Building against a stub kept the whole thing moving while external access was out of my hands.'
     },
     {
         id: 'stock-analytics',
         title: 'Cloud-Native Stock Analytics Platform',
-        description: 'A platform to track your stock portfolio performance and get real time stock and news data with AI generated recommendations. Uses 15+ microservices processing 1M+ market events/day through event-driven AWS pipelines.',
+        description: 'Portfolio tracker that syncs market and news data on a schedule and adds AI written summaries, built on an event driven AWS pipeline.',
         techTags: ['TypeScript', 'Terraform', 'AWS Lambda', 'ECS Fargate', 'PostgreSQL', 'S3', 'Parquet', 'EventBridge', 'React', 'OpenAI', 'WAF', 'Cognito', 'API Gateway', 'GitHub Actions'],
-        hardProblem: 'Designed two-stage Lambda architecture to eliminating NAT Gateway costs while maintaining database security. Built idempotent stock-split reconciliation across historical time-series data.',
+        hardProblem: 'Designed a two stage Lambda architecture that removes NAT Gateway cost while keeping the database in a private subnet, and built idempotent stock split reconciliation across historical time series data.',
         githubUrl: 'https://github.com/paramtully/Stocker',
         liveUrl: null,
         screenshots: [
@@ -122,86 +192,97 @@ export const featuredProjects: Project[] = [
             '/images/projects/stocker/stocker-5.png'
         ],
         category: 'featured',
+        highlights: [
+            'Two stage Lambda design keeps the database private while avoiding NAT Gateway cost',
+            '70 to 90 percent storage savings using Parquet with S3 lifecycle policies',
+            'Idempotent ingestion with stock split reconciliation across historical data',
+            'Infrastructure defined across 15+ Terraform modules with CI/CD'
+        ],
+        overview: 'A cloud native stock portfolio platform built end to end: event driven data pipelines, AI news summarization through OpenAI, and production AWS infrastructure defined across 15+ Terraform modules. The frontend is a full stack React app with Cognito auth, role based access, layered rate limiting, and automated CI/CD through GitHub Actions.',
 
-        overview: 'Cloud-native stock portfolio platform built end-to-end: 15+ microservices and Lambda functions, event-driven data pipelines processing 1M+ market events daily, AI-powered news summarization via OpenAI GPT, and production AWS infrastructure defined in 15+ Terraform modules. Full-stack React SPA with Cognito auth, role-based access, multi-layered rate limiting, and automated CI/CD via GitHub Actions.',
-
-        problemContext: 'Financial market data requires high-throughput ingestion from external APIs, efficient long-term storage for analytical queries, and cost-effective cloud infrastructure. Traditional approaches: JSON storage, always-on servers, VPC-connected Lambdas for external API calls. Result: high costs (NAT Gateway alone ~$32-45/month) and poor query performance at scale.',
+        problemContext: 'Market data needs steady ingestion from external APIs, efficient long term storage for analytical queries, and infrastructure that does not quietly run up a bill. The obvious approach, JSON storage on always on servers with VPC connected Lambdas calling out to the internet, gets expensive fast (a NAT Gateway alone is roughly 32 to 45 dollars a month) and queries poorly as data grows.',
 
         whyItWasHard: [
             {
-                heading: 'Two-Stage Lambda Architecture',
-                context: 'Designing architecture that isolates RDS in private subnet while avoiding NAT Gateway costs for internet-facing ingestion'
+                heading: 'Private Database Without NAT Cost',
+                context: 'Keeping RDS in a private subnet while still letting internet facing ingestion reach external APIs, without paying for a NAT Gateway.'
             },
             {
                 heading: 'Idempotent Pipelines',
-                context: 'Building pipelines with stock-split detection and historical data reconciliation that handle retries safely'
+                context: 'Handling retries safely, including stock split detection and reconciling historical data, so a re-run never double counts.'
             },
             {
                 heading: 'Service Orchestration',
-                context: 'Coordinating 15+ services with event-driven scheduling and proper failure handling across the system'
+                context: 'Coordinating many services with event driven scheduling and sensible failure handling across the system.'
             },
             {
-                heading: 'LLM Integration',
-                context: 'Integrating OpenAI GPT news summarization with token-aware batching and fallback mechanisms for API failures'
+                heading: 'Language Model Integration',
+                context: 'Summarizing news through OpenAI with token aware batching and fallbacks for when the API fails.'
             },
             {
                 heading: 'Infrastructure as Code',
-                context: 'Defining entire AWS infrastructure across 15+ Terraform modules with automated CI/CD deployment'
+                context: 'Defining the whole AWS footprint across 15+ Terraform modules with automated deploys.'
             }
         ],
 
         keyDecisions: [
             {
-                heading: 'Two-Stage Lambda Architecture',
-                context: 'Internet-facing Lambdas (no VPC) ingest from external APIs → write Parquet to S3 → VPC-isolated Lambdas read via S3 VPC endpoints and write to RDS. Eliminates NAT Gateway while keeping database in private subnets'
+                heading: 'Two Stage Lambda Architecture',
+                context: 'Internet facing Lambdas with no VPC ingest from external APIs and write Parquet to S3, then VPC isolated Lambdas read through S3 VPC endpoints and write to RDS. This removes the NAT Gateway while keeping the database private.'
             },
             {
-                heading: 'Lambda + ECS Fargate Hybrid',
-                context: 'Lambda for short-lived event-driven tasks (daily ingestion, API); ECS Fargate for long-running historical loads exceeding Lambda\'s 15-min timeout'
+                heading: 'Lambda and ECS Fargate Hybrid',
+                context: 'Lambda handles short event driven tasks like scheduled ingestion and the API, and ECS Fargate handles long running historical loads that exceed the Lambda time limit.'
             },
             {
-                heading: 'Parquet over JSON',
-                context: '70-90% compression, columnar queries for analytics, schema evolution support. Year-based S3 partitioning aligned with query patterns and lifecycle policies'
+                heading: 'Parquet Over JSON',
+                context: '70 to 90 percent compression, fast columnar analytical queries, and schema evolution. S3 is partitioned by year to match query patterns and lifecycle rules.'
             },
             {
                 heading: 'Idempotent Ingestion',
-                context: 'Composite primary keys with upsert conflict resolution. Stock-split detection uses S3-based state management with two-phase fetch → apply pattern'
+                context: 'Composite primary keys with upsert conflict resolution. Stock split detection uses S3 based state with a two phase fetch then apply pattern.'
             },
             {
-                heading: 'Multi-Layered Rate Limiting',
-                context: 'WAF IP-based rules (100 req/5min unauthenticated, 1,000/5min authenticated) + API Gateway stage throttling (50 req/sec sustained, 100 burst)'
+                heading: 'Layered Rate Limiting',
+                context: 'WAF IP rules (100 requests per 5 minutes unauthenticated, 1,000 authenticated) sit in front of API Gateway throttling at 50 requests per second sustained with 100 burst.'
             },
             {
-                heading: '7-Day Rolling Window',
-                context: 'Balances data freshness with compute cost; handles late-arriving data without reprocessing entire history'
+                heading: 'Rolling Seven Day Window',
+                context: 'Balances freshness against compute cost and absorbs late arriving data without reprocessing the entire history.'
             },
             {
-                heading: 'Monorepo with npm Workspaces',
-                context: 'Shared TypeScript types across 15+ packages with clean, acyclic dependency graph for type safety'
+                heading: 'Monorepo With npm Workspaces',
+                context: 'Shared TypeScript types across packages with a clean, acyclic dependency graph for type safety.'
             },
             {
                 heading: 'AI News Pipeline',
-                context: 'OpenAI GPT summarization with token-aware batching, sentiment analysis, and fallback mechanisms for API failures'
+                context: 'OpenAI summarization with token aware batching, sentiment analysis, and fallbacks for API failures.'
             }
         ],
-        reliability: 'Idempotent ingestion prevents duplicates across retries. EventBridge scheduling with failure handling ensures pipeline continuity. Cognito JWT auth with role-based access control (user, admin, guest). Automatic guest user cleanup via scheduled Lambda. WAF + API Gateway rate limiting provides defense-in-depth.',
-        performance: 'Processes 1M+ events/day with Lambda auto-scaling and ECS Fargate for burst historical loads. Parquet columnar format enables efficient analytical queries. S3 lifecycle policies archive old partitions to cheaper tiers. 7-day rolling windows minimize per-run compute. TanStack Query provides client-side caching for responsive UI.',
-        results: 'Shipped end-to-end: 15+ orchestrated services, 15+ Terraform modules, CI/CD pipeline (GitHub Actions → Docker → ECR → ECS), production auth, and multi-layered security. Eliminated NAT Gateway costs (~$32-45/month) via two-stage Lambda architecture. Achieved 70-90% storage reduction with Parquet. AI news pipeline processes and summarizes articles with token-aware batching. Full admin dashboard with user metrics and system health monitoring.',
-        futureImprovements: 'Real-time streaming with Kinesis for sub-minute data freshness. Redis caching layer for hot query paths. Advanced partitioning strategies based on observed access patterns. Expanded test coverage with integration and load testing.',
-        lessons: 'Cost is a first-class architectural concern. The two-stage Lambda pattern saved meaningful infrastructure spend with minimal added complexity. Hybrid compute (Lambda + ECS) optimizes for different workload durations. Parquet pays dividends in both storage cost and query performance. Infrastructure as Code is non-negotiable for reproducible cloud environments. Monorepo structure enables type-safe sharing across services but demands disciplined dependency management.'
+        reliability: 'Idempotent ingestion prevents duplicates across retries. EventBridge scheduling with failure handling keeps the pipeline running. Cognito JWT auth backs role based access for user, admin, and guest. A scheduled Lambda cleans up guest accounts. WAF and API Gateway rate limiting give defense in depth.',
+        performance: 'Scheduled syncs currently pull the NASDAQ ticker universe on a fixed cadence, and the event driven design can scale to far higher volume, bounded mainly by upstream API rate limits. Parquet columnar storage keeps analytical queries fast and storage cheap, S3 lifecycle rules move old partitions to cheaper tiers, and the seven day window keeps each run small. TanStack Query caches on the client for a responsive UI.',
+        results: 'Shipped end to end: many orchestrated services, 15+ Terraform modules, a CI/CD pipeline from GitHub Actions through Docker and ECR to ECS, production auth, and layered security. The two stage Lambda design removed NAT Gateway cost of roughly 32 to 45 dollars a month, and Parquet cut storage by 70 to 90 percent. The AI news pipeline summarizes articles with token aware batching, and an admin dashboard surfaces user metrics and system health.',
+        futureImprovements: 'Add Kinesis streaming for sub minute freshness. Add a Redis cache for hot query paths. Refine partitioning based on real access patterns. Expand integration and load test coverage.',
+        lessons: 'Cost is a real design constraint, not an afterthought. The two stage Lambda pattern saved meaningful spend for very little added complexity. Splitting work between Lambda and ECS matches compute to how long each job runs. Parquet pays off in both storage and query speed. Infrastructure as code is what makes a cloud setup reproducible, and a monorepo makes shared types easy but demands disciplined dependencies.'
     },
     {
         id: 'distributed-kv',
         title: 'Distributed Key-Value Store',
-        description: 'Linearizable distributed database in Go using Raft consensus with leader election, log replication, and snapshot-based recovery',
+        description: 'Linearizable key value store in Go, built on a from scratch Raft implementation with leader election, log replication, and snapshots.',
         techTags: ['Go', 'Raft', 'Distributed Systems'],
-        hardProblem: 'Implemented fault-tolerant consensus ensuring linearizability guarantees under network partitions, node crashes, and concurrent client operations',
+        hardProblem: 'Built fault tolerant consensus that stays linearizable under network partitions, node crashes, and concurrent clients.',
         githubUrl: null,
         liveUrl: null,
         screenshots: [],
         category: 'featured',
-        overview: 'A distributed key-value store implementing the Raft consensus algorithm from scratch. Provides linearizable consistency guarantees and handles various failure scenarios including network partitions and node crashes.',
-        problemContext: 'Distributed systems require consensus to maintain consistency across replicas. Raft provides a simpler alternative to Paxos while maintaining strong consistency guarantees. Implementing it correctly requires careful handling of leader election, log replication, and failure recovery.',
+        status: 'Academic project',
+        highlights: [
+            'Raft written from scratch: elections, log replication, and snapshots',
+            'Passes fault injection for network partitions and node crashes',
+            'Stays linearizable under concurrent clients'
+        ],
+        overview: 'A distributed key value store built on a from scratch implementation of the Raft consensus algorithm. It stays linearizable and keeps working through failures like network partitions and node crashes.',
+        problemContext: 'Distributed systems need consensus to keep replicas consistent. Raft is a simpler alternative to Paxos that still gives strong consistency, but implementing it correctly means handling leader election, log replication, and failure recovery with care.',
         whyItWasHard: [
             {
                 heading: 'Raft Correctness Requirements',
@@ -238,11 +319,11 @@ export const featuredProjects: Project[] = [
                 context: 'Prevents split votes during leader election by randomizing timeout intervals across nodes'
             }
         ],
-        reliability: 'Passes fault-injection tests for network partitions, node crashes, and concurrent client operations. Leader election ensures system continues operating even with node failures. Log replication ensures durability. Snapshot-based recovery handles node restarts efficiently.',
-        performance: 'Linearizable operations provide strong consistency guarantees. Snapshot-based recovery reduces log size and improves restart time. Concurrent client operations are handled correctly with proper synchronization.',
-        results: 'Successfully implemented Raft consensus passing all fault-injection tests. System maintains linearizability under various failure scenarios including network partitions and node crashes. Demonstrates deep understanding of distributed systems fundamentals.',
-        futureImprovements: 'Could add dynamic membership changes. Implement log compaction for better performance. Add metrics and observability for production use.',
-        lessons: 'Consensus algorithms have subtle correctness requirements that must be carefully implemented. Testing with fault injection is essential for distributed systems. Linearizability provides strong guarantees but requires careful coordination.'
+        reliability: 'Passes fault injection tests for network partitions, node crashes, and concurrent clients. Leader election keeps the system running through node failures, log replication keeps data durable, and snapshot based recovery handles restarts efficiently.',
+        performance: 'Linearizable operations give strong consistency. Snapshot based recovery shrinks the log and speeds up restarts. Concurrent clients are handled correctly through careful synchronization.',
+        results: 'A working Raft implementation that passes the fault injection tests and stays linearizable through partitions and crashes. The project is where a lot of my distributed systems intuition comes from.',
+        futureImprovements: 'Add dynamic membership changes. Add log compaction for better performance. Add metrics and observability for real deployment.',
+        lessons: 'Consensus algorithms have subtle correctness requirements that punish shortcuts. Fault injection testing is essential for distributed systems. Linearizability is a strong guarantee, but it takes careful coordination to hold.'
     }
 ]
 
@@ -257,8 +338,8 @@ export const allProjects: Project[] = [
         liveUrl: null,
         screenshots: [],
         category: 'systems',
-        overview: 'A complete implementation of the oAuth2.0 authentication protocol from scratch. Includes an authentication server for credential management and session handling, plus a full-stack application demonstrating oAuth integration.',
-        problemContext: 'Understanding authentication and authorization protocols is fundamental for backend engineers. Implementing oAuth2.0 from scratch provides deep understanding of security best practices, token management, and session handling.',
+        overview: 'A full implementation of the oAuth2.0 authentication protocol from scratch. It includes an auth server for credentials and sessions, plus a full stack app that uses it end to end.',
+        problemContext: 'Auth is fundamental backend work. Building oAuth2.0 from scratch meant working through password hashing, token management, and session handling myself instead of leaning on a library.',
         whyItWasHard: [
             {
                 heading: 'Cryptographic Primitives',
@@ -305,7 +386,7 @@ export const allProjects: Project[] = [
         ],
         reliability: 'Proper password hashing prevents credential exposure if database is compromised. Salt + Pepper prevents rainbow table attacks and frequency analysis attacks. Asymmetric token signatures allow verification without sharing secrets. Token expiration limits attack window. Refresh token rotation prevents token reuse.',
         performance: 'Stateless JWT tokens enable horizontal scaling. DynamoDB provides low-latency credential lookups. Token-based authentication eliminates need for server-side session storage.',
-        results: 'Successfully implemented oAuth2.0 protocol demonstrating understanding of authentication security. Full-stack integration shows end-to-end system thinking. Proper use of cryptographic primitives and security best practices.',
+        results: 'A working oAuth2.0 flow with an isolated auth server, asymmetrically signed tokens, salted password hashing, and refresh token rotation, wired into a full stack app.',
         futureImprovements: 'Could add multi-factor authentication. Implement OAuth2.0 authorization code flow for third-party integrations. Add rate limiting for brute-force protection.',
         lessons: 'Security is not optional - proper password hashing and token management are essential. Understanding cryptographic primitives is crucial for backend engineers. Authentication protocols have subtle security requirements that must be implemented correctly.'
     },
@@ -363,7 +444,7 @@ export const allProjects: Project[] = [
         ],
         reliability: 'Thread-safe implementation prevents race conditions and deadlocks. Proper semaphore usage ensures correct synchronization. Memory management prevents leaks and corruption.',
         performance: 'Thread pool maximizes CPU utilization across available cores. Producer-consumer pattern enables efficient work distribution. Early termination prevents unnecessary computation.',
-        results: 'Successfully implemented concurrent password cracking demonstrating deep understanding of systems programming, thread safety, and performance optimization. Showcases ability to work with low-level concurrency primitives.',
+        results: 'A multithreaded cracker that keeps every core busy through a thread pool and a semaphore based work queue, stops all threads the moment the password is found, and runs without leaks or data races.',
         futureImprovements: 'Could add GPU acceleration for massive parallelism. Implement work stealing for better load balancing. Add support for different hashing algorithms.',
         lessons: 'Concurrency primitives require careful design to avoid deadlocks and race conditions. Thread pools are essential for CPU-bound parallel workloads. Systems programming demands attention to memory management and performance.'
     },
@@ -382,11 +463,11 @@ export const allProjects: Project[] = [
         whyItWasHard: [
             {
                 heading: 'Binary Wire-Format Parsing',
-                context: 'DNS messages are encoded in a compact binary format with bit-level fields, variable-length labels, and message compression using pointer offsets — all parsed manually from raw bytes'
+                context: 'DNS messages are encoded in a compact binary format with bit level fields, variable length labels, and message compression using pointer offsets, all parsed by hand from raw bytes'
             },
             {
                 heading: 'Iterative Resolution Logic',
-                context: 'Correctly following the delegation chain from root → TLD → authoritative server, handling CNAME chains, referrals in the Authority section, and knowing when to stop'
+                context: 'Correctly following the delegation chain from root to TLD to authoritative server, handling CNAME chains, referrals in the Authority section, and knowing when to stop'
             },
             {
                 heading: 'UDP Reliability',
@@ -404,11 +485,11 @@ export const allProjects: Project[] = [
             },
             {
                 heading: 'Manual Binary Serialization',
-                context: 'Hand-written byte-level encoding and decoding of DNS message sections (header, question, answer, authority, additional) builds deep understanding of protocol structure'
+                context: 'Hand written byte level encoding and decoding of DNS message sections (header, question, answer, authority, additional) builds a real understanding of how the protocol is structured'
             },
             {
                 heading: 'Iterative over Recursive',
-                context: 'Iterative resolution — where the client follows each referral itself — is what real resolvers do; it exposes the full DNS delegation hierarchy and teaches how the system actually works'
+                context: 'Iterative resolution, where the client follows each referral itself, is what real resolvers do. It exposes the full DNS delegation hierarchy and shows how the system actually works'
             },
             {
                 heading: 'Structured Message Model',
@@ -417,7 +498,7 @@ export const allProjects: Project[] = [
         ],
         reliability: 'Handles UDP packet loss with configurable timeouts and retransmission. Gracefully surfaces NXDOMAIN, SERVFAIL, and other RCODE failures. CNAME chain resolution prevents infinite loops.',
         performance: 'Follows the minimal number of UDP round trips required by iterative resolution. Stops traversal as soon as an authoritative answer is found rather than querying unnecessary nameservers.',
-        results: 'Successfully resolves arbitrary domain names by walking the live DNS hierarchy from root nameservers. Demonstrates deep understanding of network protocols, binary serialization, and the architecture of internet infrastructure. These topics surface directly in backend engineering and distributed systems work.',
+        results: 'Resolves arbitrary domain names by walking the live DNS hierarchy from the root servers, parsing every message by hand at the byte level. The protocol and serialization work shows up directly when debugging backend and distributed systems.',
         futureImprovements: 'Add a local cache with TTL-based expiration to reduce redundant queries. Support TCP fallback for truncated responses. Implement DNSSEC validation for authenticated resolution.',
         lessons: 'Understanding protocols at the wire level demystifies abstractions that engineers use every day. UDP\'s lack of reliability guarantees forces explicit design decisions around timeouts and retries. Real-world DNS has far more edge cases than the spec suggests, handling them correctly requires reading RFCs carefully and testing against live infrastructure.'
     },
@@ -432,7 +513,7 @@ export const allProjects: Project[] = [
         screenshots: [],
         category: 'systems',
         overview: 'An RFC-compliant FTP server built entirely in C using BSD sockets and POSIX threads. Handles concurrent client sessions, passive mode data transfer, directory listing, and file retrieval with full authentication and per-session state management. Built as part of UBC CPSC 317 (Internet Computing).',
-        problemContext: 'Building a networked server that correctly separates control and data channels, manages per-client state across asynchronous commands, and enforces security boundaries without a runtime or framework requires deep understanding of the POSIX networking stack and the FTP protocol specification.',
+        problemContext: 'Building a networked server that separates control and data channels, manages per client state across asynchronous commands, and enforces security boundaries without a runtime or framework takes a solid grasp of the POSIX networking stack and the FTP spec.',
         whyItWasHard: [
             {
                 heading: 'Dual-Channel Protocol',
@@ -462,7 +543,7 @@ export const allProjects: Project[] = [
             },
             {
                 heading: 'RFC-Compliant Response Codes',
-                context: 'All FTP response codes defined as a statically initialized struct of string literals — correct protocol responses are a lookup, not a string construction, eliminating malformed reply bugs'
+                context: 'All FTP response codes defined as a statically initialized struct of string literals, so a correct protocol response is a lookup rather than string construction, which removes malformed reply bugs'
             },
             {
                 heading: 'Enum-Based Command Dispatch',
@@ -479,7 +560,7 @@ export const allProjects: Project[] = [
         ],
         reliability: 'Every socket code path handles failure explicitly with correct FTP error codes. select() prevents passive socket hangs. Path traversal is blocked at the string-inspection layer before any filesystem call is made. All file descriptors closed on both success and error paths.',
         performance: 'File transfer uses a 2KB streaming read loop rather than loading files into memory, supporting arbitrarily large files within a fixed memory footprint. Passive sockets are closed immediately after each transfer to free file descriptors promptly.',
-        results: 'Fully functional FTP server correctly handling authentication, passive mode negotiation, directory listing, and file retrieval over separate TCP channels. Demonstrates low-level networking, protocol implementation, concurrency, and systems resource management in C. The kind of foundational work that makes higher-level distributed systems intuition concrete.',
+        results: 'A working FTP server that handles auth, passive mode negotiation, directory listing, and file retrieval over separate control and data channels, written in C with explicit file descriptor cleanup on every path and a select based timeout so it never hangs.',
         futureImprovements: 'Replace sequential pthread_join with a thread pool or epoll-based event loop for true simultaneous connections. Add TLS on the control channel for encrypted sessions. Implement STOR for file uploads.',
         lessons: 'Network protocols expose every assumption about timing, ordering, and resource ownership. Implementing FTP from scratch built intuition for why abstractions like HTTP/2 multiplexing and connection pools exist, and exactly what problems they solve at the socket level.'
     },
@@ -516,7 +597,7 @@ export const allProjects: Project[] = [
         keyDecisions: [
             {
                 heading: 'Three-Phase Pipeline',
-                context: 'Containerize and build → test → deployment phases with clear separation of concerns'
+                context: 'Containerize and build, then test, then deploy, with clear separation between phases'
             },
             {
                 heading: 'Branch-Based Triggering',
@@ -541,7 +622,7 @@ export const allProjects: Project[] = [
         ],
         reliability: 'Pipeline prevents deployment if automated tests fail. Proper environment isolation ensures Dev/QA/Prod don\'t interfere. Concurrent builds are handled correctly with proper resource management.',
         performance: 'Reduced build and deploy times by 3x (from 45 to 15 minutes) through parallelization and Docker layer optimization. Pipeline supports concurrent pushes from 6+ developers without conflicts.',
-        results: 'Successfully deployed pipeline supporting 3 build environments and concurrent development. Reduced build and deploy times by 3x (from 45 to 15 minutes). Built production backend API handling article CRUD operations, user authentication, and comment management.',
+        results: 'A pipeline supporting 3 build environments and concurrent pushes from a team of developers, with build and deploy times cut about 3x, from 45 minutes to 15. I also built the Java and Spring Boot backend API for article CRUD, authentication, and comments.',
         futureImprovements: 'Could add blue-green deployments for zero-downtime. Implement canary deployments for safer production releases. Add more comprehensive monitoring and alerting.',
         lessons: 'CI/CD pipelines are critical infrastructure that enable team productivity. Proper design can dramatically reduce deployment times. Automation and testing are essential for reliable deployments.'
     },
@@ -603,7 +684,7 @@ export const allProjects: Project[] = [
         ],
         reliability: 'Type-safe query execution prevents runtime errors. Comprehensive test suite ensures correctness. Visitor pattern enables verified extensibility.',
         performance: 'Efficient ZIP file parsing with streaming. Query optimization through proper indexing. Express provides scalable API layer.',
-        results: 'Successfully implemented query system demonstrating mastery of design patterns and ability to work with formal specifications. Shows understanding of language design and compiler concepts.',
+        results: 'A query engine for a language defined in EBNF, built around the visitor pattern with double dispatch so new query operations can be added without touching the node classes.',
         futureImprovements: 'Could add query optimization layer. Implement caching for frequently accessed data. Add more sophisticated query features like joins and aggregations.',
         lessons: 'Design patterns solve real architectural problems. Visitor pattern is powerful for operations on complex data structures. Formal specifications require careful implementation and testing.'
     },
@@ -673,7 +754,7 @@ export const allProjects: Project[] = [
         ],
         reliability: 'Referential integrity enforced through foreign key constraints. Cardinality constraints prevent invalid states. Participation constraints ensure data completeness.',
         performance: 'Strategic indexing optimizes common queries. Normalized schema reduces data redundancy. Efficient join operations through proper relationship modeling.',
-        results: 'Successfully modeled complex sports domain with 11 entity sets and 11 relationships. Demonstrates expertise in database design, normalization, and constraint modeling.',
+        results: 'A normalized Oracle schema for the NBA domain with 11 entity sets, including weak entities and ISA hierarchies, with integrity enforced through keys and check constraints and a Java Swing frontend for querying it.',
         futureImprovements: 'Could add materialized views for complex analytics. Implement query optimization hints. Add full-text search for player names.',
         lessons: 'Proper database design requires understanding domain relationships deeply. ISA hierarchies model inheritance elegantly. Constraints are crucial for data integrity. Normalization must balance with query performance needs.'
     },
@@ -735,7 +816,7 @@ export const allProjects: Project[] = [
         ],
         reliability: 'Maintains referential integrity across relationship updates. Hash-based reconstruction ensures consistent state after deserialization. Unit tests verify correctness of bidirectional relationships.',
         performance: 'O(1) amortized lookup time for relationships using hash tables. Efficient serialization/deserialization for local storage. Responsive UI through proper event handling.',
-        results: 'Successfully implemented Facebook-like features with creative solution to JSON\'s lack of reference support. Demonstrates data structure expertise, algorithmic thinking, and ability to work within constraints.',
+        results: 'A social app with friends, posts, and messaging where bidirectional relationships are rebuilt from JSON on load using an id keyed hash table for O(1) lookups, since JSON has no native references.',
         futureImprovements: 'Could migrate to proper database (PostgreSQL) for scalability. Add real-time features with WebSockets. Implement privacy controls and permissions.',
         lessons: 'Creative data structure design can overcome format limitations. Bidirectional relationships require careful state management. Understanding language and format constraints drives architectural decisions.'
     },
@@ -797,7 +878,7 @@ export const allProjects: Project[] = [
         ],
         reliability: 'Handles authentication edge cases and session management. Gracefully handles network errors and timeouts. Validates scraped data for correctness.',
         performance: 'Reduces manual GPA calculation from several minutes to seconds. Automated navigation eliminates human error. Efficient data extraction and processing.',
-        results: 'Successfully automated GPA calculation solving real user pain point. Originally built as full-stack web app but pivoted to CLI tool after learning it violated university ToS. Demonstrates practical problem-solving and full-stack engineering skills.',
+        results: 'Automated GPA calculation from a university portal that does not offer it. It started as a full stack web app, then I pivoted to a personal CLI after realizing the web version violated the university terms of service.',
         futureImprovements: 'Could add support for other universities. Implement caching to reduce repeated scraping. Add grade trend analysis and predictions.',
         lessons: 'Always verify Terms of Service before deploying user-facing applications. Web scraping requires robust error handling and anti-detection strategies. Practical tools that solve real problems demonstrate engineering impact.'
     },
@@ -811,7 +892,7 @@ export const allProjects: Project[] = [
         liveUrl: null,
         screenshots: [],
         category: 'data',
-        overview: 'A machine learning project that classifies songs into genres based on Spotify audio features. Uses Random Forest classifier with cross-validation for hyperparameter tuning, demonstrating ML pipeline development from data cleaning through model evaluation.',
+        overview: 'A machine learning project that classifies songs into genres from Spotify audio features. It uses a Random Forest with cross validation for hyperparameter tuning and covers the full pipeline from data cleaning through model evaluation.',
         problemContext: 'Predicting song genre from audio features presents challenges including high-dimensional feature space, potential class imbalance, and selecting appropriate features and model architecture for multi-class classification.',
         whyItWasHard: [
             {
@@ -859,7 +940,7 @@ export const allProjects: Project[] = [
         ],
         reliability: 'Cross-validation ensures model generalizes beyond training data. Proper train/test split prevents overfitting. Feature selection reduces noise.',
         performance: 'Achieved 75% accuracy on 5-class genre prediction. Random Forest provides feature importance insights. Ensemble method robust to overfitting.',
-        results: 'Successfully built ML classification pipeline achieving 75% accuracy. Demonstrates understanding of ML fundamentals, feature engineering, and model selection. Reflective analysis shows growth mindset.',
+        results: 'A genre classifier that reaches 75 percent accuracy across 5 classes, with a written retrospective on the feature selection and alternative models that would improve it next time.',
         futureImprovements: 'Use forward selection or ensemble feature selection instead of manual selection. Apply MDS for dimensionality reduction and visualization. Try KNN for convex clusters, DBSCAN for non-convex clusters with outliers, or Multi-class SVM. Add precision-recall analysis per genre.',
         lessons: 'Feature selection is critical for ML performance. Ensemble methods provide robustness. Retrospective analysis and identifying improvements demonstrates engineering maturity. Understanding when different algorithms (KNN, DBSCAN, SVM) might work better shows algorithmic depth.'
     }

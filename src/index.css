@@ -18,6 +18,20 @@
     scroll-behavior: smooth;
   }
 
+  /* Offset anchored scrolling so the fixed nav does not cover section titles */
+  section[id] {
+    scroll-margin-top: 6rem;
+  }
+
+  /* Hide the default disclosure triangle on collapsible sections */
+  summary {
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;

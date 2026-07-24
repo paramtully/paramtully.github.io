@@ -9,13 +9,13 @@ export default function Hero() {
                     Param Tully
                 </h1>
                 <h2 className="text-2xl md:text-4xl text-text-secondary mb-6">
-                    Software Engineer — Backend & Cloud
+                    Backend and Cloud Software Engineer
                 </h2>
                 <p className="text-sm md:text-base text-text-secondary mb-4">
-                    Vancouver, BC (PST) • Open to remote & relocation
+                    Vancouver, BC (PST) • Open to remote and relocation
                 </p>
                 <p className="text-lg md:text-xl text-text-secondary mb-8 max-w-2xl mx-auto">
-                    I design and build reliable backend systems and cloud infrastructure, with experience shipping production applications on AWS
+                    I build reliable backend systems and cloud infrastructure, and I have shipped production apps on AWS
                 </p>
                 <p className="text-base text-accent mb-12">
                     Open to full-time Software Engineer roles
