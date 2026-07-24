@@ -79,7 +79,7 @@ export default function Education() {
                             </div>
                             <div className="text-left md:text-right mt-2 md:mt-0">
                                 <p className="text-base text-text-secondary">Vancouver, BC</p>
-                                <p className="text-base text-text-secondary">2019 to 2021</p>
+                                <p className="text-base text-text-secondary">2019 - 2021</p>
                             </div>
                         </div>
                     </div>
