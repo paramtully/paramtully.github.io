@@ -29,7 +29,7 @@ export default function ProjectCard({ project, onExpand }: ProjectCardProps) {
                     <img
                         src={preview}
                         alt={`${project.title} preview`}
-                        className="w-full h-full object-contain group-hover:scale-[1.02] transition-transform"
+                        className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform"
                         loading="lazy"
                         onError={() => setImgError(true)}
                     />
