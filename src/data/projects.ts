@@ -32,7 +32,7 @@ export interface Project {
 export const featuredProjects: Project[] = [
     {
         id: 'multi-vendor-vertical-saas',
-        title: 'Multi-Vendor Collision Parts Search',
+        title: 'Parts Search for Collision Shops',
         description: 'Live search for collision repair shops. Look up parts by VIN or part number and compare offers across suppliers in one place.',
         techTags: ['TypeScript', 'Next.js', 'Express', 'PostgreSQL', 'Drizzle ORM', 'AWS Lambda', 'Terraform', 'Vercel', 'Zod', 'GitHub Actions'],
         hardProblem: 'Cut per-page ingestion from about 3,500 database writes to about 25 so a catalog page finishes inside the 12 minute Lambda limit, while merging OEM, aftermarket, and interchange part numbers into one graph with safe, idempotent writes.',
