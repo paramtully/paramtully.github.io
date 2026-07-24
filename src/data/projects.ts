@@ -118,7 +118,7 @@ export const featuredProjects: Project[] = [
     {
         id: 'asterism',
         title: 'AI Review Response App',
-        description: 'iOS app that uses a RAG pipeline to draft replies to reviews in each business\u2019s own voice, so owners can approve, edit, or auto post from their phone.',
+        description: 'iOS app that uses a RAG pipeline to draft replies to business reviews in a business\u2019s own voice, so owners can approve, edit, or auto post from their phone.',
         techTags: ['Swift', 'SwiftUI', 'Python', 'FastAPI', 'RAG', 'PostgreSQL', 'pgvector', 'Supabase', 'GitHub Actions'],
         hardProblem: 'Keeping AI replies on brand with RAG: a business\u2019s own past replies are embedded and the closest ones are retrieved as examples, but only when there are enough of them and they are similar enough to trust.',
         githubUrl: null,
