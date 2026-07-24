@@ -75,7 +75,7 @@ export default function Education() {
                                 <h3 className="text-xl font-semibold text-text-primary">Simon Fraser University</h3>
                                 <p className="text-base text-text-secondary mt-1">Bachelor of Science in Biological Sciences</p>
                                 <p className="text-sm text-text-secondary mt-1">Completed foundational coursework, then transferred to UBC to pursue Computer Science</p>
-                                <p className="text-sm text-text-secondary mt-1">Dean's Honour List, President's Honour Roll, Undergraduate Open Scholarship</p>
+                                <p className="text-sm text-text-secondary mt-1">Undergraduate Open Scholarship, President's Honour Roll, Dean's Honour List</p>
                             </div>
                             <div className="text-left md:text-right mt-2 md:mt-0">
                                 <p className="text-base text-text-secondary">Vancouver, BC</p>
