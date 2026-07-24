@@ -117,22 +117,22 @@ export const featuredProjects: Project[] = [
     },
     {
         id: 'asterism',
-        title: 'Asterism',
-        description: 'iOS app that drafts review replies in each business\u2019s own voice, so owners can approve, edit, or auto post from their phone.',
-        techTags: ['Swift', 'SwiftUI', 'Python', 'FastAPI', 'PostgreSQL', 'pgvector', 'Supabase', 'GitHub Actions'],
-        hardProblem: 'Keeping AI replies on brand with retrieval: a business\u2019s own past replies are embedded and the closest ones are pulled back as examples, but only when there are enough of them and they are similar enough to trust.',
+        title: 'AI Review Response App',
+        description: 'iOS app that uses a RAG pipeline to draft replies to reviews in each business\u2019s own voice, so owners can approve, edit, or auto post from their phone.',
+        techTags: ['Swift', 'SwiftUI', 'Python', 'FastAPI', 'RAG', 'PostgreSQL', 'pgvector', 'Supabase', 'GitHub Actions'],
+        hardProblem: 'Keeping AI replies on brand with RAG: a business\u2019s own past replies are embedded and the closest ones are retrieved as examples, but only when there are enough of them and they are similar enough to trust.',
         githubUrl: null,
         liveUrl: 'https://asterism-app.vercel.app',
         screenshots: [],
         category: 'featured',
         status: 'In progress',
         highlights: [
-            'Retrieval only fires with 8 or more past replies and 0.78 or higher similarity, then adds up to 3 examples',
+            'RAG pipeline retrieves replies of 3 most similar reviews as examples, so the draft sounds like the business owner wrote it',
             'Runs end to end locally against a mocked Google and Yelp integration while partner API access is pending',
             'Customer review text is kept out of system instructions to reduce prompt injection risk',
             'StoreKit 2 billing across three subscription plans'
         ],
-        overview: 'A product for local business owners who never have time to reply to reviews. Asterism connects a business\u2019s Google and Yelp profiles, drafts a reply in that business\u2019s own voice, and lets the owner approve, edit, or auto post from their phone. It is a native SwiftUI app backed by a Python FastAPI service, Postgres with pgvector for retrieval, and Supabase for data and auth. The core loop is built and runs locally against a mocked review integration; a public landing page is live while I wait on Google Business Profile and Yelp partner access.',
+        overview: 'A product for local business owners who never have time to reply to reviews. It connects a business\u2019s Google and Yelp profiles, drafts a reply in that business\u2019s own voice, and lets the owner approve, edit, or auto post from their phone. It is a native SwiftUI app backed by a Python FastAPI service, a RAG pipeline (retrieval augmented generation) built on Postgres with pgvector, and Supabase for data and auth. The core loop is built and runs locally against a mocked review integration; a public landing page is live while I wait on Google Business Profile and Yelp partner access.',
         problemContext: 'Owners know that replying to reviews helps their reputation, but writing a genuine reply to every one is tedious, and generic AI replies sound like a robot and can hurt more than help. The hard part is not calling a language model, it is making the reply actually sound like this specific business, grounded in real facts about them, without letting a hostile review steer the model.',
         whyItWasHard: [
             {
@@ -140,8 +140,8 @@ export const featuredProjects: Project[] = [
                 context: 'A model with no context writes bland, generic replies. The app needs each business\u2019s tone and past replies as grounding so drafts read like the owner actually wrote them.'
             },
             {
-                heading: 'Knowing When to Trust Retrieval',
-                context: 'Pulling in past replies as examples only helps when there are enough of them and they are close enough to the new review. Firing retrieval too early produces off tone, low quality examples.'
+                heading: 'Knowing When to Trust RAG Retrieval',
+                context: 'Pulling in past replies as examples only helps when there are enough of them and they are close enough to the new review. Firing the RAG step too early produces off tone, low quality examples.'
             },
             {
                 heading: 'Untrusted Review Text',
@@ -154,8 +154,8 @@ export const featuredProjects: Project[] = [
         ],
         keyDecisions: [
             {
-                heading: 'Retrieval With Guardrails',
-                context: 'Past replies are embedded with a sentence transformer and stored in pgvector. Examples are only injected when there are at least 8 past replies and the closest ones clear a 0.78 similarity bar, capped at 3 examples.'
+                heading: 'RAG With Guardrails',
+                context: 'Past replies are embedded with a sentence transformer and stored in pgvector for retrieval. The RAG step only injects examples when there are at least 8 past replies and the closest ones clear a 0.78 similarity bar, capped at 3 examples.'
             },
             {
                 heading: 'Role Separation for Safety',
@@ -174,7 +174,7 @@ export const featuredProjects: Project[] = [
         performance: 'Embeddings use a compact 384 dimension model that runs cheaply on CPU. Retrieval uses vector similarity in Postgres, so it does not need a separate vector database. Prompt size is kept in check with compact voice and business summaries rather than dumping raw history into every request.',
         results: 'The product is built and runs end to end locally against a mocked review integration, including sync, voice grounded drafting, approve and edit, and StoreKit 2 billing across three plans. A public landing page is live. It is not on TestFlight yet because it needs live Google and Yelp access to be useful to real owners, and that access is still pending.',
         futureImprovements: 'Ship to TestFlight once partner API access clears. Add a small red team set of adversarial reviews to measure prompt injection resistance directly. Expand the voice profile to learn more from owner edits over time.',
-        lessons: 'The interesting engineering in an AI product is rarely the model call. It is the retrieval gating, the safety boundaries around untrusted input, and the fallbacks for when there is not enough data yet. Building against a stub kept the whole thing moving while external access was out of my hands.'
+        lessons: 'The interesting engineering in an AI product is rarely the model call. It is the RAG retrieval gating, the safety boundaries around untrusted input, and the fallbacks for when there is not enough data yet. Building against a stub kept the whole thing moving while external access was out of my hands.'
     },
     {
         id: 'stock-analytics',
