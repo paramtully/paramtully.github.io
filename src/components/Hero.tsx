@@ -1,7 +1,12 @@
-import { githubLink, linkedinLink, resumeLink, emailLink } from '../data/links'
+import { Focus } from '../data/projects.ts'
+import { githubLink, linkedinLink, resumeLinkForFocus, emailLink } from '../data/links'
 import { FaGithub, FaLinkedin, FaFilePdf, FaEnvelope } from 'react-icons/fa'
 
-export default function Hero() {
+interface HeroProps {
+    focus: Focus
+}
+
+export default function Hero({ focus }: HeroProps) {
     return (
         <section id="hero" className="py-20 flex items-center justify-center px-6 pt-16">
             <div className="max-w-4xl mx-auto text-center">
@@ -29,7 +34,7 @@ export default function Hero() {
                         Get in Touch
                     </a>
                     <a
-                        href={resumeLink}
+                        href={resumeLinkForFocus(focus)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 px-6 py-3 bg-surface border border-border rounded-lg text-text-primary hover:border-accent hover:text-accent hover:bg-surface-elevated transition-all"

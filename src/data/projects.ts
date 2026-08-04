@@ -3,6 +3,19 @@ export interface TechnicalDetail {
     context: string
 }
 
+export type Role = 'swe' | 'ml'
+
+/** Default landing view plus the two role lenses used in applications. */
+export type Focus = 'highlights' | Role
+
+export const focusLabels: Record<Focus, string> = {
+    highlights: 'Highlights',
+    swe: 'Software',
+    ml: 'ML & AI'
+}
+
+export const focusOrder: Focus[] = ['highlights', 'swe', 'ml']
+
 export interface Project {
     id: string
     title: string
@@ -13,6 +26,9 @@ export interface Project {
     liveUrl?: string | null
     screenshots?: string[] // Array of image paths in public/images/projects/
     category: 'featured' | 'systems' | 'cloud-infra' | 'data'
+    roles: Role[] // drives the role filter and ?focus= deep links
+    /** Shown in the default Highlights strip; deeper coursework lives under a role filter. */
+    highlightInHighlights?: boolean
     status?: string // short badge, e.g. "Live in production", "In progress"
     highlights?: string[] // 3-4 skimmable facts shown at the top of the detail view
 
@@ -48,6 +64,7 @@ export const featuredProjects: Project[] = [
             '/images/projects/boneyard/boneyard-7.png'
         ],
         category: 'featured',
+        roles: ['swe'],
         status: 'Live in production',
         highlights: [
             'About 140x fewer database writes per catalog page (roughly 3,500 down to 25)',
@@ -129,6 +146,7 @@ export const featuredProjects: Project[] = [
             '/images/projects/asterism/asterism-3.png'
         ],
         category: 'featured',
+        roles: ['ml', 'swe'],
         status: 'In progress',
         highlights: [
             'RAG pipeline retrieves replies of 3 most similar reviews as examples, so the draft sounds like the business owner wrote it',
@@ -196,6 +214,7 @@ export const featuredProjects: Project[] = [
             '/images/projects/stocker/stocker-5.png'
         ],
         category: 'featured',
+        roles: ['swe'],
         highlights: [
             'Two stage Lambda design keeps the database private while avoiding NAT Gateway cost',
             '70 to 90 percent storage savings using Parquet with S3 lifecycle policies',
@@ -270,6 +289,75 @@ export const featuredProjects: Project[] = [
         lessons: 'Cost is a real design constraint, not an afterthought. The two stage Lambda pattern saved meaningful spend for very little added complexity. Splitting work between Lambda and ECS matches compute to how long each job runs. Parquet pays off in both storage and query speed. Infrastructure as code is what makes a cloud setup reproducible, and a monorepo makes shared types easy but demands disciplined dependencies.'
     },
     {
+        id: 'graph-transformer',
+        title: 'Graph Neural Networks from Scratch',
+        description: 'Hand written graph convolution and graph transformer layers in PyTorch, benchmarked against reference implementations on a molecular property regression task.',
+        techTags: ['Python', 'PyTorch', 'PyTorch Geometric', 'Graph Neural Networks', 'Attention'],
+        hardProblem: 'Implemented message passing and multi head self attention from the math up, including Laplacian positional encodings, then validated correctness by racing the from scratch layers against PyTorch Geometric\u2019s reference versions on the same data.',
+        githubUrl: null,
+        liveUrl: null,
+        screenshots: [
+            '/images/projects/graph-transformer/gnn-1-results.png',
+            '/images/projects/graph-transformer/gnn-2-training.png'
+        ],
+        category: 'featured',
+        roles: ['ml'],
+        status: 'Academic project',
+        highlights: [
+            'Graph convolution and multi head self attention written from scratch, not imported',
+            'From scratch GCN landed within about 5 percent of the reference implementation (0.95 vs 0.91 test MSE)',
+            'Convolution clearly beat attention here: 0.95 vs 15.9 test MSE',
+            'Transformer fit training data harder than the reference yet tested worse, isolating a generalization gap',
+            'Laplacian positional encodings to give the transformer a sense of graph structure'
+        ],
+        overview: 'A from scratch implementation of two graph learning architectures in PyTorch: a graph convolutional network built on hand written message passing, and a graph transformer built on hand written multi head self attention with Laplacian positional encodings. Both were trained on Peptides-struct, a molecular property regression task from the Long Range Graph Benchmark, and both were benchmarked against PyTorch Geometric\u2019s reference layers to check that my versions were actually correct.',
+        problemContext: 'Graphs break the assumptions that make CNNs and standard transformers work. There is no grid and no natural ordering, so a node has to gather information from an arbitrary set of neighbours, and attention has no positional signal to fall back on. Molecular graphs push this further: properties can depend on atoms that are far apart in the graph, which is exactly what the Long Range Graph Benchmark is designed to stress.',
+        whyItWasHard: [
+            {
+                heading: 'Message Passing from the Math Up',
+                context: 'Aggregating neighbour features correctly means handling variable degree nodes, normalizing by degree so high degree nodes do not dominate, and doing it with sparse operations instead of a dense adjacency matrix.'
+            },
+            {
+                heading: 'Attention Without Positions',
+                context: 'Self attention is permutation invariant, so on a graph it cannot tell a neighbour from a distant node. Without an injected notion of structure, the transformer is attending over an unordered bag of nodes.'
+            },
+            {
+                heading: 'Batching Irregular Graphs',
+                context: 'Molecules have different atom counts, so batching means padding and masking so that attention never leaks across two different molecules in the same batch.'
+            },
+            {
+                heading: 'Knowing Whether It Was Correct',
+                context: 'A from scratch layer that trains without crashing can still be subtly wrong. The only real check is running it head to head against a trusted implementation on identical data.'
+            }
+        ],
+        keyDecisions: [
+            {
+                heading: 'Benchmarked Against Reference Layers',
+                context: 'Every from scratch layer has a PyTorch Geometric counterpart run under the same conditions. The from scratch GCN reached 0.95 test MSE against 0.91 for the reference, close enough to trust the implementation.'
+            },
+            {
+                heading: 'Laplacian Positional Encodings',
+                context: 'Eigenvectors of the graph Laplacian are fed in as node features so the transformer gets a structural signal, the graph equivalent of positional encodings in a sequence transformer.'
+            },
+            {
+                heading: 'Degree Normalized Aggregation',
+                context: 'Symmetric normalization in the convolution keeps activations stable across nodes with very different neighbour counts.'
+            },
+            {
+                heading: 'Masked Attention Over Padded Batches',
+                context: 'Padding plus an attention mask keeps variable sized molecular graphs batchable without letting one molecule attend to another.'
+            }
+        ],
+        reliability: 'Correctness is established by comparison rather than by assumption. Each from scratch layer runs against the equivalent reference layer on identical data and training settings, so a bug shows up as a gap in the numbers instead of hiding behind a loss curve that merely goes down.',
+        performance: 'Sparse neighbour aggregation avoids materializing a dense adjacency matrix, which is what makes the convolution tractable on larger molecular graphs. Attention is the more expensive path, since it scales with the square of node count per graph where message passing scales with edges.',
+        results: 'On Peptides-struct, the from scratch GCN reached 0.95 test MSE and 0.74 test MAE, close to the 0.91 MSE of PyTorch Geometric\u2019s reference GCN, which is the evidence that the hand written message passing is correct. The from scratch graph transformer reached 15.9 test MSE against 6.8 for the reference transformer. The training curves make the diagnosis clearer: my transformer actually reached a lower training loss than the reference (3.20 against 7.28) while testing far worse, so the problem is generalization rather than capacity or undertraining.',
+        futureImprovements: 'Chase the generalization gap on the transformer rather than training it longer, since it already fits the training data harder than the reference does. Check attention scaling, normalization placement, and regularization. Ablate the Laplacian positional encodings to measure what they actually contribute.',
+        lessons: 'Writing the layers by hand is what turns attention and message passing from formulas into things you actually understand. Benchmarking against a trusted implementation is the honest way to find out whether your version is right, and it is worth reporting the result that did not go your way: the transformer losing to a simple convolution says something real about inductive bias mattering more than architectural sophistication when the training budget is small.'
+    }
+]
+
+export const allProjects: Project[] = [
+    {
         id: 'distributed-kv',
         title: 'Distributed Key-Value Store',
         description: 'Linearizable key value store in Go, built on a from scratch Raft implementation with leader election, log replication, and snapshots.',
@@ -278,7 +366,9 @@ export const featuredProjects: Project[] = [
         githubUrl: null,
         liveUrl: null,
         screenshots: [],
-        category: 'featured',
+        category: 'systems',
+        roles: ['swe'],
+        highlightInHighlights: true,
         status: 'Academic project',
         highlights: [
             'Raft written from scratch: elections, log replication, and snapshots',
@@ -328,10 +418,7 @@ export const featuredProjects: Project[] = [
         results: 'A working Raft implementation that passes the fault injection tests and stays linearizable through partitions and crashes. The project is where a lot of my distributed systems intuition comes from.',
         futureImprovements: 'Add dynamic membership changes. Add log compaction for better performance. Add metrics and observability for real deployment.',
         lessons: 'Consensus algorithms have subtle correctness requirements that punish shortcuts. Fault injection testing is essential for distributed systems. Linearizability is a strong guarantee, but it takes careful coordination to hold.'
-    }
-]
-
-export const allProjects: Project[] = [
+    },
     {
         id: 'oauth2',
         title: 'oAuth2.0 Implementation',
@@ -342,6 +429,8 @@ export const allProjects: Project[] = [
         liveUrl: null,
         screenshots: [],
         category: 'systems',
+        roles: ['swe'],
+        highlightInHighlights: true,
         overview: 'A full implementation of the oAuth2.0 authentication protocol from scratch. It includes an auth server for credentials and sessions, plus a full stack app that uses it end to end.',
         problemContext: 'Auth is fundamental backend work. Building oAuth2.0 from scratch meant working through password hashing, token management, and session handling myself instead of leaning on a library.',
         whyItWasHard: [
@@ -404,6 +493,7 @@ export const allProjects: Project[] = [
         liveUrl: null,
         screenshots: [],
         category: 'systems',
+        roles: ['swe'],
         overview: 'A multithreaded password cracking system that takes a hash and finds its associated password using brute force. Implemented from scratch using C with thread pools and semaphores for safe concurrent processing.',
         problemContext: 'Password hashing systems require high-performance parallel processing to test password candidates efficiently. This project demonstrates systems-level programming with careful attention to concurrency primitives and performance optimization.',
         whyItWasHard: [
@@ -462,6 +552,7 @@ export const allProjects: Project[] = [
         liveUrl: null,
         screenshots: [],
         category: 'systems',
+        roles: ['swe'],
         overview: 'A DNS resolver built from scratch as part of UBC CPSC 317 (Internet Computing). Implements the full iterative resolution process starting from root nameservers and following referrals down the DNS hierarchy to authoritative answers using raw UDP sockets and hand-written binary protocol parsing.',
         problemContext: 'DNS is the phonebook of the internet, yet most engineers treat it as a black box. Implementing a resolver from scratch requires understanding the wire protocol, the iterative delegation model, and the edge cases that real-world DNS infrastructure surfaces, knowledge that directly informs debugging production network issues and designing distributed systems.',
         whyItWasHard: [
@@ -516,6 +607,7 @@ export const allProjects: Project[] = [
         liveUrl: null,
         screenshots: [],
         category: 'systems',
+        roles: ['swe'],
         overview: 'An RFC-compliant FTP server built entirely in C using BSD sockets and POSIX threads. Handles concurrent client sessions, passive mode data transfer, directory listing, and file retrieval with full authentication and per-session state management. Built as part of UBC CPSC 317 (Internet Computing).',
         problemContext: 'Building a networked server that separates control and data channels, manages per client state across asynchronous commands, and enforces security boundaries without a runtime or framework takes a solid grasp of the POSIX networking stack and the FTP spec.',
         whyItWasHard: [
@@ -578,6 +670,8 @@ export const allProjects: Project[] = [
         liveUrl: null,
         screenshots: [],
         category: 'cloud-infra',
+        roles: ['swe'],
+        highlightInHighlights: true,
         overview: 'Software Engineering Capstone project (team of 9) where I independently designed and implemented a complete CI/CD pipeline for a full-stack blog application. The pipeline supports multiple build environments and concurrent development workflows.',
         problemContext: 'The team needed a CI/CD pipeline that could support multiple developers working concurrently, multiple deployment environments (Dev, QA, Prod), and automated testing. Manual deployment processes were slow and error-prone.',
         whyItWasHard: [
@@ -640,6 +734,7 @@ export const allProjects: Project[] = [
         liveUrl: null,
         screenshots: [],
         category: 'systems',
+        roles: ['swe'],
         overview: 'A full-stack web application that allows users to query UBC\'s historical grade data extracted from zipped HTML files. Features a custom query language defined in EBNF format and demonstrates advanced software design patterns.',
         problemContext: 'Processing complex hierarchical grade data from compressed HTML files while supporting flexible querying requires formal language specification and clean architecture. The project required following strict EBNF-formatted requirements.',
         whyItWasHard: [
@@ -702,6 +797,7 @@ export const allProjects: Project[] = [
         liveUrl: null,
         screenshots: [],
         category: 'data',
+        roles: ['swe'],
         overview: 'An NBA statistics tracking application built on a complex relational database model. Features sophisticated entity-relationship design with weak entities, ISA hierarchies, and comprehensive constraint enforcement.',
         problemContext: 'Representing the NBA ecosystem (players, teams, games, statistics, contracts) requires sophisticated relational modeling with proper constraint enforcement. The domain includes complex many-to-many relationships, temporal dimensions for historical stats, and inheritance hierarchies.',
         whyItWasHard: [
@@ -763,68 +859,6 @@ export const allProjects: Project[] = [
         lessons: 'Proper database design requires understanding domain relationships deeply. ISA hierarchies model inheritance elegantly. Constraints are crucial for data integrity. Normalization must balance with query performance needs.'
     },
     {
-        id: 'social-media-app',
-        title: 'Social Media Application',
-        description: 'Built feature-complete social media platform in Java with bidirectional relationship modeling in JSON storage, solving complex serialization challenge using custom hash-based reconstruction',
-        techTags: ['Java', 'JUnit', 'Java Swing', 'JSON', 'Design Patterns'],
-        hardProblem: 'Architected bidirectional graph relationships in JSON (which lacks native references) using dependency injection and hash-based reconstruction with O(1) amortized lookup time',
-        githubUrl: 'https://github.com/paramtully/AcademicProjects/tree/main/SocialMediaAppV1',
-        liveUrl: null,
-        screenshots: [],
-        category: 'systems',
-        overview: 'A device-bound social media application modeling Facebook\'s core features including friend management, profile posts, profile viewing, and direct messaging. Built entirely in Java with JSON-based local storage, requiring creative solutions for relationship modeling.',
-        problemContext: 'Building a social media application with bidirectional relationships (friend connections, message threads) using only JSON for storage presents unique challenges since JSON doesn\'t natively support object references or circular dependencies.',
-        whyItWasHard: [
-            {
-                heading: 'JSON Reference Limitations',
-                context: 'JSON doesn\'t support object references or bidirectional relationships, requiring custom serialization strategy'
-            },
-            {
-                heading: 'Circular Dependencies',
-                context: 'Friend relationships are circular (User A friends with User B means B friends with A) requiring careful handling'
-            },
-            {
-                heading: 'Referential Integrity',
-                context: 'Must maintain relationship consistency across updates while enabling efficient lookups without native references'
-            },
-            {
-                heading: 'Serialization/Deserialization',
-                context: 'Converting object graphs to JSON and reconstructing bidirectional relationships on load'
-            }
-        ],
-        keyDecisions: [
-            {
-                heading: 'Dependency Injection Pattern',
-                context: 'Exploited class dependency structure for parent-to-child object passing during reconstruction'
-            },
-            {
-                heading: 'Hash-Based Reconstruction',
-                context: 'Hash table with object IDs as keys enables O(1) cross-reference resolution during deserialization'
-            },
-            {
-                heading: 'Object ID Strategy',
-                context: 'Strategic use of unique IDs as hash keys in JSON enables efficient relationship resolution'
-            },
-            {
-                heading: 'Bidirectional Consistency',
-                context: 'Careful state management ensures both sides of relationships stay synchronized through updates'
-            },
-            {
-                heading: 'Java Swing GUI',
-                context: 'Desktop interface with event-driven architecture for interactive social media features'
-            },
-            {
-                heading: 'JUnit Test Coverage',
-                context: 'Comprehensive test suite verifies correctness of bidirectional relationship integrity'
-            }
-        ],
-        reliability: 'Maintains referential integrity across relationship updates. Hash-based reconstruction ensures consistent state after deserialization. Unit tests verify correctness of bidirectional relationships.',
-        performance: 'O(1) amortized lookup time for relationships using hash tables. Efficient serialization/deserialization for local storage. Responsive UI through proper event handling.',
-        results: 'A social app with friends, posts, and messaging where bidirectional relationships are rebuilt from JSON on load using an id keyed hash table for O(1) lookups, since JSON has no native references.',
-        futureImprovements: 'Could migrate to proper database (PostgreSQL) for scalability. Add real-time features with WebSockets. Implement privacy controls and permissions.',
-        lessons: 'Creative data structure design can overcome format limitations. Bidirectional relationships require careful state management. Understanding language and format constraints drives architectural decisions.'
-    },
-    {
         id: 'gpa-retriever',
         title: 'GPA Retriever',
         description: 'Engineered automated web scraping pipeline using Selenium to extract and process academic data from authenticated university portal, reducing manual GPA calculation from minutes to seconds',
@@ -834,6 +868,7 @@ export const allProjects: Project[] = [
         liveUrl: null,
         screenshots: [],
         category: 'systems',
+        roles: ['swe'],
         overview: 'A full-stack web scraping application that automates the process of logging into UBC\'s website, navigating to grade data, extracting it, and calculating GPA metrics. Solves a real student pain point where the university doesn\'t provide built-in GPA calculation.',
         problemContext: 'UBC\'s SSC website doesn\'t provide GPA calculation functionality, requiring students to manually compute their GPA from scattered grade data across multiple pages. This project automates the entire process using web scraping.',
         whyItWasHard: [
@@ -887,65 +922,310 @@ export const allProjects: Project[] = [
         lessons: 'Always verify Terms of Service before deploying user-facing applications. Web scraping requires robust error handling and anti-detection strategies. Practical tools that solve real problems demonstrate engineering impact.'
     },
     {
-        id: 'spotify-classification',
-        title: 'Spotify Song Classification System',
-        description: 'Trained Random Forest classifier achieving 75% accuracy on 5-class genre prediction using Spotify audio features with scikit-learn',
-        techTags: ['Python', 'Pandas', 'NumPy', 'Scikit-Learn', 'Machine Learning'],
-        hardProblem: 'Achieved 75% multi-class accuracy through feature engineering and ensemble methods; identified potential improvements using MDS visualization and alternative models',
+        id: 'credit-default',
+        title: 'Credit Default Prediction',
+        description: 'End to end supervised learning pipeline on 30,000 credit clients: EDA, feature engineering, a four model bake off, and tuning to 81% test accuracy.',
+        techTags: ['Python', 'pandas', 'scikit-learn', 'XGBoost', 'Machine Learning'],
+        hardProblem: 'Picking a model on evidence rather than on accuracy alone, since the classes are imbalanced and the majority class baseline is already strong enough to make raw accuracy misleading.',
         githubUrl: null,
         liveUrl: null,
-        screenshots: [],
+        screenshots: [
+            '/images/projects/credit-default/credit-corr.png',
+            '/images/projects/credit-default/credit-feature-cross.png'
+        ],
         category: 'data',
-        overview: 'A machine learning project that classifies songs into genres from Spotify audio features. It uses a Random Forest with cross validation for hyperparameter tuning and covers the full pipeline from data cleaning through model evaluation.',
-        problemContext: 'Predicting song genre from audio features presents challenges including high-dimensional feature space, potential class imbalance, and selecting appropriate features and model architecture for multi-class classification.',
+        roles: ['ml'],
+        highlightInHighlights: true,
+        status: 'Academic project',
+        highlights: [
+            '81% test accuracy against a 78% majority class baseline on roughly 30,000 clients',
+            'Bake off across logistic regression, SVM, random forest, and XGBoost',
+            'Recursive feature elimination with cross validation to cut redundant features',
+            'Evaluated on precision, recall, and F1 because the classes are imbalanced'
+        ],
+        overview: 'A full supervised learning pipeline on the UCI credit card default dataset, roughly 30,000 clients. It runs the whole path: exploratory analysis, feature engineering, a bake off across four model families, hyperparameter tuning, feature selection, and interpretation of what the final model is actually keying on.',
+        problemContext: 'Predicting which clients will default next month is a class imbalanced problem where most clients do not default. That makes accuracy a deceptive headline number, since a model that predicts nobody defaults already scores well while being useless to a lender who cares specifically about catching the defaulters.',
         whyItWasHard: [
             {
-                heading: 'High-Dimensional Feature Space',
-                context: 'Many potentially irrelevant features requiring careful selection to avoid noise and overfitting'
+                heading: 'Imbalanced Classes',
+                context: 'Defaulters are the minority, so accuracy rewards a model for ignoring exactly the group the model exists to find. Precision, recall, and F1 are what actually separate the candidates.'
             },
             {
-                heading: 'Multi-Class Classification',
-                context: '5-genre classification more challenging than binary; requires balanced accuracy across all classes'
+                heading: 'Comparing Model Families Fairly',
+                context: 'Logistic regression, SVM, random forest, and XGBoost each want different preprocessing and different hyperparameters, so a fair comparison means tuning each one rather than running defaults and declaring a winner.'
             },
             {
-                heading: 'Class Imbalance',
-                context: 'Uneven genre distribution requiring careful evaluation metrics beyond simple accuracy'
+                heading: 'Redundant and Correlated Features',
+                context: 'Payment history columns across consecutive months carry overlapping signal, which inflates model complexity without adding predictive value.'
             },
             {
-                heading: 'Hyperparameter Tuning',
-                context: 'Large search space for Random Forest parameters requiring systematic cross-validation approach'
+                heading: 'Interpreting the Result',
+                context: 'A lender cannot act on a score alone, so the model has to be interrogated for which features actually drive the prediction.'
             }
         ],
         keyDecisions: [
             {
-                heading: 'Random Forest Classifier',
-                context: 'Ensemble learning provides robustness and feature importance insights for understanding predictions'
+                heading: 'Four Model Bake Off',
+                context: 'Logistic regression as an interpretable baseline, SVM, random forest, and XGBoost, each tuned, so the final pick is backed by a comparison instead of a hunch.'
             },
             {
-                heading: 'Cross-Validation Tuning',
-                context: 'K-fold cross-validation ensures robust hyperparameter selection and prevents overfitting to training data'
+                heading: 'Imbalance Aware Metrics',
+                context: 'Scoring on precision, recall, and F1 alongside accuracy, so a model that quietly ignores the minority class cannot win on the strength of the majority.'
             },
             {
-                heading: 'Manual Feature Selection',
-                context: 'Domain knowledge-based selection of audio features; retrospectively could use forward selection'
+                heading: 'Recursive Feature Elimination with CV',
+                context: 'RFECV trims correlated payment history features down to the ones that carry independent signal, reducing complexity without giving up accuracy.'
             },
             {
-                heading: 'Scikit-Learn Pipeline',
-                context: 'Reproducible ML workflow with standardized preprocessing, training, and evaluation steps'
-            },
-            {
-                heading: 'Multi-Class Evaluation',
-                context: 'Accuracy, precision, and recall metrics per class provide comprehensive performance assessment'
-            },
-            {
-                heading: 'Data Cleaning',
-                context: 'Removed irrelevant features like artist names that could cause overfitting to artist rather than genre'
+                heading: 'Cross Validated Tuning',
+                context: 'Hyperparameters selected under cross validation so the reported test number reflects generalization rather than a lucky split.'
             }
         ],
-        reliability: 'Cross-validation ensures model generalizes beyond training data. Proper train/test split prevents overfitting. Feature selection reduces noise.',
-        performance: 'Achieved 75% accuracy on 5-class genre prediction. Random Forest provides feature importance insights. Ensemble method robust to overfitting.',
-        results: 'A genre classifier that reaches 75 percent accuracy across 5 classes, with a written retrospective on the feature selection and alternative models that would improve it next time.',
-        futureImprovements: 'Use forward selection or ensemble feature selection instead of manual selection. Apply MDS for dimensionality reduction and visualization. Try KNN for convex clusters, DBSCAN for non-convex clusters with outliers, or Multi-class SVM. Add precision-recall analysis per genre.',
-        lessons: 'Feature selection is critical for ML performance. Ensemble methods provide robustness. Retrospective analysis and identifying improvements demonstrates engineering maturity. Understanding when different algorithms (KNN, DBSCAN, SVM) might work better shows algorithmic depth.'
+        reliability: 'Model selection and hyperparameter tuning both happen under cross validation, with the test set touched only at the end. Metrics are reported per class so the minority class performance is visible rather than buried in an aggregate.',
+        performance: 'The tuned random forest reaches about 81% test accuracy, against a majority class baseline of about 78%. That roughly 3 point lift is the honest headline, and it is why the per class breakdown matters more here than the accuracy figure: recall on the default class is what determines whether the model is useful for the lending decision it is meant to support.',
+        results: 'A complete pipeline from raw data to a tuned, interpreted model at roughly 81% test accuracy. The more interesting finding is how little that beats the 78% baseline, and that a 99% train score against 81% test pointed at overfitting rather than a genuinely predictive model. Recognizing that the features available simply did not separate the classes well was the real result.',
+        futureImprovements: 'Try resampling or class weighting to push recall on the default class. Calibrate predicted probabilities so scores can be thresholded against a real cost of a missed default. Add SHAP values for per client explanations.',
+        lessons: 'Always establish the baseline before celebrating a score. On imbalanced data an 81% accuracy sounds respectable right up until you notice that predicting the majority class gets 78%, and the gap between a 99% train score and an 81% test score says more about the model than either number alone. Choosing the metric is a modeling decision, not a formality.'
+    },
+    {
+        id: 'bc-covid-census',
+        title: 'BC COVID and Census Analysis',
+        description: 'Analysis joining roughly 85,000 rows of provincial COVID case records with Canadian census data to compare regional outcomes on a per capita basis.',
+        techTags: ['Python', 'pandas', 'NumPy', 'Matplotlib', 'Data Analysis'],
+        hardProblem: 'Making regions comparable at all: raw case counts just rank provinces by population, so the analysis only becomes meaningful after normalizing per 100,000 residents using census data joined on inconsistent region naming.',
+        githubUrl: null,
+        liveUrl: null,
+        screenshots: [
+            '/images/projects/bc-covid-census/covid-1.png'
+        ],
+        category: 'data',
+        roles: ['ml'],
+        highlightInHighlights: true,
+        status: 'Academic project',
+        highlights: [
+            'Roughly 85,000 rows of public health data cleaned and joined to census demographics',
+            'Per capita normalization to make regions with very different populations comparable',
+            'Peak of about 136 cases per 100,000 residents identified across the case timeline',
+            'Education attainment compared across provinces, from about 32% in Ontario to about 14% in Nunavut'
+        ],
+        overview: 'An analysis of British Columbia COVID case data joined against Canadian census demographics. It covers the unglamorous parts of analytics honestly: cleaning roughly 85,000 rows of public health records, reconciling region names across two datasets that do not agree, binning and aggregating, and normalizing by population so that comparisons between regions actually mean something.',
+        problemContext: 'Public health data and census data are published by different bodies with different conventions, so joining them is the hard part. On top of that, raw case counts are close to useless for comparison, since a large region will always report more cases than a small one. Any conclusion about which regions fared worse depends entirely on getting the per capita normalization right.',
+        whyItWasHard: [
+            {
+                heading: 'Joining Datasets That Disagree',
+                context: 'Health authority regions and census geographies use different names and different granularity, so the join needs explicit reconciliation rather than a direct key match.'
+            },
+            {
+                heading: 'Population Weighting',
+                context: 'Comparing regions on raw counts just re-ranks them by population. Per capita rates are what make the comparison legitimate, which requires correct population denominators per region.'
+            },
+            {
+                heading: 'Messy Real World Records',
+                context: 'Missing values, inconsistent date handling, and reporting artifacts like weekend dips all distort the trend if they are aggregated naively.'
+            },
+            {
+                heading: 'Choosing Honest Aggregations',
+                context: 'Bin widths and rolling windows change the story a chart tells, so those choices had to be deliberate rather than whatever looked cleanest.'
+            }
+        ],
+        keyDecisions: [
+            {
+                heading: 'Per 100,000 Normalization',
+                context: 'All cross region comparisons are expressed as rates per 100,000 residents, which surfaced a peak of about 136 cases per 100,000 and made small regions comparable to large ones.'
+            },
+            {
+                heading: 'Explicit Region Reconciliation',
+                context: 'Region names are mapped deliberately between the health and census datasets rather than relying on a fuzzy match that would silently drop or misassign rows.'
+            },
+            {
+                heading: 'Binned Demographic Comparison',
+                context: 'Census attainment data is bucketed and compared across provinces, showing a spread from roughly 32% college attainment in Ontario down to about 14% in Nunavut.'
+            },
+            {
+                heading: 'Visualization Tied to the Question',
+                context: 'Each chart answers one specific question about trend or regional difference, rather than displaying the data for its own sake.'
+            }
+        ],
+        reliability: 'Row counts are checked before and after every join so silent drops surface immediately. Missing values are handled explicitly rather than dropped by default, and population denominators are validated against published census figures.',
+        performance: 'Vectorized pandas operations handle the roughly 85,000 row dataset comfortably in memory, with groupby aggregations replacing row wise iteration throughout.',
+        results: 'A complete analysis with per capita case rates across regions, a peak of about 136 cases per 100,000 residents, and a demographic comparison spanning roughly 32% college attainment in Ontario to about 14% in Nunavut. The work is mostly in the cleaning and joining, which is where the conclusions were actually won or lost.',
+        futureImprovements: 'Bring in time aligned policy dates to compare regional outcomes against intervention timing. Add confidence intervals on per capita rates for small population regions where a handful of cases moves the rate substantially.',
+        lessons: 'Most of an analysis is reconciling data that was never designed to be joined. Normalization is not a formatting step, it is the thing that determines whether a regional comparison means anything, and small population regions need care because per capita rates get noisy fast.'
+    },
+    {
+        id: 'recipe-clustering',
+        title: 'Recipe Document Clustering',
+        description: 'Compared bag of words against sentence transformer embeddings for clustering recipe text, with KMeans, DBSCAN, silhouette selection, and UMAP visualization.',
+        techTags: ['Python', 'sentence-transformers', 'scikit-learn', 'UMAP', 'NLP'],
+        hardProblem: 'Sparse bag of words clusters by shared vocabulary, which mixes semantically different recipes that happen to share ingredients words. Dense embeddings fix that, but only if you pick distance metrics and hyperparameters that actually produce separable clusters.',
+        githubUrl: null,
+        liveUrl: null,
+        screenshots: [
+            '/images/projects/recipe-clustering/cluster-elbow.png',
+            '/images/projects/recipe-clustering/cluster-umap-emb-kmeans.png',
+            '/images/projects/recipe-clustering/cluster-umap-emb-dbscan.png',
+            '/images/projects/recipe-clustering/cluster-wordcloud.png',
+            '/images/projects/recipe-clustering/cluster-dendrogram.png'
+        ],
+        category: 'data',
+        roles: ['ml'],
+        highlightInHighlights: true,
+        status: 'Academic project',
+        highlights: [
+            'Side by side comparison of bag of words versus sentence transformer embeddings',
+            'KMeans and DBSCAN with cosine distance on the same corpus',
+            'Silhouette score used to choose DBSCAN eps and min samples',
+            'UMAP used to inspect whether clusters were actually separable'
+        ],
+        overview: 'An unsupervised NLP project on recipe and document text. It compares a classic bag of words representation against sentence transformer embeddings, clusters with both KMeans and DBSCAN, selects DBSCAN hyperparameters with silhouette score, and uses UMAP to visualize whether the clusters separate cleanly in two dimensions.',
+        problemContext: 'Unlabeled text is cheap and abundant, but organizing it means choosing a representation before you ever pick a clustering algorithm. Bag of words is simple and sparse. Sentence embeddings are denser and carry semantics. Which one produces clusters a human would recognize depends on the corpus, and you cannot tell from training loss alone because clustering has no labels.',
+        whyItWasHard: [
+            {
+                heading: 'Representation Dominates the Result',
+                context: 'Two documents that share ingredient words can land in the same bag of words cluster even when the recipes are nothing alike. Embeddings capture meaning, but they also change which distance metric makes sense.'
+            },
+            {
+                heading: 'DBSCAN Hyperparameters Without Labels',
+                context: 'eps and min samples have no obvious defaults for text embeddings. Too tight and everything is noise; too loose and you get one giant cluster.'
+            },
+            {
+                heading: 'Evaluating Without Ground Truth',
+                context: 'There is no accuracy number to optimize. Silhouette score and visual inspection have to stand in for labels, and they can disagree.'
+            },
+            {
+                heading: 'High Dimensional Text Geometry',
+                context: 'Embedding space is high dimensional, so Euclidean intuition fails and cosine distance becomes the more natural choice for DBSCAN.'
+            }
+        ],
+        keyDecisions: [
+            {
+                heading: 'Sentence Transformers Over Bag of Words',
+                context: 'Dense embeddings preserve semantic similarity that word counts miss, which produced clusters that grouped recipes by meaning rather than by shared stopword heavy vocabulary.'
+            },
+            {
+                heading: 'Cosine Distance for DBSCAN',
+                context: 'Cosine fits directional similarity in embedding space better than Euclidean distance, which is distorted by vector magnitude.'
+            },
+            {
+                heading: 'Silhouette Guided Search',
+                context: 'Swept eps and min samples and kept the pair with the best silhouette score among runs that produced more than one cluster, instead of hand picking round numbers.'
+            },
+            {
+                heading: 'UMAP as a Sanity Check',
+                context: 'Projected clusters into two dimensions to verify that the chosen labeling was visually coherent, not just a high silhouette on paper.'
+            }
+        ],
+        reliability: 'Hyperparameter selection is reproducible through a silhouette sweep with a fixed random seed. UMAP visualizations are treated as diagnostic checks rather than as proof, since two dimensional projections can invent structure.',
+        performance: 'Sentence embeddings are computed once and reused across KMeans and DBSCAN runs. The silhouette sweep is the expensive step, so it is limited to a small grid of eps and min samples values.',
+        results: 'Embedding based clusters were more semantically coherent than bag of words clusters on the same documents. DBSCAN with cosine distance and silhouette selected hyperparameters produced usable structure, and UMAP confirmed that the embedding clusters separated more cleanly than the bag of words ones.',
+        futureImprovements: 'Try hierarchical clustering for a dendrogram view of recipe families. Compare a second embedding model to see how sensitive the clusters are to the encoder. Add a small hand labeled subset to measure agreement with human categories.',
+        lessons: 'In unsupervised text work the representation usually matters more than the clustering algorithm. Bag of words is a weak baseline worth keeping exactly so you can see what embeddings buy you, and silhouette plus visualization together are more trustworthy than either alone.'
+    },
+    {
+        id: 'avocado-forecasting',
+        title: 'Avocado Price Forecasting',
+        description: 'Time series style feature engineering for next week avocado prices, with Ridge and Random Forest models reaching about 0.80 test R² against a strong persistence baseline.',
+        techTags: ['Python', 'pandas', 'scikit-learn', 'Time Series', 'Feature Engineering'],
+        hardProblem: 'A naive persistence baseline already scores about 0.83 R² by predicting that next week equals this week, so any real model has to beat a bar that looks strong on paper and still leave room to generalize.',
+        githubUrl: null,
+        liveUrl: null,
+        screenshots: [
+            '/images/projects/avocado-forecasting/avocado-corr.png'
+        ],
+        category: 'data',
+        roles: ['ml'],
+        status: 'Academic project',
+        highlights: [
+            'Persistence baseline of about 0.83 R² set a high bar before any model training',
+            'Date aware feature engineering for next week price prediction',
+            'Ridge and Random Forest compared under the same transforms',
+            'Best models reached about 0.80 test R² without the polynomial overfit path'
+        ],
+        overview: 'A forecasting project on weekly avocado prices. It builds a next week prediction target, establishes a persistence baseline that simply copies this week forward, engineers date aware features, and compares Ridge regression against Random Forest under the same transforms.',
+        problemContext: 'Prices are strongly autocorrelated, so predicting next week equal to this week already looks good by R². That makes the modeling problem less about fitting a curve and more about extracting signal beyond the obvious lag, without inventing features that overfit the training window.',
+        whyItWasHard: [
+            {
+                heading: 'A Strong Baseline',
+                context: 'Persistence already scores around 0.83 R². Beating it is hard, and matching it with a more complex model is not automatically progress.'
+            },
+            {
+                heading: 'Time Aware Features',
+                context: 'Calendar features, lags, and rolling signals have to respect time order. Random splits would leak the future into training.'
+            },
+            {
+                heading: 'Overfitting Through Transforms',
+                context: 'Polynomial expansions raised train R² while hurting test R², a clean example of complexity that looks better until you leave the training set.'
+            },
+            {
+                heading: 'Model Comparison Under Fair Conditions',
+                context: 'Ridge and Random Forest only mean something when they see the same feature pipeline, otherwise you are comparing preprocessing rather than models.'
+            }
+        ],
+        keyDecisions: [
+            {
+                heading: 'Persistence Baseline First',
+                context: 'Established the copy last week forward baseline before training anything, so later scores had a real reference point instead of a dummy regressor that is too easy to beat.'
+            },
+            {
+                heading: 'Date Derived Features',
+                context: 'Encoded day and month style calendar signal so the models could capture seasonality without treating the timestamp as a raw number.'
+            },
+            {
+                heading: 'Reject Polynomial Expansion',
+                context: 'Polynomial features improved train R² and hurt test R², so they were dropped in favor of the simpler transforms that generalized.'
+            },
+            {
+                heading: 'Ridge and Random Forest Bake Off',
+                context: 'Compared a linear regularized model against a non linear ensemble on identical features, with the best runs landing around 0.80 test R².'
+            }
+        ],
+        reliability: 'Train and test splits respect time so future weeks are never used as training features. The persistence baseline is recomputed on the same split, which keeps the comparison honest.',
+        performance: 'Ridge is cheap to train and was competitive with Random Forest on this feature set. The expensive part is feature experimentation, not model fitting.',
+        results: 'With date aware features, Ridge and Random Forest reached roughly 0.80 test R². That sits near the course benchmark and close to the 0.83 persistence baseline, which is the honest framing: the models capture real signal, but a large share of next week price is already explained by this week.',
+        futureImprovements: 'Add explicit lag and rolling mean features beyond calendar encodings. Try a seasonal naive baseline by region. Evaluate mean absolute error alongside R² so large price swings are visible.',
+        lessons: 'In time series, the baseline is often the real competitor. Feature engineering matters more than swapping model families, and a transform that helps the training score is worthless if it fails on the next weeks.'
     }
 ]
+
+/**
+ * Highlights pins three equals in one row: live product, AI product, ML depth.
+ * Stock Analytics stays featured under Software and appears in More on Highlights.
+ */
+const HIGHLIGHTS_FEATURED_IDS = [
+    'multi-vendor-vertical-saas',
+    'asterism',
+    'graph-transformer'
+] as const
+
+/** Role lenses pin featured cards (trio for Software, pair for ML). */
+const ROLE_FEATURED_IDS: Record<Role, string[]> = {
+    swe: ['multi-vendor-vertical-saas', 'asterism', 'stock-analytics'],
+    ml: ['asterism', 'graph-transformer']
+}
+
+function projectsByIds(ids: readonly string[]): Project[] {
+    return ids
+        .map((id) => featuredProjects.find((project) => project.id === id))
+        .filter((project): project is Project => Boolean(project))
+}
+
+export function getFeaturedForFocus(focus: Focus): Project[] {
+    if (focus === 'highlights') return projectsByIds(HIGHLIGHTS_FEATURED_IDS)
+    return projectsByIds(ROLE_FEATURED_IDS[focus])
+}
+
+export function getAdditionalForFocus(focus: Focus): Project[] {
+    if (focus === 'highlights') {
+        const featuredIds = new Set<string>(HIGHLIGHTS_FEATURED_IDS)
+        const featuredOverflow = featuredProjects.filter((project) => !featuredIds.has(project.id))
+        const additional = allProjects.filter((project) => project.highlightInHighlights)
+        return [...featuredOverflow, ...additional]
+    }
+
+    const featuredIds = new Set(ROLE_FEATURED_IDS[focus])
+    const featuredOverflow = featuredProjects.filter(
+        (project) => project.roles.includes(focus) && !featuredIds.has(project.id)
+    )
+    const additional = allProjects.filter((project) => project.roles.includes(focus))
+    return [...featuredOverflow, ...additional]
+}

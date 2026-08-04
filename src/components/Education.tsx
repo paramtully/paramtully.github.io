@@ -1,6 +1,12 @@
 export default function Education() {
     const courses = [
         {
+            code: "CPSC 440",
+            title: "Advanced Machine Learning and Data Mining",
+            description: "End-to-end ML from feature engineering and model evaluation through deep learning: graph neural networks, transformers, and probabilistic methods, with from-scratch PyTorch implementations.",
+            technologies: ["Python", "PyTorch", "scikit-learn", "Graph Neural Networks", "Attention"]
+        },
+        {
             code: "CPSC 416",
             title: "Distributed Systems",
             description: "Built fault-tolerant distributed systems with consensus protocols, replication strategies, and consistency models essential for designing reliable cloud infrastructure.",
@@ -35,12 +41,6 @@ export default function Education() {
             title: "Introduction to Software Engineering",
             description: "Software engineering best practices including design patterns, testing strategies, code review, and team collaboration workflows.",
             technologies: ["TypeScript", "Git", "Testing Frameworks", "CI"]
-        },
-        {
-            code: "CPSC 340",
-            title: "Machine Learning and Data Mining",
-            description: "Applied machine learning with focus on model evaluation, feature engineering, and practical deployment relevant for ML infrastructure and MLOps roles.",
-            technologies: ["Python", "scikit-learn", "pandas", "NumPy"]
         },
         {
             code: "CPSC 304",
